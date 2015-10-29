@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comPago_det" pageWidth="210" pageHeight="297" columnWidth="210" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1331c044-79cb-4b03-b88e-41def99dac5f">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="billingId" class="entities.Billing">
+		<fieldDescription><![CDATA[billingId]]></fieldDescription>
+	</field>
+	<field name="cantidad" class="java.lang.String">
+		<fieldDescription><![CDATA[cantidad]]></fieldDescription>
+	</field>
+	<field name="class" class="java.lang.Class">
+		<fieldDescription><![CDATA[class]]></fieldDescription>
+	</field>
+	<field name="descuento" class="java.lang.String">
+		<fieldDescription><![CDATA[descuento]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[id]]></fieldDescription>
+	</field>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[name]]></fieldDescription>
+	</field>
+	<field name="percentageDiscount" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[percentageDiscount]]></fieldDescription>
+	</field>
+	<field name="percentageIva" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[percentageIva]]></fieldDescription>
+	</field>
+	<field name="precioTotal" class="java.lang.String">
+		<fieldDescription><![CDATA[precioTotal]]></fieldDescription>
+	</field>
+	<field name="precioUnitario" class="java.lang.String">
+		<fieldDescription><![CDATA[precioUnitario]]></fieldDescription>
+	</field>
+	<field name="productId" class="entities.Product">
+		<fieldDescription><![CDATA[productId]]></fieldDescription>
+	</field>
+	<field name="producto" class="java.lang.String">
+		<fieldDescription><![CDATA[producto]]></fieldDescription>
+	</field>
+	<field name="quantity" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[quantity]]></fieldDescription>
+	</field>
+	<field name="total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[total]]></fieldDescription>
+	</field>
+	<field name="totalWithTax" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[totalWithTax]]></fieldDescription>
+	</field>
+	<field name="unitaryPrice" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[unitaryPrice]]></fieldDescription>
+	</field>
+	<field name="valueDiscount" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[valueDiscount]]></fieldDescription>
+	</field>
+	<field name="valueIva" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[valueIva]]></fieldDescription>
+	</field>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="190" height="13" uuid="1926eab5-7b22-411d-8828-fe94cc181f54"/>
+				<textField>
+					<reportElement x="0" y="0" width="31" height="12" uuid="bd4cc967-bf12-41f2-91b4-84e98794ea87"/>
+					<textElement>
+						<font size="7" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="31" y="0" width="76" height="12" uuid="193ee674-60e1-47bb-bb19-b92ba5fd22cf"/>
+					<textElement>
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{producto}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="151" y="0" width="33" height="12" uuid="55a08cb3-86b5-4e00-b974-324e3833ac2a"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="107" y="0" width="44" height="12" uuid="4a1624b2-4de3-4d9e-9950-e218ed22fa8b"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{precioUnitario}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+</jasperReport>

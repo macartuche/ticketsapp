@@ -1,0 +1,221 @@
+@startuml
+class controllers.AccountJpaController
+class controllers.BillingJpaController
+class controllers.ClientProviderJpaController
+class controllers.ConfigurationsJpaController
+class controllers.DetailBillingJpaController
+class controllers.EntityManagerProj
+class controllers.FamilyJpaController
+class controllers.InventaryJpaController
+class controllers.PaymentJpaController
+class controllers.PersonJpaController
+class controllers.ProductJpaController
+class controllers.ProviderJpaController
+class controllers.ProviderJpaController1
+class controllers.UsersJpaController
+class controllers.exceptions.IllegalOrphanException
+class controllers.exceptions.NonexistentEntityException
+class controllers.exceptions.PreexistingEntityException
+class entities.Account
+class entities.Billing
+class entities.ClientProvider
+class entities.Configurations
+class entities.DetailBilling
+class entities.Family
+class entities.Inventary
+class entities.Payment
+class entities.Person
+class entities.Product
+class entities.Provider
+class entities.Users
+class java.lang.Exception
+class java.util.ArrayList
+class java.util.List
+class java.util.Map
+class javax.persistence.EntityManager
+class javax.persistence.EntityManagerFactory
+class javax.persistence.EntityNotFoundException
+class javax.persistence.Persistence
+class javax.persistence.Query
+class javax.persistence.criteria.CriteriaQuery
+class javax.persistence.criteria.Root
+interface java.io.Serializable
+controllers.AccountJpaController --|> controllers.EntityManagerProj
+controllers.AccountJpaController ..> controllers.exceptions.NonexistentEntityException
+controllers.AccountJpaController ..> entities.Account
+controllers.AccountJpaController ..> entities.Billing
+controllers.AccountJpaController ..> java.util.List
+controllers.AccountJpaController ..> javax.persistence.EntityManager
+controllers.AccountJpaController ..> javax.persistence.EntityManagerFactory
+controllers.AccountJpaController ..> javax.persistence.EntityNotFoundException
+controllers.AccountJpaController ..> javax.persistence.Query
+controllers.AccountJpaController ..> javax.persistence.criteria.CriteriaQuery
+controllers.AccountJpaController ..> javax.persistence.criteria.Root
+controllers.AccountJpaController --|> java.io.Serializable
+controllers.BillingJpaController --|> controllers.EntityManagerProj
+controllers.BillingJpaController ..> controllers.exceptions.IllegalOrphanException
+controllers.BillingJpaController ..> controllers.exceptions.NonexistentEntityException
+controllers.BillingJpaController ..> entities.Billing
+controllers.BillingJpaController ..> entities.ClientProvider
+controllers.BillingJpaController ..> entities.DetailBilling
+controllers.BillingJpaController ..> entities.Inventary
+controllers.BillingJpaController ..> java.util.ArrayList
+controllers.BillingJpaController ..> java.util.List
+controllers.BillingJpaController ..> java.util.Map
+controllers.BillingJpaController ..> javax.persistence.EntityManager
+controllers.BillingJpaController ..> javax.persistence.EntityNotFoundException
+controllers.BillingJpaController ..> javax.persistence.Query
+controllers.BillingJpaController ..> javax.persistence.criteria.CriteriaQuery
+controllers.BillingJpaController ..> javax.persistence.criteria.Root
+controllers.BillingJpaController --|> java.io.Serializable
+controllers.ClientProviderJpaController --|> controllers.EntityManagerProj
+controllers.ClientProviderJpaController ..> controllers.exceptions.IllegalOrphanException
+controllers.ClientProviderJpaController ..> controllers.exceptions.NonexistentEntityException
+controllers.ClientProviderJpaController ..> entities.Billing
+controllers.ClientProviderJpaController ..> entities.ClientProvider
+controllers.ClientProviderJpaController ..> entities.Person
+controllers.ClientProviderJpaController ..> entities.Users
+controllers.ClientProviderJpaController ..> java.util.ArrayList
+controllers.ClientProviderJpaController ..> java.util.List
+controllers.ClientProviderJpaController ..> java.util.Map
+controllers.ClientProviderJpaController ..> javax.persistence.EntityManager
+controllers.ClientProviderJpaController ..> javax.persistence.EntityManagerFactory
+controllers.ClientProviderJpaController ..> javax.persistence.EntityNotFoundException
+controllers.ClientProviderJpaController ..> javax.persistence.Query
+controllers.ClientProviderJpaController ..> javax.persistence.criteria.CriteriaQuery
+controllers.ClientProviderJpaController ..> javax.persistence.criteria.Root
+controllers.ClientProviderJpaController --|> java.io.Serializable
+controllers.ConfigurationsJpaController --|> controllers.EntityManagerProj
+controllers.ConfigurationsJpaController ..> controllers.exceptions.NonexistentEntityException
+controllers.ConfigurationsJpaController ..> controllers.exceptions.PreexistingEntityException
+controllers.ConfigurationsJpaController ..> entities.Configurations
+controllers.ConfigurationsJpaController ..> java.util.List
+controllers.ConfigurationsJpaController ..> javax.persistence.EntityManager
+controllers.ConfigurationsJpaController ..> javax.persistence.EntityManagerFactory
+controllers.ConfigurationsJpaController ..> javax.persistence.EntityNotFoundException
+controllers.ConfigurationsJpaController ..> javax.persistence.Query
+controllers.ConfigurationsJpaController ..> javax.persistence.criteria.CriteriaQuery
+controllers.ConfigurationsJpaController ..> javax.persistence.criteria.Root
+controllers.ConfigurationsJpaController --|> java.io.Serializable
+controllers.DetailBillingJpaController ..> controllers.exceptions.NonexistentEntityException
+controllers.DetailBillingJpaController ..> controllers.exceptions.PreexistingEntityException
+controllers.DetailBillingJpaController ..> entities.Billing
+controllers.DetailBillingJpaController ..> entities.DetailBilling
+controllers.DetailBillingJpaController ..> entities.Product
+controllers.DetailBillingJpaController ..> java.util.List
+controllers.DetailBillingJpaController ..> javax.persistence.EntityManager
+controllers.DetailBillingJpaController ..> javax.persistence.EntityManagerFactory
+controllers.DetailBillingJpaController ..> javax.persistence.EntityNotFoundException
+controllers.DetailBillingJpaController ..> javax.persistence.Query
+controllers.DetailBillingJpaController ..> javax.persistence.criteria.CriteriaQuery
+controllers.DetailBillingJpaController ..> javax.persistence.criteria.Root
+controllers.DetailBillingJpaController --|> java.io.Serializable
+controllers.EntityManagerProj ..> javax.persistence.EntityManager
+controllers.EntityManagerProj ..> javax.persistence.EntityManagerFactory
+controllers.EntityManagerProj ..> javax.persistence.Persistence
+controllers.FamilyJpaController --|> controllers.EntityManagerProj
+controllers.FamilyJpaController ..> controllers.exceptions.NonexistentEntityException
+controllers.FamilyJpaController ..> entities.Family
+controllers.FamilyJpaController ..> java.util.List
+controllers.FamilyJpaController ..> javax.persistence.EntityManager
+controllers.FamilyJpaController ..> javax.persistence.EntityManagerFactory
+controllers.FamilyJpaController ..> javax.persistence.EntityNotFoundException
+controllers.FamilyJpaController ..> javax.persistence.Query
+controllers.FamilyJpaController ..> javax.persistence.criteria.CriteriaQuery
+controllers.FamilyJpaController ..> javax.persistence.criteria.Root
+controllers.FamilyJpaController --|> java.io.Serializable
+controllers.InventaryJpaController ..> controllers.exceptions.NonexistentEntityException
+controllers.InventaryJpaController ..> controllers.exceptions.PreexistingEntityException
+controllers.InventaryJpaController ..> entities.Billing
+controllers.InventaryJpaController ..> entities.Inventary
+controllers.InventaryJpaController ..> entities.Product
+controllers.InventaryJpaController ..> java.util.List
+controllers.InventaryJpaController ..> javax.persistence.EntityManager
+controllers.InventaryJpaController ..> javax.persistence.EntityManagerFactory
+controllers.InventaryJpaController ..> javax.persistence.EntityNotFoundException
+controllers.InventaryJpaController ..> javax.persistence.Query
+controllers.InventaryJpaController ..> javax.persistence.criteria.CriteriaQuery
+controllers.InventaryJpaController ..> javax.persistence.criteria.Root
+controllers.InventaryJpaController --|> java.io.Serializable
+controllers.PaymentJpaController --|> controllers.EntityManagerProj
+controllers.PaymentJpaController ..> controllers.exceptions.NonexistentEntityException
+controllers.PaymentJpaController ..> entities.Payment
+controllers.PaymentJpaController ..> java.util.List
+controllers.PaymentJpaController ..> javax.persistence.EntityManager
+controllers.PaymentJpaController ..> javax.persistence.EntityManagerFactory
+controllers.PaymentJpaController ..> javax.persistence.EntityNotFoundException
+controllers.PaymentJpaController ..> javax.persistence.Query
+controllers.PaymentJpaController ..> javax.persistence.criteria.CriteriaQuery
+controllers.PaymentJpaController ..> javax.persistence.criteria.Root
+controllers.PaymentJpaController --|> java.io.Serializable
+controllers.PersonJpaController --|> controllers.EntityManagerProj
+controllers.PersonJpaController ..> controllers.exceptions.IllegalOrphanException
+controllers.PersonJpaController ..> controllers.exceptions.NonexistentEntityException
+controllers.PersonJpaController ..> entities.ClientProvider
+controllers.PersonJpaController ..> entities.Person
+controllers.PersonJpaController ..> entities.Users
+controllers.PersonJpaController ..> java.util.ArrayList
+controllers.PersonJpaController ..> java.util.List
+controllers.PersonJpaController ..> javax.persistence.EntityManager
+controllers.PersonJpaController ..> javax.persistence.EntityManagerFactory
+controllers.PersonJpaController ..> javax.persistence.EntityNotFoundException
+controllers.PersonJpaController ..> javax.persistence.Query
+controllers.PersonJpaController ..> javax.persistence.criteria.CriteriaQuery
+controllers.PersonJpaController ..> javax.persistence.criteria.Root
+controllers.PersonJpaController --|> java.io.Serializable
+controllers.ProductJpaController --|> controllers.EntityManagerProj
+controllers.ProductJpaController ..> controllers.exceptions.IllegalOrphanException
+controllers.ProductJpaController ..> controllers.exceptions.NonexistentEntityException
+controllers.ProductJpaController ..> entities.DetailBilling
+controllers.ProductJpaController ..> entities.Inventary
+controllers.ProductJpaController ..> entities.Product
+controllers.ProductJpaController ..> java.util.ArrayList
+controllers.ProductJpaController ..> java.util.List
+controllers.ProductJpaController ..> java.util.Map
+controllers.ProductJpaController ..> javax.persistence.EntityManager
+controllers.ProductJpaController ..> javax.persistence.EntityManagerFactory
+controllers.ProductJpaController ..> javax.persistence.EntityNotFoundException
+controllers.ProductJpaController ..> javax.persistence.Query
+controllers.ProductJpaController ..> javax.persistence.criteria.CriteriaQuery
+controllers.ProductJpaController ..> javax.persistence.criteria.Root
+controllers.ProductJpaController --|> java.io.Serializable
+controllers.ProviderJpaController ..> controllers.exceptions.NonexistentEntityException
+controllers.ProviderJpaController ..> controllers.exceptions.PreexistingEntityException
+controllers.ProviderJpaController ..> entities.Provider
+controllers.ProviderJpaController ..> java.util.List
+controllers.ProviderJpaController ..> javax.persistence.EntityManager
+controllers.ProviderJpaController ..> javax.persistence.EntityManagerFactory
+controllers.ProviderJpaController ..> javax.persistence.EntityNotFoundException
+controllers.ProviderJpaController ..> javax.persistence.Query
+controllers.ProviderJpaController ..> javax.persistence.criteria.CriteriaQuery
+controllers.ProviderJpaController ..> javax.persistence.criteria.Root
+controllers.ProviderJpaController --|> java.io.Serializable
+controllers.ProviderJpaController1 ..> controllers.exceptions.NonexistentEntityException
+controllers.ProviderJpaController1 ..> controllers.exceptions.PreexistingEntityException
+controllers.ProviderJpaController1 ..> entities.Provider
+controllers.ProviderJpaController1 ..> java.util.List
+controllers.ProviderJpaController1 ..> javax.persistence.EntityManager
+controllers.ProviderJpaController1 ..> javax.persistence.EntityManagerFactory
+controllers.ProviderJpaController1 ..> javax.persistence.EntityNotFoundException
+controllers.ProviderJpaController1 ..> javax.persistence.Query
+controllers.ProviderJpaController1 ..> javax.persistence.criteria.CriteriaQuery
+controllers.ProviderJpaController1 ..> javax.persistence.criteria.Root
+controllers.ProviderJpaController1 --|> java.io.Serializable
+controllers.UsersJpaController --|> controllers.EntityManagerProj
+controllers.UsersJpaController ..> controllers.exceptions.NonexistentEntityException
+controllers.UsersJpaController ..> entities.Person
+controllers.UsersJpaController ..> entities.Users
+controllers.UsersJpaController ..> java.util.List
+controllers.UsersJpaController ..> java.util.Map
+controllers.UsersJpaController ..> javax.persistence.EntityManager
+controllers.UsersJpaController ..> javax.persistence.EntityNotFoundException
+controllers.UsersJpaController ..> javax.persistence.Query
+controllers.UsersJpaController ..> javax.persistence.criteria.CriteriaQuery
+controllers.UsersJpaController ..> javax.persistence.criteria.Root
+controllers.UsersJpaController --|> java.io.Serializable
+controllers.exceptions.IllegalOrphanException --|> java.lang.Exception
+controllers.exceptions.IllegalOrphanException ..> java.util.ArrayList
+controllers.exceptions.IllegalOrphanException ..> java.util.List
+controllers.exceptions.NonexistentEntityException --|> java.lang.Exception
+controllers.exceptions.PreexistingEntityException --|> java.lang.Exception
+@enduml

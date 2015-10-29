@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://sistemaunico.ant.gob.ec:7027/BASEUNIF-BASEUNIF-context-root/MetodosPort?WSDL" uri="xml-resources/web-service-references/MetodosPort/wsdl/sistemaunico.ant.gob.ec_7027/BASEUNIF-BASEUNIF-context-root/MetodosPort.wsdl"/>
+    <system systemId="http://sistemaunico.ant.gob.ec:7027/BASEUNIF-BASEUNIF-context-root/MetodosPort?xsd=1" uri="xml-resources/web-service-references/MetodosPort/wsdl/sistemaunico.ant.gob.ec_7027/BASEUNIF-BASEUNIF-context-root/MetodosPort.xsd_1.xsd"/>
+</catalog>

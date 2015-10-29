@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="abono" language="groovy" pageWidth="210" pageHeight="297" columnWidth="170" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="078f13ed-03a1-46bf-acab-f47cf705df9f">
+	<property name="ireport.zoom" value="1.7715610000000102"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="accountId" class="entities.Account">
+		<fieldDescription><![CDATA[accountId]]></fieldDescription>
+	</field>
+	<field name="datePayment" class="java.util.Date">
+		<fieldDescription><![CDATA[datePayment]]></fieldDescription>
+	</field>
+	<field name="saldo" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[saldo]]></fieldDescription>
+	</field>
+	<field name="valor" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[valor]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="72" splitType="Stretch">
+			<staticText>
+				<reportElement style="SubTitle" x="14" y="0" width="143" height="21" forecolor="#000000" uuid="7eb54d25-4a7c-4ad9-95be-01c547a582b3"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Comprobante de pago]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="43" width="33" height="10" uuid="075233e0-2217-4d1f-a936-18081bea06e9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="53" width="33" height="11" uuid="77f86538-c86d-4262-8a95-a96aba507062"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="45" y="21" width="76" height="13" forecolor="#000000" uuid="0a6553e4-cb70-4b5c-98a3-d3a99ddfc0f2"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Castillo Sport]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy HH.mm.ss">
+				<reportElement x="35" y="43" width="107" height="10" uuid="e68b109a-b078-478f-8763-802146a74af6"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{datePayment}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="35" y="53" width="122" height="11" uuid="b75c76a0-3037-44bc-8e5f-b3b485585cab"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{accountId}.getCliente()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="43" splitType="Stretch">
+			<textField>
+				<reportElement x="45" y="0" width="63" height="11" uuid="84554b97-2256-4aca-ac85-03a09f3f93df"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="45" height="11" uuid="b1824eec-b4fb-408f-8e41-4b35edb88d15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Pago de:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="11" width="45" height="11" uuid="356787a1-8968-41f5-9440-c249bb42c96b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Saldo: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="45" y="11" width="76" height="11" uuid="177d4337-72d8-46e5-8c3f-c402275712d4"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saldo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="22" width="45" height="11" uuid="c7caa094-157e-4d02-bb00-95eb71da64c5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Fact. #:]]></text>
+			</staticText>
+			<textField pattern="">
+				<reportElement x="45" y="23" width="112" height="20" uuid="355df2e0-01ee-41e6-9ef1-155178206f83"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{accountId}.getBillingId().getSequential()]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
