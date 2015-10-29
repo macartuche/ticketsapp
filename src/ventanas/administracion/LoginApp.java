@@ -28,6 +28,8 @@ public class LoginApp extends javax.swing.JDialog {
     public static Users userLogged;
     /**
      * Creates new form Login
+     * @param parent
+     * @param modal
      */
     public LoginApp(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -192,7 +194,7 @@ public class LoginApp extends javax.swing.JDialog {
 
         try {
             Query q = controller.getEm().createQuery("Select u from Users  u where u.nick = :username and u.password=:password");
-            q.setParameter("username", usuario);
+            q.setParameter("username", usuario.getBytes());
             q.setParameter("password", Utilitario.encriptarClave(clave));
 
             List<Users> usuarios = q.getResultList();

@@ -556,9 +556,9 @@ public class reporteVentas extends javax.swing.JPanel {
             String methodNames[] = {"getFecha", "getFactura", "getCliente", "getTotal"};
             dBTable1.refreshDataObject(billings, methodNames);
             dBTable1.getColumn(0).setPreferredWidth(200);
-            dBTable1.getColumn(1).setPreferredWidth(300);
-            dBTable1.getColumn(2).setPreferredWidth(420);
-            dBTable1.getColumn(3).setPreferredWidth(250);
+            dBTable1.getColumn(1).setPreferredWidth(250);
+            dBTable1.getColumn(2).setPreferredWidth(200);
+            dBTable1.getColumn(3).setPreferredWidth(100);
 
             DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
             rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);

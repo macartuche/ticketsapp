@@ -58,12 +58,11 @@ public class CobroForm extends javax.swing.JDialog {
         initComponents();
         this.account = account;
         this.quote = quote;
-        fijarDatos();
-        System.out.println("bal cons: " + this.account.getBalance());
+        fijarDatos(); 
         paymentController = new PaymentJpaController();
         accountController = new AccountJpaController();
         billingController = new BillingJpaController();
-        
+
     }
 
     /**
@@ -110,23 +109,30 @@ public class CobroForm extends javax.swing.JDialog {
         jLabel4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel4.setText("Registro de pago");
 
-        jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 36)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         jLabel2.setText("Pago: ");
 
-        jLabel3.setFont(new java.awt.Font("Lucida Grande", 1, 36)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         jLabel3.setText("Cambio:");
 
         changeTxt.setEditable(false);
-        changeTxt.setFont(new java.awt.Font("Lucida Grande", 1, 36)); // NOI18N
+        changeTxt.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         changeTxt.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         changeTxt.setText("00,00");
 
-        paymentTxt.setFont(new java.awt.Font("Lucida Grande", 1, 36)); // NOI18N
+        paymentTxt.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         paymentTxt.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         paymentTxt.setText("00,00");
+        paymentTxt.setFocusTraversalPolicyProvider(true);
+        paymentTxt.setNextFocusableComponent(registerBtn);
         paymentTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 paymentTxtActionPerformed(evt);
+            }
+        });
+        paymentTxt.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                paymentTxtFocusGained(evt);
             }
         });
         paymentTxt.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -155,10 +161,10 @@ public class CobroForm extends javax.swing.JDialog {
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         jLabel5.setText("Cuota:");
 
-        saldoLbl.setFont(new java.awt.Font("Lucida Grande", 1, 36)); // NOI18N
+        saldoLbl.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         saldoLbl.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         saldoLbl.setText("00,00");
 
@@ -188,7 +194,7 @@ public class CobroForm extends javax.swing.JDialog {
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(changeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(paymentTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addContainerGap(12, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -245,16 +251,16 @@ public class CobroForm extends javax.swing.JDialog {
             //grabar el abono
 
             BigDecimal newBalance = this.account.getBalance().subtract(this.quote);
-            
+
             if (newBalance.compareTo(BigDecimal.ZERO) == 0) {
                 account.setState("Pagada");
-                
+
                 //actualizar la factura
                 Billing billing = account.getBillingId();
                 billing.setState("Pagada");
                 billingController.edit(billing);
             }
-            
+
             account.setBalance(newBalance);
             accountController.edit(this.account);
 
@@ -270,7 +276,7 @@ public class CobroForm extends javax.swing.JDialog {
 
             System.out.println("A===>" + payment.getAccountId().getFactura());
             payment.setAccountId(account);
-             imprimirAbono(payment);
+            imprimirAbono(payment);
         } catch (Exception ex) {
             Logger.getLogger(CobroForm.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -298,7 +304,7 @@ public class CobroForm extends javax.swing.JDialog {
     }
 
     private void paymentTxtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_paymentTxtKeyReleased
-        String value = paymentTxt.getText();
+/*        String value = paymentTxt.getText();
         if (value.isEmpty()) {
             this.registerBtn.setEnabled(false);
             return;
@@ -306,11 +312,11 @@ public class CobroForm extends javax.swing.JDialog {
         System.out.println("value " + value);
         try {
             Double converted = Double.parseDouble(value);
-            
+
             //verificar que el valor ingresado sea mayor a cero
-            if(converted<=0){
-                 this.registerBtn.setEnabled(false);
-                 return;
+            if (converted <= 0) {
+                this.registerBtn.setEnabled(false);
+                return;
             }
             BigDecimal change = new BigDecimal(converted).subtract(this.quote);
             change = change.setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -329,7 +335,7 @@ public class CobroForm extends javax.swing.JDialog {
             System.out.println("=>" + e);
             JOptionPane.showMessageDialog(this, "Ingrese valores correctos", "Error", JOptionPane.ERROR_MESSAGE);
             this.registerBtn.setEnabled(false);
-        }
+        }*/
     }//GEN-LAST:event_paymentTxtKeyReleased
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -337,8 +343,17 @@ public class CobroForm extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void paymentTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paymentTxtActionPerformed
+
+        JOptionPane.showMessageDialog(this, "INGRESE", "ERROR", JOptionPane.ERROR_MESSAGE);
         registerBtnActionPerformed(evt);
     }//GEN-LAST:event_paymentTxtActionPerformed
+
+    private void paymentTxtFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_paymentTxtFocusGained
+
+        System.out.println("=============================>");
+        paymentTxt.selectAll();
+        
+    }//GEN-LAST:event_paymentTxtFocusGained
 
     /**
      * @param args the command line arguments

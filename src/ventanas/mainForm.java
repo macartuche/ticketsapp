@@ -17,11 +17,10 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import ventanas.administracion.UsuarioForm;
 import ventanas.administracion.configuraciones;
 import ventanas.administracion.usuarios;
-import ventanas.compras.Compras;
 import ventanas.compras.CtasPagar;
-import ventanas.compras.Proveedores;
 import ventanas.inventario.grupos;
 import ventanas.inventario.products;
+import ventanas.parqueadero.parking;
 import ventanas.reportes.reporteCobros;
 import ventanas.reportes.reporteMasVendido;
 import ventanas.reportes.reporteVentas;
@@ -61,61 +60,26 @@ public class mainForm extends javax.swing.JFrame {
         createSubTree(treeNode1, treeNode3, "factura", "Facturas de venta");
 
         javax.swing.tree.DefaultMutableTreeNode treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("Cuentas");
-         createSubTree(treeNode1, treeNode4, "ctas", "Cuentas por cobrar");
-         
+        createSubTree(treeNode1, treeNode4, "ctas", "Cuentas por cobrar");
+
         javax.swing.tree.DefaultMutableTreeNode treeNode5 = new javax.swing.tree.DefaultMutableTreeNode("Reportes");
         createSubTree(treeNode1, treeNode5, "reporteVentas", "Ventas realizadas");
         createSubTree(treeNode1, treeNode5, "reporteCta", "Ctas por cobrar");
         createSubTree(treeNode1, treeNode5, "reporteMas", "Productos más vendidos");
-        
+
         javax.swing.tree.DefaultMutableTreeNode treeNode6 = new javax.swing.tree.DefaultMutableTreeNode("Administración");
-    createSubTree(treeNode1, treeNode6, "usuarios", "Usuarios");
-    createSubTree(treeNode1, treeNode6, "configuracion", "Configuraciones");
-        //dibujar de acuerdo al caso
-//        if (UsuarioForm.llaves.containsKey("producto") && UsuarioForm.llaves.get("producto") == 1) {
-//            javax.swing.tree.DefaultMutableTreeNode prod = new javax.swing.tree.DefaultMutableTreeNode("Productos");
-//            treeNode2.add(prod);
-//            treeNode1.add(treeNode2);
-//        }
-//
-//        if (UsuarioForm.llaves.containsKey("clientes") && UsuarioForm.llaves.get("clientes") == 1) {
-//            javax.swing.tree.DefaultMutableTreeNode prod = new javax.swing.tree.DefaultMutableTreeNode("Productos");
-//            treeNode2.add(prod);
-//            treeNode1.add(treeNode2);
-//        }
-//
-////        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Productos");
-////        treeNode2.add(treeNode3);
-////        treeNode1.add(treeNode2);
-//        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Ventas");
-//        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Clientes");
-//        treeNode2.add(treeNode3);
-//        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Facturas de venta");
-//        treeNode2.add(treeNode3);
-//        treeNode1.add(treeNode2);
-//        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Cuentas");
-//        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Cuentas por cobrar");
-//        treeNode2.add(treeNode3);
-//        treeNode1.add(treeNode2);
-//        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Reportes");
-//        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Ventas realizadas");
-//        treeNode2.add(treeNode3);
-//        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Ctas por cobrar");
-//        treeNode2.add(treeNode3);
-//        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Productos más vendidos");
-//        treeNode2.add(treeNode3);
-//        treeNode1.add(treeNode2);
-//        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Administración");
-//        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Usuarios");
-//        treeNode2.add(treeNode3);
-//        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Configuraciones");
-//        treeNode2.add(treeNode3);
-//        treeNode1.add(treeNode2);
+        createSubTree(treeNode1, treeNode6, "usuarios", "Usuarios");
+        createSubTree(treeNode1, treeNode6, "configuracion", "Configuraciones");
+
+        javax.swing.tree.DefaultMutableTreeNode treeNode7 = new javax.swing.tree.DefaultMutableTreeNode("Parqueadero");
+        createSubTree(treeNode1, treeNode7, "parqueadero", "Boleteria");
+
         arbol.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
     }
 
     /**
      * Creates new form mainForm
+     * @param user
      */
     public mainForm(Users user) {
         initComponents();
@@ -123,6 +87,7 @@ public class mainForm extends javax.swing.JFrame {
         pestanasAbiertas = new ArrayList<>();
 //        pestanias.setUI(new CustomTabbedPaneUI());
         arbol.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
             public void valueChanged(TreeSelectionEvent e) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) arbol.getLastSelectedPathComponent();
                 if (node == null) {
@@ -184,6 +149,11 @@ public class mainForm extends javax.swing.JFrame {
                         reporteMasVendido masvendido = new reporteMasVendido();
                         crearPestana(masvendido, "Productos más vendidos", 11);
                         break;
+                        
+                    case "Boleteria":
+                        parking parqueadero = new parking();
+                        crearPestana(parqueadero, "Boleteria", 12);
+                        break;    
                 }
             }
         });

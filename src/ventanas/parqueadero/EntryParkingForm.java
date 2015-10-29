@@ -5,8 +5,8 @@
  */
 package ventanas.parqueadero;
 
-import ant.DatosMatricula;
-import antclient.AntClient;
+//import ant.DatosMatricula;
+//import antclient.AntClient;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -213,8 +213,8 @@ public class EntryParkingForm extends javax.swing.JDialog {
         String placa = placaTxt.getText();
         if (!placa.trim().isEmpty()) {
             //LAA1007
-            DatosMatricula dm = AntClient.solicitaMatricula(placa, "WEB", "TESTUSER");
-            ownerLbl.setText(dm.getPropietario());
+//            DatosMatricula dm = AntClient.solicitaMatricula(placa, "WEB", "TESTUSER");
+//            ownerLbl.setText(dm.getPropietario());
         }
     }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

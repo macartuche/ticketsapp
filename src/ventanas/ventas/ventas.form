@@ -35,6 +35,9 @@
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jPanel1KeyPressed"/>
+      </Events>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -299,12 +302,15 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/recursos/imagenes/folder112.png"/>
                 </Property>
+                <Property name="mnemonic" type="int" value="118"/>
                 <Property name="text" type="java.lang.String" value="Nuevo"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
                 <Property name="verticalTextPosition" type="int" value="3"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNuevoActionPerformed"/>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btnNuevoKeyPressed"/>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btnNuevoKeyReleased"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnPago1">
@@ -315,6 +321,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/recursos/imagenes/salir.png"/>
                 </Property>
+                <Property name="mnemonic" type="int" value="83"/>
                 <Property name="text" type="java.lang.String" value="Salir"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
                 <Property name="verticalTextPosition" type="int" value="3"/>
@@ -331,6 +338,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/recursos/imagenes/printer67.png"/>
                 </Property>
+                <Property name="mnemonic" type="int" value="73"/>
                 <Property name="text" type="java.lang.String" value="Imprimir"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
                 <Property name="verticalTextPosition" type="int" value="3"/>
@@ -347,6 +355,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/recursos/imagenes/trash.png"/>
                 </Property>
+                <Property name="mnemonic" type="int" value="65"/>
                 <Property name="text" type="java.lang.String" value="Anular"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
                 <Property name="verticalTextPosition" type="int" value="3"/>
@@ -363,6 +372,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/recursos/imagenes/Banknotes.png"/>
                 </Property>
+                <Property name="mnemonic" type="int" value="80"/>
                 <Property name="text" type="java.lang.String" value="Pagar"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
                 <Property name="verticalTextPosition" type="int" value="3"/>

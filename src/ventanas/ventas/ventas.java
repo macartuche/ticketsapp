@@ -5,6 +5,7 @@
  */
 package ventanas.ventas;
 
+import com.sun.glass.events.KeyEvent;
 import controllers.BillingJpaController;
 import controllers.ClientProviderJpaController;
 import controllers.PersonJpaController;
@@ -50,7 +51,7 @@ public class ventas extends javax.swing.JPanel {
     static BillingJpaController controller = null;
     static PersonJpaController controllerPerson = null;
     static ProductJpaController controllerProducto = null;
-    static ClientProviderJpaController controllerClient =null;
+    static ClientProviderJpaController controllerClient = null;
     public static List<Billing> ventas;
 
     /**
@@ -61,7 +62,7 @@ public class ventas extends javax.swing.JPanel {
         controller = new BillingJpaController();
         controllerPerson = new PersonJpaController();
         controllerProducto = new ProductJpaController();
-        controllerClient=new ClientProviderJpaController();
+        controllerClient = new ClientProviderJpaController();
         verTabla();
     }
 
@@ -131,6 +132,11 @@ public class ventas extends javax.swing.JPanel {
         btnPago = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jPanel1KeyPressed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel3.setText("Facturas de venta");
@@ -174,6 +180,7 @@ public class ventas extends javax.swing.JPanel {
 
         btnNuevo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagenes/folder112.png"))); // NOI18N
+        btnNuevo.setMnemonic('v');
         btnNuevo.setText("Nuevo");
         btnNuevo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNuevo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -182,9 +189,18 @@ public class ventas extends javax.swing.JPanel {
                 btnNuevoActionPerformed(evt);
             }
         });
+        btnNuevo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnNuevoKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                btnNuevoKeyReleased(evt);
+            }
+        });
 
         btnPago1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnPago1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagenes/salir.png"))); // NOI18N
+        btnPago1.setMnemonic('S');
         btnPago1.setText("Salir");
         btnPago1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnPago1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -196,6 +212,7 @@ public class ventas extends javax.swing.JPanel {
 
         btnImprimir.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagenes/printer67.png"))); // NOI18N
+        btnImprimir.setMnemonic('I');
         btnImprimir.setText("Imprimir");
         btnImprimir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnImprimir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -207,6 +224,7 @@ public class ventas extends javax.swing.JPanel {
 
         btnAnular.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnAnular.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagenes/trash.png"))); // NOI18N
+        btnAnular.setMnemonic('A');
         btnAnular.setText("Anular");
         btnAnular.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAnular.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -218,6 +236,7 @@ public class ventas extends javax.swing.JPanel {
 
         btnPago.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnPago.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagenes/Banknotes.png"))); // NOI18N
+        btnPago.setMnemonic('P');
         btnPago.setText("Pagar");
         btnPago.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnPago.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -358,18 +377,20 @@ public class ventas extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-       
+        abrirFormTickets();
+    }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void abrirFormTickets() {
         Billing b = new Billing();
         b.setDetailBillingList(new ArrayList<DetailBilling>());
         b.setEmissiondate(new Date());
         b.setUser(LoginApp.userLogged);
-        
+
         //fijar por defecto el contribuyente: CONSUMIDOR FINAL
         ClientProvider consumidorFinal = controllerClient.findClientProvider(5);
         b.setClientProviderid(consumidorFinal);
         abrirVentana(b);
-    }//GEN-LAST:event_btnNuevoActionPerformed
-
+    }
     private void btnAnularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnularActionPerformed
 
         try {
@@ -516,6 +537,21 @@ public class ventas extends javax.swing.JPanel {
             mainForm.CerrarPestana(2);
         }
     }//GEN-LAST:event_btnPago1ActionPerformed
+
+    private void btnNuevoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnNuevoKeyReleased
+
+    }//GEN-LAST:event_btnNuevoKeyReleased
+
+    private void btnNuevoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnNuevoKeyPressed
+        System.out.println("GIM=>" + evt.getKeyCode());
+        if (evt.getKeyCode() == KeyEvent.VK_N) {
+            abrirFormTickets();
+        }
+    }//GEN-LAST:event_btnNuevoKeyPressed
+
+    private void jPanel1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel1KeyPressed
+
+    }//GEN-LAST:event_jPanel1KeyPressed
 
     private void abrirVentana(final Billing b) {
         VentasForm dialog = new VentasForm(new javax.swing.JFrame(), true, b);

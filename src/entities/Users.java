@@ -6,7 +6,6 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -22,7 +21,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -52,7 +50,7 @@ public class Users implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @Column(name = "nombreUsuario")
-    private String nick;
+    private byte[] nick;
     @Basic(optional = false)
     @Column(name = "clave")
     private String password;
@@ -79,7 +77,7 @@ public class Users implements Serializable {
         this.id = id;
     }
 
-    public Users(Integer id, String nick, String password, Boolean active) {
+    public Users(Integer id, byte[] nick, String password, Boolean active) {
         this.id = id;
         this.nick = nick;
         this.password = password;
@@ -94,11 +92,11 @@ public class Users implements Serializable {
         this.id = id;
     }
 
-    public String getNick() {
+    public byte[] getNick() {
         return nick;
     }
 
-    public void setNick(String nick) {
+    public void setNick(byte[] nick) {
         this.nick = nick;
     }
 
@@ -139,7 +137,7 @@ public class Users implements Serializable {
     }
 
     public String getUsuario() {
-        return nick;
+        return new String(nick);
     }
 
     public String getEstado() {
