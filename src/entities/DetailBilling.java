@@ -7,6 +7,7 @@ package entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -67,9 +70,22 @@ public class DetailBilling implements Serializable {
     @ManyToOne(optional = false)
     private Billing billingId;
     
+    @Column(name = "inicio")
+    @Temporal(TemporalType.TIME)
+    @Basic(optional = true)
+    private Date timestart;
+    
+        
+    @Column(name = "fin")
+    @Temporal(TemporalType.TIME)
+    @Basic(optional = true)
+    private Date timeend;
+
+    
     @Transient
     private String name;
-
+    
+    
     public DetailBilling() {
     }
 
@@ -224,4 +240,24 @@ public class DetailBilling implements Serializable {
     public void setName(String name) {
         this.name = name;
     } 
+
+
+    public Date getTimestart() {
+        return timestart;
+    }
+
+    public void setTimestart(Date timestart) {
+        this.timestart = timestart;
+    }
+
+    public Date getTimeend() {
+        return timeend;
+    }
+
+    public void setTimeend(Date timeend) {
+        this.timeend = timeend;
+    }
+     
+    
+    
 }

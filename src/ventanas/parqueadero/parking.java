@@ -153,7 +153,7 @@ public class parking extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        EntryParkingForm form = new EntryParkingForm(null, true);
+        EntryParkingForm form = new EntryParkingForm(null, true, null);
         form.setVisible(true);
     }//GEN-LAST:event_btnNuevoActionPerformed
 

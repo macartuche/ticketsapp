@@ -59,7 +59,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Billing.findByTotal", query = "SELECT b FROM Billing b WHERE b.total = :total")})
 @SuppressWarnings("ValidAttributes")
 public class Billing implements Serializable {
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "billingId")
     private List<Account> accountCollection;
     private static final long serialVersionUID = 1L;
@@ -108,19 +108,21 @@ public class Billing implements Serializable {
     private List<DetailBilling> detailBillingList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "billingId")
     private List<Inventary> inventaryList;
-    
+
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Users user;
-        
+
     @Transient
     private String clienteName;
-    
+
     @Transient
     private String passportClient;
 
-    
-    
+    @Column(name = "adicional")
+    @Basic(optional = true)
+    private String additionalInformation;
+
     public Billing() {
         detailBillingList = new ArrayList<DetailBilling>();
         accountCollection = new ArrayList<Account>();
@@ -329,9 +331,9 @@ public class Billing implements Serializable {
     public String getFactura() {
         return number;
     }
-    
-    public String getIdentificacion(){
-        return clientProviderid.getIdentificacion(); 
+
+    public String getIdentificacion() {
+        return clientProviderid.getIdentificacion();
     }
 
     @XmlTransient
@@ -358,12 +360,36 @@ public class Billing implements Serializable {
     public void setPassportClient(String passportClient) {
         this.passportClient = passportClient;
     }
- 
+
     public Users getUser() {
         return user;
     }
 
     public void setUser(Users user) {
         this.user = user;
-    } 
+    }
+
+    public String getInicio() {
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        return (!detailBillingList.isEmpty()) ? format.format(detailBillingList.get(0).getTimestart()) : "";
+    }
+
+    
+    public String getFin() {
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        return (!detailBillingList.isEmpty()) ? format.format(detailBillingList.get(0).getTimeend()) : "";
+    }
+
+    public String getAdditionalInformation() {
+        return additionalInformation;
+    }
+
+    public void setAdditionalInformation(String additionalInformation) {
+        this.additionalInformation = additionalInformation;
+    }
+    
+    
+    public String getPlaca(){
+        return this.additionalInformation;
+    }
 }

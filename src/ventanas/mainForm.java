@@ -151,7 +151,7 @@ public class mainForm extends javax.swing.JFrame {
                         break;
                         
                     case "Boleteria":
-                        parking parqueadero = new parking();
+                        ventanas.parqueadero.ventas parqueadero = new ventanas.parqueadero.ventas();
                         crearPestana(parqueadero, "Boleteria", 12);
                         break;    
                 }

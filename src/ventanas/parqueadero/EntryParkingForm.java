@@ -5,12 +5,27 @@
  */
 package ventanas.parqueadero;
 
-//import ant.DatosMatricula;
-//import antclient.AntClient;
+import ant.DatosMatricula;
+import antclient.AntClient;
+import controllers.AccountJpaController;
+import controllers.BillingJpaController;
+import controllers.ClientProviderJpaController;
+import controllers.DetailBillingJpaController;
+import controllers.PersonJpaController;
+import entities.Account;
+import entities.Billing;
+import entities.ClientProvider;
+import entities.DetailBilling;
+import entities.Person;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.persistence.Query;
 
 /**
  *
@@ -18,22 +33,35 @@ import java.util.Date;
  */
 public class EntryParkingForm extends javax.swing.JDialog {
 
+    public Billing billing;
+    public ClientProviderJpaController clientController;
+    public BillingJpaController controller;
+    public DetailBillingJpaController detailController;
+    public PersonJpaController personController;
+    public AccountJpaController accountController;
+
     /**
      * Creates new form EnterParkinForm
      */
-    public EntryParkingForm(java.awt.Frame parent, boolean modal) {
+    public EntryParkingForm(java.awt.Frame parent, boolean modal, Billing b) {
         super(parent, modal);
-        initComponents(); 
-        
-        
+        initComponents();
+
         DateFormat day = new SimpleDateFormat("MM-dd-yyyy ");
         DateFormat time = new SimpleDateFormat("HH:mm:ss");
         Date today = Calendar.getInstance().getTime();
-        String reportDay= day.format(today);
+        String reportDay = day.format(today);
         String reportDate = time.format(today);
         dayLbl.setText(reportDay);
         timeLbl.setText(reportDate);
 
+        clientController = new ClientProviderJpaController();
+        controller = new BillingJpaController();
+        detailController = new DetailBillingJpaController();
+        personController = new PersonJpaController();
+        accountController = new AccountJpaController();
+        
+        this.billing = b;
     }
 
     /**
@@ -213,8 +241,45 @@ public class EntryParkingForm extends javax.swing.JDialog {
         String placa = placaTxt.getText();
         if (!placa.trim().isEmpty()) {
             //LAA1007
-//            DatosMatricula dm = AntClient.solicitaMatricula(placa, "WEB", "TESTUSER");
-//            ownerLbl.setText(dm.getPropietario());
+            DatosMatricula dm = AntClient.solicitaMatricula(placa, "WEB", "TESTUSER");
+
+            if (dm != null) {
+
+                if (dm.getPropietario() != null && !dm.getPropietario().isEmpty()) {
+
+                    String identification = dm.getDocPropietario().replace("CED-", "");
+                    Query q = clientController.getEm().createNamedQuery("ClientProvider.findByNamesOrPassport");
+                    q.setParameter("criteria", identification);
+                    List<ClientProvider> list = q.getResultList();
+                    ClientProvider client = null;
+
+                    if (list.isEmpty()) {
+
+                        Person person = new Person();
+                        person.setNames(dm.getPropietario());
+                        person.setPassport(identification);
+                        personController.create(person);
+
+                        client = new ClientProvider();
+                        client.setPersonId(person);
+                        client.setActiveclient(true);
+                        clientController.create(client);
+
+                        this.billing.setClientProviderid(client);
+                    } else {
+                        this.billing.setClientProviderid(list.get(0));
+                    }
+                    
+                    this.billing.setAdditionalInformation(placa);
+                }
+            }
+            System.out.println("1=>" + dm.getDocPropietario());
+            System.out.println("2=>" + dm.getPropietario());
+            System.out.println("3=>" + dm.getApellido1());
+            System.out.println("4=>" + dm.getApellido2());
+//            System.out.println("5=>"+dm.ge);
+            System.out.println("6=>" + dm.getTipo());
+            ownerLbl.setText(dm.getPropietario());
         }
     }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -222,7 +287,36 @@ public class EntryParkingForm extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        DetailBilling detail = new DetailBilling();
 
+        detail.setBillingId(this.billing);
+        detail.setQuantity(BigDecimal.ONE);
+        detail.setTotal(BigDecimal.ZERO);
+        detail.setProductId(null);
+        detail.setTimestart(new Date());
+        detail.setTotal(BigDecimal.ZERO);
+        detail.setPercentageIva(BigDecimal.ZERO);
+        detail.setUnitaryPrice(BigDecimal.ZERO);
+        detail.setValueIva(BigDecimal.ZERO);
+        
+        this.billing.setState("GENERADA");
+        
+       //cuenta
+        Account account = new Account();
+        account.setBalance(BigDecimal.ZERO);
+        account.setTotal(BigDecimal.ZERO);
+        account.setDateCreation(new Date());
+        account.setBillingId(this.billing);
+        account.setState("Abierta");
+        try {
+            
+            controller.create(this.billing);
+            detailController.create(detail);
+            accountController.create(account);
+        } catch (Exception ex) {
+            Logger.getLogger(EntryParkingForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -260,7 +354,7 @@ public class EntryParkingForm extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                EntryParkingForm dialog = new EntryParkingForm(new javax.swing.JFrame(), true);
+                EntryParkingForm dialog = new EntryParkingForm(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
