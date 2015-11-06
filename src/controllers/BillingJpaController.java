@@ -59,11 +59,11 @@ public class BillingJpaController extends EntityManagerProj implements Serializa
                 billing.setClientProviderid(clientProviderid);
             }
             List<DetailBilling> attachedDetailBillingList = new ArrayList<DetailBilling>();
-            for (DetailBilling detailBillingListDetailBillingToAttach : billing.getDetailBillingList()) {
-                detailBillingListDetailBillingToAttach = em.getReference(detailBillingListDetailBillingToAttach.getClass(), detailBillingListDetailBillingToAttach.getId());
-                attachedDetailBillingList.add(detailBillingListDetailBillingToAttach);
-            }
-            billing.setDetailBillingList(attachedDetailBillingList);
+//            for (DetailBilling detailBillingListDetailBillingToAttach : billing.getDetailBillingList()) {
+//                detailBillingListDetailBillingToAttach = em.getReference(detailBillingListDetailBillingToAttach.getClass(), detailBillingListDetailBillingToAttach.getId());
+//                attachedDetailBillingList.add(detailBillingListDetailBillingToAttach);
+//            }
+//            billing.setDetailBillingList(attachedDetailBillingList);
             List<Inventary> attachedInventaryList = new ArrayList<Inventary>();
             for (Inventary inventaryListInventaryToAttach : billing.getInventaryList()) {
                 inventaryListInventaryToAttach = em.getReference(inventaryListInventaryToAttach.getClass(), inventaryListInventaryToAttach.getId());
@@ -75,15 +75,15 @@ public class BillingJpaController extends EntityManagerProj implements Serializa
                 clientProviderid.getBillingList().add(billing);
                 clientProviderid = em.merge(clientProviderid);
             }
-            for (DetailBilling detailBillingListDetailBilling : billing.getDetailBillingList()) {
-                Billing oldBillingIdOfDetailBillingListDetailBilling = detailBillingListDetailBilling.getBillingId();
-                detailBillingListDetailBilling.setBillingId(billing);
-                detailBillingListDetailBilling = em.merge(detailBillingListDetailBilling);
-                if (oldBillingIdOfDetailBillingListDetailBilling != null) {
-                    oldBillingIdOfDetailBillingListDetailBilling.getDetailBillingList().remove(detailBillingListDetailBilling);
-                    oldBillingIdOfDetailBillingListDetailBilling = em.merge(oldBillingIdOfDetailBillingListDetailBilling);
-                }
-            }
+//            for (DetailBilling detailBillingListDetailBilling : billing.getDetailBillingList()) {
+//                Billing oldBillingIdOfDetailBillingListDetailBilling = detailBillingListDetailBilling.getBillingId();
+//                detailBillingListDetailBilling.setBillingId(billing);
+//                detailBillingListDetailBilling = em.merge(detailBillingListDetailBilling);
+//                if (oldBillingIdOfDetailBillingListDetailBilling != null) {
+//                    oldBillingIdOfDetailBillingListDetailBilling.getDetailBillingList().remove(detailBillingListDetailBilling);
+//                    oldBillingIdOfDetailBillingListDetailBilling = em.merge(oldBillingIdOfDetailBillingListDetailBilling);
+//                }
+//            }
             for (Inventary inventaryListInventary : billing.getInventaryList()) {
                 Billing oldBillingIdOfInventaryListInventary = inventaryListInventary.getBillingId();
                 inventaryListInventary.setBillingId(billing);

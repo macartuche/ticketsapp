@@ -12,20 +12,36 @@ import controllers.BillingJpaController;
 import controllers.ClientProviderJpaController;
 import controllers.DetailBillingJpaController;
 import controllers.PersonJpaController;
+import controllers.ProductJpaController;
 import entities.Account;
 import entities.Billing;
 import entities.ClientProvider;
 import entities.DetailBilling;
 import entities.Person;
+import entities.Product;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Query;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -39,6 +55,7 @@ public class EntryParkingForm extends javax.swing.JDialog {
     public DetailBillingJpaController detailController;
     public PersonJpaController personController;
     public AccountJpaController accountController;
+    public ProductJpaController productController;
 
     /**
      * Creates new form EnterParkinForm
@@ -60,6 +77,7 @@ public class EntryParkingForm extends javax.swing.JDialog {
         detailController = new DetailBillingJpaController();
         personController = new PersonJpaController();
         accountController = new AccountJpaController();
+        productController = new ProductJpaController();
         
         this.billing = b;
     }
@@ -269,7 +287,7 @@ public class EntryParkingForm extends javax.swing.JDialog {
                     } else {
                         this.billing.setClientProviderid(list.get(0));
                     }
-                    
+
                     this.billing.setAdditionalInformation(placa);
                 }
             }
@@ -287,21 +305,31 @@ public class EntryParkingForm extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Query q  = productController.getEm().createQuery("Select p from Producto p where p.code =:code and p.active=true");
+        q.setParameter("code", "park001");
+        List<Product> productList = q.getResultList();
+        Product product = null;
+        if(!productList.isEmpty()){
+            product = productList.get(0);
+        }
+        
         DetailBilling detail = new DetailBilling();
-
         detail.setBillingId(this.billing);
         detail.setQuantity(BigDecimal.ONE);
         detail.setTotal(BigDecimal.ZERO);
-        detail.setProductId(null);
+        detail.setProductId(product);
         detail.setTimestart(new Date());
         detail.setTotal(BigDecimal.ZERO);
         detail.setPercentageIva(BigDecimal.ZERO);
         detail.setUnitaryPrice(BigDecimal.ZERO);
         detail.setValueIva(BigDecimal.ZERO);
-        
+        detail.setPercentageDiscount(BigDecimal.ZERO);
+        detail.setValueDiscount(BigDecimal.ZERO);
+
         this.billing.setState("GENERADA");
-        
-       //cuenta
+        this.billing.getDetailBillingList().add(detail);
+
+        //cuenta
         Account account = new Account();
         account.setBalance(BigDecimal.ZERO);
         account.setTotal(BigDecimal.ZERO);
@@ -309,16 +337,42 @@ public class EntryParkingForm extends javax.swing.JDialog {
         account.setBillingId(this.billing);
         account.setState("Abierta");
         try {
-            
+
             controller.create(this.billing);
             detailController.create(detail);
             accountController.create(account);
+            printTicket();
+            
         } catch (Exception ex) {
             Logger.getLogger(EntryParkingForm.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    /**
+     *
+     */
+    private void printTicket() {
+        Locale local = Locale.getDefault();
+        ResourceBundle resource = ResourceBundle.getBundle("values", local);
+        String reportPath = resource.getString("pathJasper") + "comPark.jasper";
+        List<Billing> facturas = new ArrayList<>();
+        facturas.add(this.billing);
+        try {
+            FileInputStream fis = new FileInputStream(reportPath);
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(fis);
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(bufferedInputStream);
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(facturas);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap(), beanCollectionDataSource);
+            // view report to UI
+            JasperViewer.viewReport(jasperPrint, false);
+//            JasperPrintManager.printReport(jasperPrint, false);
+        } catch (JRException ex) {
+            Logger.getLogger(ventas.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ventas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         buscarANT();
     }//GEN-LAST:event_jButton3ActionPerformed

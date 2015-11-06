@@ -71,13 +71,13 @@ public class DetailBilling implements Serializable {
     private Billing billingId;
     
     @Column(name = "inicio")
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     @Basic(optional = true)
     private Date timestart;
     
         
     @Column(name = "fin")
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     @Basic(optional = true)
     private Date timeend;
 
@@ -257,7 +257,5 @@ public class DetailBilling implements Serializable {
     public void setTimeend(Date timeend) {
         this.timeend = timeend;
     }
-     
-    
-    
+        
 }

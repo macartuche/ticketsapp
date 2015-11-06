@@ -20,6 +20,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -40,8 +41,11 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
 import ventanas.administracion.LoginApp;
 import ventanas.mainForm;
+import static ventanas.ventas.ventas.ventas;
 
 /**
  *
@@ -460,7 +464,7 @@ public class ventas extends javax.swing.JPanel {
         facturas.add(b);
         Locale local = Locale.getDefault();
         ResourceBundle resource = ResourceBundle.getBundle("values", local);
-        String reportPath = resource.getString("pathJasper") + "comPago.jasper";
+        String reportPath = resource.getString("pathJasper") + "comPark.jasper";
 
         try {
             FileInputStream fis = new FileInputStream(reportPath);
@@ -469,8 +473,8 @@ public class ventas extends javax.swing.JPanel {
             JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(facturas);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap(), beanCollectionDataSource);
             // view report to UI
-//            JasperViewer.viewReport(jasperPrint, false);
-            JasperPrintManager.printReport(jasperPrint, false);
+            JasperViewer.viewReport(jasperPrint, false);
+//            JasperPrintManager.printReport(jasperPrint, false);
         } catch (JRException ex) {
             Logger.getLogger(ventas.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
@@ -479,25 +483,79 @@ public class ventas extends javax.swing.JPanel {
     }//GEN-LAST:event_btnImprimirActionPerformed
 
     private void btnPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagoActionPerformed
-        if (ventas.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Seleccione una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
         int indice = dBTable1.getSelectedRow();
         Billing b = ventas.get(indice);
-        if (!b.getState().equals("GENERADA")) {
-//                abrirVentana(b);
-            JOptionPane.showMessageDialog(this, "Sólo se pueden pagar facturas en estado \"GENERADA\".", "ERROR", JOptionPane.ERROR_MESSAGE);
-            return;
+
+        //calcular el tiempo de pago 
+        DetailBilling detail = b.getDetailBillingList().get(0);
+        Date timeStart = detail.getTimestart();
+
+        DateTime start = new DateTime(timeStart);
+        Date fin = new Date();
+        DateTime end = new DateTime(fin);
+
+        System.out.println("===>" + start);
+        System.out.println("===>" + end);
+        Period period = new Period(start, end);
+
+        int hours = period.getHours();
+        int minutes = period.getMinutes();
+
+        System.out.println("Dias: " + period.getDays());
+        System.out.println("horas: " + period.getHours());
+        System.out.println("minutes: " + period.getMinutes());
+
+        Product product = detail.getProductId();
+        BigDecimal price = product.getSaleprice();
+        BigDecimal quantity = BigDecimal.ZERO;
+
+        if (hours >= 1) {
+            quantity = new BigDecimal(hours);
         }
 
-        CobroFacturaForm dialog = new CobroFacturaForm(new javax.swing.JFrame(), Boolean.TRUE, b);
-        dialog.setVisible(true);
-        System.out.println(">");
-        verTabla();
-        System.out.println(">>");
+        if (minutes > 0) {
+            quantity = quantity.add(BigDecimal.ONE);
+        }
 
+        detail.setPercentageIva(product.getPercentageIva());
+        detail.setUnitaryPrice(price);
+        detail.setValueIva(price);
+
+        BigDecimal totalIva = price.multiply(quantity).multiply(product.getPercentageIva());
+        BigDecimal total = product.getSaleprice().multiply(quantity).add(totalIva);
+
+        total = total.setScale(2, RoundingMode.HALF_UP);
+
+        detail.setValueIva(totalIva);
+        detail.setTotalWithTax(total);
+        detail.setTotal(total);
+        detail.setQuantity(quantity);
+        detail.setTimeend(fin);
+        b.setTotal(detail.getTotalWithTax());
+       
+        CobroParkForm dialog = new CobroParkForm(new javax.swing.JFrame(), Boolean.TRUE, b);
+        dialog.setVisible(true);
+        verTabla();
+        /*
+         if (ventas.isEmpty()) {
+         JOptionPane.showMessageDialog(this, "Seleccione una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
+         return;
+         }
+
+         int indice = dBTable1.getSelectedRow();
+         Billing b = ventas.get(indice);
+         if (!b.getState().equals("GENERADA")) {
+         //                abrirVentana(b);
+         JOptionPane.showMessageDialog(this, "Sólo se pueden pagar facturas en estado \"GENERADA\".", "ERROR", JOptionPane.ERROR_MESSAGE);
+         return;
+         }
+
+         CobroFacturaForm dialog = new CobroFacturaForm(new javax.swing.JFrame(), Boolean.TRUE, b);
+         dialog.setVisible(true);
+         System.out.println(">");
+           
+         System.out.println(">>");
+         */
     }//GEN-LAST:event_btnPagoActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comPark" pageWidth="210" pageHeight="297" columnWidth="198" leftMargin="7" rightMargin="5" topMargin="8" bottomMargin="8" uuid="228fd20d-3fef-43d9-81bb-466511a5b766">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/Users/macbookpro/NetBeansProjects/ticketsApp/src/ventanas/reportes/jasper/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="accountCollection" class="java.util.List">
+		<fieldDescription><![CDATA[accountCollection]]></fieldDescription>
+	</field>
+	<field name="baseiva0" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[baseiva0]]></fieldDescription>
+	</field>
+	<field name="baseiva12" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[baseiva12]]></fieldDescription>
+	</field>
+	<field name="class" class="java.lang.Class">
+		<fieldDescription><![CDATA[class]]></fieldDescription>
+	</field>
+	<field name="clientProviderid" class="entities.ClientProvider">
+		<fieldDescription><![CDATA[clientProviderid]]></fieldDescription>
+	</field>
+	<field name="cliente" class="java.lang.String">
+		<fieldDescription><![CDATA[cliente]]></fieldDescription>
+	</field>
+	<field name="clienteName" class="java.lang.String">
+		<fieldDescription><![CDATA[clienteName]]></fieldDescription>
+	</field>
+	<field name="detailBillingList" class="java.util.List">
+		<fieldDescription><![CDATA[detailBillingList]]></fieldDescription>
+	</field>
+	<field name="discount" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[discount]]></fieldDescription>
+	</field>
+	<field name="emissiondate" class="java.util.Date">
+		<fieldDescription><![CDATA[emissiondate]]></fieldDescription>
+	</field>
+	<field name="emissionpoint_id" class="java.lang.String">
+		<fieldDescription><![CDATA[emissionpoint_id]]></fieldDescription>
+	</field>
+	<field name="estado" class="java.lang.String">
+		<fieldDescription><![CDATA[estado]]></fieldDescription>
+	</field>
+	<field name="factura" class="java.lang.String">
+		<fieldDescription><![CDATA[factura]]></fieldDescription>
+	</field>
+	<field name="fecha" class="java.lang.String">
+		<fieldDescription><![CDATA[fecha]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[id]]></fieldDescription>
+	</field>
+	<field name="identificacion" class="java.lang.String">
+		<fieldDescription><![CDATA[identificacion]]></fieldDescription>
+	</field>
+	<field name="inventaryList" class="java.util.List">
+		<fieldDescription><![CDATA[inventaryList]]></fieldDescription>
+	</field>
+	<field name="iva0" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[iva0]]></fieldDescription>
+	</field>
+	<field name="iva12" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[iva12]]></fieldDescription>
+	</field>
+	<field name="number" class="java.lang.String">
+		<fieldDescription><![CDATA[number]]></fieldDescription>
+	</field>
+	<field name="numero" class="java.lang.String">
+		<fieldDescription><![CDATA[numero]]></fieldDescription>
+	</field>
+	<field name="passportClient" class="java.lang.String">
+		<fieldDescription><![CDATA[passportClient]]></fieldDescription>
+	</field>
+	<field name="percentageDiscount" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[percentageDiscount]]></fieldDescription>
+	</field>
+	<field name="sequential" class="java.lang.String">
+		<fieldDescription><![CDATA[sequential]]></fieldDescription>
+	</field>
+	<field name="shop_id" class="java.lang.String">
+		<fieldDescription><![CDATA[shop_id]]></fieldDescription>
+	</field>
+	<field name="state" class="java.lang.String">
+		<fieldDescription><![CDATA[state]]></fieldDescription>
+	</field>
+	<field name="subtotal" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[subtotal]]></fieldDescription>
+	</field>
+	<field name="total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[total]]></fieldDescription>
+	</field>
+	<field name="type" class="java.lang.String">
+		<fieldDescription><![CDATA[type]]></fieldDescription>
+	</field>
+	<field name="user" class="entities.Users">
+		<fieldDescription><![CDATA[user]]></fieldDescription>
+	</field>
+	<field name="placa" class="java.lang.String">
+		<fieldDescription><![CDATA[placa]]></fieldDescription>
+	</field>
+	<field name="inicio" class="java.lang.String">
+		<fieldDescription><![CDATA[inicio]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="78" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="1" width="198" height="15" uuid="877108ab-43fe-4410-9269-6bc6e4f28fbe"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tasa de Ingreso]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="75" y="32" width="123" height="12" uuid="b2a461c8-6afd-4e82-a62a-923cd181a859"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emissiondate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="32" width="75" height="12" uuid="2aa6dfff-6508-474a-a3d6-44d033c9568f"/>
+				<textElement textAlignment="Left">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="15" width="198" height="15" uuid="4394494a-c4e8-40a3-9ccb-3c114959fdfa"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Parqueadero Municipal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="44" width="75" height="12" uuid="41593167-b203-46d6-bb1b-253174dde6cb"/>
+				<textElement textAlignment="Left">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hora de ingreso:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="57" width="75" height="12" uuid="f9c9e636-aa48-441c-9b14-69bca6c9b733"/>
+				<textElement textAlignment="Left">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número de placa:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="75" y="57" width="123" height="12" uuid="14300ac1-28ff-4094-b63b-21359985fe07"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{placa}]]></textFieldExpression>
+			</textField>
+			<textField pattern="h.mm.ss a">
+				<reportElement x="75" y="44" width="123" height="12" uuid="5338684c-7927-4ad4-884d-3846dbf03eaf"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inicio}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<summary>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="12" width="198" height="12" uuid="a967e00c-b4a6-472c-8f7f-f6a299bfc761"/>
+				<textElement textAlignment="Justified">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Motivación: Ordenanza 036-2015 SRO 537 del 07 de 2015]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="51" height="12" uuid="a7d0235f-d494-484e-8a6d-be56df6dacca"/>
+				<textElement textAlignment="Justified">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Recaudador:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="51" y="0" width="147" height="12" uuid="c0add269-6708-45df-aeba-fcad4076e88b"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{user}.getPersonId().getNames()+" "+$F{user}.getPersonId().getLastname()]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
