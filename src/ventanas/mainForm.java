@@ -172,6 +172,8 @@ public class mainForm extends javax.swing.JFrame {
         if (!pestanasAbiertas.contains(pestana)) {
             pestanasAbiertas.add(pestana);
             pestanias.add(titulo, panel);
+        }else{
+            pestanias.setSelectedIndex(pestana);
         }
     }
 

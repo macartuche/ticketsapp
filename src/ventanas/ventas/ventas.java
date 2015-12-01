@@ -5,14 +5,16 @@
  */
 package ventanas.ventas;
 
-import com.sun.glass.events.KeyEvent;
+//import com.sun.glass.events.KeyEvent;
 import controllers.BillingJpaController;
 import controllers.ClientProviderJpaController;
+import controllers.ConfigurationsJpaController;
 import controllers.PersonJpaController;
 import controllers.ProductJpaController;
 import controllers.exceptions.NonexistentEntityException;
 import entities.Billing;
 import entities.ClientProvider;
+import entities.Configurations;
 import entities.DetailBilling;
 import entities.Product;
 import java.io.BufferedInputStream;
@@ -53,6 +55,8 @@ public class ventas extends javax.swing.JPanel {
     static ProductJpaController controllerProducto = null;
     static ClientProviderJpaController controllerClient = null;
     public static List<Billing> ventas;
+    private ConfigurationsJpaController configController;
+    public Configurations config;
 
     /**
      * Creates new form ventas
@@ -63,6 +67,11 @@ public class ventas extends javax.swing.JPanel {
         controllerPerson = new PersonJpaController();
         controllerProducto = new ProductJpaController();
         controllerClient = new ClientProviderJpaController();
+        configController = new ConfigurationsJpaController(); 
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("code", "institutionName");
+        config = configController.namedQuery("Configurations.findByCode", variables).get(0);
         verTabla();
     }
 
@@ -424,7 +433,7 @@ public class ventas extends javax.swing.JPanel {
                     product = detalle.getProductId();
                     cantidad = cantidad.add(product.getStock());
                     product.setStock(cantidad);
-                    controllerProducto.edit(product);
+                    controllerProducto.edit(product);                    
 
                 }
                 b.setState("ANULADA");
@@ -442,7 +451,6 @@ public class ventas extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAnularActionPerformed
 
     private void actualizarProductosPorFacturaAnulada() {
-
     }
 
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
@@ -456,14 +464,18 @@ public class ventas extends javax.swing.JPanel {
         String reportPath = resource.getString("pathJasper") + "comPago.jasper";
 
         try {
+
+            Map parametersMap = new HashMap();
+            parametersMap.put("institution", config.getValue());
+
             FileInputStream fis = new FileInputStream(reportPath);
             BufferedInputStream bufferedInputStream = new BufferedInputStream(fis);
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(bufferedInputStream);
             JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(facturas);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap(), beanCollectionDataSource);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametersMap, beanCollectionDataSource);
             // view report to UI
-//            JasperViewer.viewReport(jasperPrint, false);
-            JasperPrintManager.printReport(jasperPrint, false);
+            JasperViewer.viewReport(jasperPrint, false);
+//            JasperPrintManager.printReport(jasperPrint, false);
         } catch (JRException ex) {
             Logger.getLogger(ventas.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
@@ -544,9 +556,9 @@ public class ventas extends javax.swing.JPanel {
 
     private void btnNuevoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnNuevoKeyPressed
         System.out.println("GIM=>" + evt.getKeyCode());
-        if (evt.getKeyCode() == KeyEvent.VK_N) {
-            abrirFormTickets();
-        }
+//        if (evt.getKeyCode() == KeyEvent.VK_N) {
+//            abrirFormTickets();
+//        }
     }//GEN-LAST:event_btnNuevoKeyPressed
 
     private void jPanel1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel1KeyPressed

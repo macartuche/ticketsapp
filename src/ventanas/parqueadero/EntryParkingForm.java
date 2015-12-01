@@ -35,6 +35,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Query;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.DocumentFilter;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -42,6 +44,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import utilitarios.UpperCaseDocumentFilter;
 
 /**
  *
@@ -78,8 +81,10 @@ public class EntryParkingForm extends javax.swing.JDialog {
         personController = new PersonJpaController();
         accountController = new AccountJpaController();
         productController = new ProductJpaController();
-        
+
         this.billing = b;
+        DocumentFilter filter = new  UpperCaseDocumentFilter();
+        ((AbstractDocument)placaTxt.getDocument()).setDocumentFilter(filter);
     }
 
     /**
@@ -260,11 +265,8 @@ public class EntryParkingForm extends javax.swing.JDialog {
         if (!placa.trim().isEmpty()) {
             //LAA1007
             DatosMatricula dm = AntClient.solicitaMatricula(placa, "WEB", "TESTUSER");
-
             if (dm != null) {
-
                 if (dm.getPropietario() != null && !dm.getPropietario().isEmpty()) {
-
                     String identification = dm.getDocPropietario().replace("CED-", "");
                     Query q = clientController.getEm().createNamedQuery("ClientProvider.findByNamesOrPassport");
                     q.setParameter("criteria", identification);
@@ -287,7 +289,6 @@ public class EntryParkingForm extends javax.swing.JDialog {
                     } else {
                         this.billing.setClientProviderid(list.get(0));
                     }
-
                     this.billing.setAdditionalInformation(placa);
                 }
             }
@@ -305,14 +306,14 @@ public class EntryParkingForm extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Query q  = productController.getEm().createQuery("Select p from Producto p where p.code =:code and p.active=true");
+        Query q = productController.getEm().createQuery("Select p from Product p where p.code =:code and p.active=true");
         q.setParameter("code", "park001");
         List<Product> productList = q.getResultList();
         Product product = null;
-        if(!productList.isEmpty()){
+        if (!productList.isEmpty()) {
             product = productList.get(0);
         }
-        
+
         DetailBilling detail = new DetailBilling();
         detail.setBillingId(this.billing);
         detail.setQuantity(BigDecimal.ONE);
@@ -339,10 +340,10 @@ public class EntryParkingForm extends javax.swing.JDialog {
         try {
 
             controller.create(this.billing);
-            detailController.create(detail);
+//            detailController.create(detail);
             accountController.create(account);
             printTicket();
-            
+
         } catch (Exception ex) {
             Logger.getLogger(EntryParkingForm.class.getName()).log(Level.SEVERE, null, ex);
         }

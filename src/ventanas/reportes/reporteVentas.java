@@ -6,7 +6,9 @@
 package ventanas.reportes;
 
 import controllers.BillingJpaController;
+import controllers.ConfigurationsJpaController;
 import entities.Billing;
+import entities.Configurations;
 import entities.DetailBilling;
 import entities.Product;
 import java.io.BufferedInputStream;
@@ -45,16 +47,25 @@ public class reporteVentas extends javax.swing.JPanel {
     static BillingJpaController controller;
     static List<Billing> billings;
     static BigDecimal totalReport;
-
+    private ConfigurationsJpaController configController;
+    public Configurations config;
     /**
-     * Creates new form reportes
+     * Constructor de reporte de ventas, se deshabilitan los botones cuando no
+     * existen datos
      */
     public reporteVentas() {
         initComponents();
         controller = new BillingJpaController();
-        printBTN.setEnabled(false);
-        printUnificadoBTN.setEnabled(false);
+//        printBTN.setEnabled(false);
+//        printUnificadoBTN.setEnabled(false);
         printTicketsBTN.setEnabled(false);
+        
+          configController = new ConfigurationsJpaController(); 
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("code", "institutionName");
+        config = configController.namedQuery("Configurations.findByCode", variables).get(0);
+        
         verTabla();
     }
 
@@ -84,11 +95,9 @@ public class reporteVentas extends javax.swing.JPanel {
         jButton4 = new javax.swing.JButton();
         jXTitledPanel1 = new org.jdesktop.swingx.JXTitledPanel();
         dBTable1 = new quick.dbtable.DBTable();
-        printBTN = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         totalLbl = new javax.swing.JLabel();
-        printUnificadoBTN = new javax.swing.JButton();
         printTicketsBTN = new javax.swing.JButton();
 
         jButton2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -136,18 +145,6 @@ public class reporteVentas extends javax.swing.JPanel {
         jXTitledPanel1.setTitle("Listado de ventas realizadas");
         jXTitledPanel1.setTitleFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
 
-        printBTN.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        printBTN.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagenes/printer67.png"))); // NOI18N
-        printBTN.setText("Imprimir");
-        printBTN.setEnabled(false);
-        printBTN.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        printBTN.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        printBTN.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                printBTNActionPerformed(evt);
-            }
-        });
-
         jButton5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagenes/salir.png"))); // NOI18N
         jButton5.setText("Salir");
@@ -165,18 +162,6 @@ public class reporteVentas extends javax.swing.JPanel {
 
         totalLbl.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         totalLbl.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-
-        printUnificadoBTN.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        printUnificadoBTN.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagenes/printer67.png"))); // NOI18N
-        printUnificadoBTN.setText("Imprimir por clientes");
-        printUnificadoBTN.setEnabled(false);
-        printUnificadoBTN.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        printUnificadoBTN.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        printUnificadoBTN.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                printUnificadoBTNActionPerformed(evt);
-            }
-        });
 
         printTicketsBTN.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         printTicketsBTN.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagenes/printer67.png"))); // NOI18N
@@ -199,7 +184,7 @@ public class reporteVentas extends javax.swing.JPanel {
                 .addGroup(jXTitledPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(dBTable1, javax.swing.GroupLayout.DEFAULT_SIZE, 709, Short.MAX_VALUE)
                     .addGroup(jXTitledPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 495, Short.MAX_VALUE)
                         .addGroup(jXTitledPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jXTitledPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -207,10 +192,6 @@ public class reporteVentas extends javax.swing.JPanel {
                                 .addComponent(totalLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jXTitledPanel1Layout.createSequentialGroup()
                                 .addComponent(printTicketsBTN)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(printUnificadoBTN)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(printBTN)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(17, 17, 17))
@@ -221,8 +202,6 @@ public class reporteVentas extends javax.swing.JPanel {
                 .addGap(12, 12, 12)
                 .addGroup(jXTitledPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(printBTN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(printUnificadoBTN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(printTicketsBTN, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(dBTable1, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
@@ -306,38 +285,25 @@ public class reporteVentas extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void printBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printBTNActionPerformed
-
-        String reportPath = Utilitario.getValue("pathJasper") + "ventasReport.jasper";
-
-        try {
-            Map parametersMap = new HashMap();
-            parametersMap.put("totalReport", totalReport);
-
-            FileInputStream fis = new FileInputStream(reportPath);
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(fis);
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(bufferedInputStream);
-            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(billings);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametersMap, beanCollectionDataSource);
-            // view report to UI
-            JasperViewer.viewReport(jasperPrint, false);
-
-        } catch (JRException ex) {
-            Logger.getLogger(reporteVentas.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(reporteVentas.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_printBTNActionPerformed
-
+    /**
+     * Boton limpiar campos de busqueda
+     *
+     * @param evt
+     */
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         criteria.setText("");
         fromDate.setDate(null);
         untilDate.setDate(null);
-        printBTN.setEnabled(false);
+//        printBTN.setEnabled(false);
 
         fijarDatos(new ArrayList<Billing>());
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    /**
+     * Acción de boton salir
+     *
+     * @param evt
+     */
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         int index = mainForm.pestanias.getSelectedIndex();
         if (index != -1) {
@@ -346,6 +312,11 @@ public class reporteVentas extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    /**
+     * Accion de boton de buscar ventas realizadas por rango de fechas
+     *
+     * @param evt
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String criterio = criteria.getText();
 
@@ -383,74 +354,6 @@ public class reporteVentas extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void printUnificadoBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printUnificadoBTNActionPerformed
-        if (!billings.isEmpty()) {
-
-            //consultar nuevamente agrupando los usuarios
-            Calendar start = Calendar.getInstance();
-            start.setTime(fromDate.getDate());
-            start.set(Calendar.HOUR_OF_DAY, 0);
-            start.set(Calendar.MINUTE, 0);
-            start.set(Calendar.SECOND, 0);
-
-            Calendar end = Calendar.getInstance();
-            end.setTime(untilDate.getDate());
-            end.set(Calendar.HOUR_OF_DAY, 23);
-            end.set(Calendar.MINUTE, 59);
-            end.set(Calendar.SECOND, 0);
-
-            String query = "select sum(b.total),  b.clientProviderid.personId.names, b.clientProviderid.personId.passport from Billing b "
-                    + "where  b.emissiondate between :start "
-                    + "and :end  and b.state=:state  and b.user=:user  group by b.clientProviderid.personId.names";
-
-            Query q = controller.getEm().createQuery(query);
-            q.setParameter("start", start.getTime());
-            q.setParameter("end", end.getTime());
-            q.setParameter("user", LoginApp.userLogged);
-            q.setParameter("state", "Pagada");
-
-            BigDecimal totalReport = BigDecimal.ZERO;
-
-            List<Object[]> temp = q.getResultList();
-            BigDecimal totalBilling = BigDecimal.ZERO;
-            List<Billing> tickets = new ArrayList<>();
-
-            for (Object[] bill : temp) {
-                totalBilling = new BigDecimal(bill[0].toString());
-                Billing newBilling = new Billing();
-                newBilling.setTotal(totalBilling);
-                newBilling.setClienteName(bill[1].toString());
-                newBilling.setPassportClient(bill[2].toString());
-                totalReport = totalReport.add(totalBilling);
-                tickets.add(newBilling);
-            }
-
-            String reportPath = Utilitario.getValue("pathJasper") + "ventasA7.jasper";
-
-            try {
-                Map parametersMap = new HashMap();
-                parametersMap.put("total", totalReport);
-                parametersMap.put("desde", fromDate.getDate());
-                parametersMap.put("hasta", untilDate.getDate());
-
-                FileInputStream fis = new FileInputStream(reportPath);
-                BufferedInputStream bufferedInputStream = new BufferedInputStream(fis);
-                JasperReport jasperReport = (JasperReport) JRLoader.loadObject(bufferedInputStream);
-                JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(tickets);
-                JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametersMap, beanCollectionDataSource);
-                // view report to UI 
-//                JasperViewer.viewReport(jasperPrint, false);
-                JasperPrintManager.printReport(jasperPrint, false);
-            } catch (JRException ex) {
-                Logger.getLogger(reporteVentas.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(reporteVentas.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        } else {
-            printUnificadoBTN.setEnabled(false);
-        }
-    }//GEN-LAST:event_printUnificadoBTNActionPerformed
 
     private void printTicketsBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printTicketsBTNActionPerformed
         if (!billings.isEmpty()) {
@@ -504,6 +407,7 @@ public class reporteVentas extends javax.swing.JPanel {
                 parametersMap.put("desde", fromDate.getDate());
                 parametersMap.put("hasta", untilDate.getDate());;
                 parametersMap.put("recaudador", LoginApp.userLogged.getNombres());
+                parametersMap.put("institution", config.getValue());
 
                 FileInputStream fis = new FileInputStream(reportPath);
                 BufferedInputStream bufferedInputStream = new BufferedInputStream(fis);
@@ -520,10 +424,13 @@ public class reporteVentas extends javax.swing.JPanel {
                 Logger.getLogger(reporteVentas.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            printUnificadoBTN.setEnabled(false);
+//            printUnificadoBTN.setEnabled(false);
         }
     }//GEN-LAST:event_printTicketsBTNActionPerformed
 
+    /**
+     * Construir la tabla de datos de ventas
+     */
     public static void verTabla() {
         dBTable1.createControlPanel();
         Calendar date = Calendar.getInstance();
@@ -533,6 +440,11 @@ public class reporteVentas extends javax.swing.JPanel {
         fijarDatos(billings);
     }
 
+    /**
+     * Fijar los datos en la tabla de datos de ventas
+     *
+     * @param billings
+     */
     private static void fijarDatos(List<Billing> billings) {
         BigDecimal sum = BigDecimal.ZERO;
         for (Billing billing : billings) {
@@ -540,12 +452,12 @@ public class reporteVentas extends javax.swing.JPanel {
         }
 
         if (billings.size() > 0) {
-            printBTN.setEnabled(true);
-            printUnificadoBTN.setEnabled(true);
+//            printBTN.setEnabled(true);
+//            printUnificadoBTN.setEnabled(true);
             printTicketsBTN.setEnabled(true);
         } else {
-            printBTN.setEnabled(false);
-            printUnificadoBTN.setEnabled(false);
+//            printBTN.setEnabled(false);
+//            printUnificadoBTN.setEnabled(false);
             printTicketsBTN.setEnabled(false);
         }
 
@@ -586,9 +498,7 @@ public class reporteVentas extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel1;
-    private static javax.swing.JButton printBTN;
     private static javax.swing.JButton printTicketsBTN;
-    private static javax.swing.JButton printUnificadoBTN;
     private static javax.swing.JLabel totalLbl;
     private com.toedter.calendar.JDateChooser untilDate;
     // End of variables declaration//GEN-END:variables

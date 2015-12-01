@@ -4,7 +4,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["/Users/macbookpro/NetBeansProjects/ticketsApp/src/ventanas/reportes/jasper/"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["C:/Users/Usuario/Documents/GIM-Loxageek/src/ventanas/reportes/jasper/"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[]]>

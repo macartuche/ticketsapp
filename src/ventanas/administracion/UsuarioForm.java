@@ -59,12 +59,12 @@ public class UsuarioForm extends javax.swing.JDialog {
         identificacion.setText(this.user.getPersonId().getPassport());
         direccion.setText(this.user.getPersonId().getAddress());
         correo.setText(this.user.getPersonId().getEmail());
-        usuario.setText(this.user.getUsuario());
         rol.setSelectedItem(this.user.getRol());
         if (this.user.getId() == null) {
             clave.setEnabled(true);
             cambiarClave.setVisible(false);
         } else {
+            usuario.setText(this.user.getUsuario());
             clave.setEnabled(false);
             cambiarClave.setVisible(true);
             //fijar los permisos de usuario
