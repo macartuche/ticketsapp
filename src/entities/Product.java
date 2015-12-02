@@ -303,6 +303,4 @@ public class Product implements Serializable {
     public void setModel(String model) {
         this.model = model;
     }
-    
-    
 }

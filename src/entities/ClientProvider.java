@@ -187,7 +187,4 @@ public class ClientProvider implements Serializable {
     public void setFullname(String fullname) {
         this.fullname = fullname;
     }
-    
-    
- 
 }

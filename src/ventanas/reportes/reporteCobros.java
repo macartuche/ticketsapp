@@ -44,7 +44,7 @@ public class reporteCobros extends javax.swing.JPanel {
     static ConfigurationsJpaController controllerConfig = null;
 
     /**
-     * Creates new form reportes
+     * Constructor 
      */
     public reporteCobros() {
         initComponents();
@@ -271,6 +271,12 @@ public class reporteCobros extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
+    /**
+     * Accion de boton imprimir reporte
+     * @param evt 
+     */
     private void printBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printBTNActionPerformed
  
         String reportPath = Utilitario.getValue("pathJasper")+"cobrosReport.jasper"; 
@@ -293,6 +299,11 @@ public class reporteCobros extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_printBTNActionPerformed
 
+    
+    /**
+     * Accion de boton, limpiar buscador
+     * @param evt 
+     */
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         criteria.setText("");
         fromDate.setDate(null);
@@ -309,6 +320,12 @@ public class reporteCobros extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    
+    
+    /**
+     * Accion de boton buscador de cobros por fechas
+     * @param evt 
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String criterio = criteria.getText();
         Date start = fromDate.getDate();
@@ -339,16 +356,21 @@ public class reporteCobros extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    /**
+     * Construir la tabla de datos
+     */
     public static void verTabla() {
         dBTable1.createControlPanel();
         account = controller.findAccountEntities();
         fijarDatos(account);
     }
 
+    /**
+     * Fijar los datos en la tabla de datos
+     * @param accounts 
+     */
     private static void fijarDatos(List<Account> accounts) {
         BigDecimal sum = BigDecimal.ZERO;
-//        for (Account account : accounts) {
-//        }
         Query q = controllerConfig.getEntityManager().createNamedQuery("Configurations.findByCode");
         q.setParameter("code", "quotesNumber");
         List<Configurations> configurations = q.getResultList();

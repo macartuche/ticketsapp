@@ -7,10 +7,12 @@ package ventanas.ventas;
 
 import controllers.AccountJpaController;
 import controllers.BillingJpaController;
+import controllers.ConfigurationsJpaController;
 import controllers.PaymentJpaController;
 import controllers.exceptions.NonexistentEntityException;
 import entities.Account;
 import entities.Billing;
+import entities.Configurations;
 import entities.Payment;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -46,26 +48,15 @@ public class CobroFacturaForm extends javax.swing.JDialog {
     private PaymentJpaController paymentController;
     private AccountJpaController accountController;
     private BillingJpaController billingController;
+    private ConfigurationsJpaController configController;
+    public Configurations config;
 
     /**
      * Creates new form CobroForm
      *
      * @param parent
      * @param modal
-     * @param account
-     * @param quote
      */
-    public CobroFacturaForm(java.awt.Frame parent, boolean modal, Account account, BigDecimal quote) {
-        super(parent, modal);
-        initComponents();
-        this.account = account;
-        this.quote = quote;
-        fijarDatos();
-        System.out.println("bal cons: " + this.account.getBalance());
-        paymentController = new PaymentJpaController();
-        accountController = new AccountJpaController();
-        this.btnRegistrarPago.setEnabled(false);
-    }
 
     public CobroFacturaForm(java.awt.Frame parent, boolean modal, Billing billing) {
         super(parent, modal);
@@ -78,7 +69,13 @@ public class CobroFacturaForm extends javax.swing.JDialog {
         paymentController = new PaymentJpaController();
         accountController = new AccountJpaController();
         billingController = new BillingJpaController();
+        configController = new ConfigurationsJpaController();
         this.btnRegistrarPago.setEnabled(false);
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("code", "institutionName");
+        config = configController.namedQuery("Configurations.findByCode", variables).get(0);
+        
     }
 
     /**
@@ -256,6 +253,13 @@ public class CobroFacturaForm extends javax.swing.JDialog {
 
     }//GEN-LAST:event_txtPagoKeyPressed
 
+    /**
+     * Accion del boton registrar pago, anade una cuota de pago, o en su defecto
+     * si no hay mas cuotas por pagar se cancela la cuenta por cobrar y se
+     * imprime un comprobante de pago
+     *
+     * @param evt
+     */
     private void btnRegistrarPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPagoActionPerformed
         try {
             //solo grabar los valores
@@ -279,8 +283,10 @@ public class CobroFacturaForm extends javax.swing.JDialog {
 
             //imprimir el comprobante
             String reportPath = Utilitario.getValue("pathJasper") + "comPago.jasper";
+
             try {
                 Map parametersMap = new HashMap();
+                parametersMap.put("institution", config.getValue());
                 List<Billing> billings = new ArrayList<Billing>();
                 billings.add(billing);
                 FileInputStream fis = new FileInputStream(reportPath);
@@ -300,13 +306,18 @@ public class CobroFacturaForm extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnRegistrarPagoActionPerformed
 
+    /**
+     * Accion al momento de digitar una cantidad, verificia si es mayor al total
+     * a pagar caso contrario desactiva el boton
+     *
+     * @param evt
+     */
     private void txtPagoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPagoKeyReleased
         String value = txtPago.getText();
         if (value.isEmpty()) {
             this.btnRegistrarPago.setEnabled(false);
             return;
         }
-        System.out.println("value " + value);
         try {
             Double converted = Double.parseDouble(value);
             if (converted <= 0) {
@@ -316,11 +327,6 @@ public class CobroFacturaForm extends javax.swing.JDialog {
             BigDecimal change = new BigDecimal(converted).subtract(this.quote);
             change = change.setScale(2, BigDecimal.ROUND_HALF_UP);
             this.txtCambio.setText(change.toString());
-
-            System.out.println("bal: " + this.account.getBalance());
-            System.out.println("Cuota: " + quote);
-
-            System.out.println("=>" + change.compareTo(BigDecimal.ZERO));
             if (change.compareTo(BigDecimal.ZERO) < 0) {
                 this.btnRegistrarPago.setEnabled(false);
             } else {
@@ -333,6 +339,11 @@ public class CobroFacturaForm extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_txtPagoKeyReleased
 
+    /**
+     * Cierra el dialogo de cobro
+     *
+     * @param evt
+     */
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
 
         try {
@@ -356,65 +367,6 @@ public class CobroFacturaForm extends javax.swing.JDialog {
     private void txtPagoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPagoFocusGained
         txtPago.selectAll();
     }//GEN-LAST:event_txtPagoFocusGained
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CobroFacturaForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CobroFacturaForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CobroFacturaForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CobroFacturaForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the dialog */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                CobroForm dialog = new CobroForm(new javax.swing.JFrame(), true);
-//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-//                    @Override
-//                    public void windowClosing(java.awt.event.WindowEvent e) {
-//                        System.exit(0);
-//                    }
-//                });
-//                dialog.setVisible(true);
-//            }
-//        });
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the dialog */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                CobroForm dialog = new CobroForm(new javax.swing.JFrame(), true);
-//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-//                    @Override
-//                    public void windowClosing(java.awt.event.WindowEvent e) {
-//                        System.exit(0);
-//                    }
-//                });
-//                dialog.setVisible(true);
-//            }
-//        });
-    }
 
     public Account getAccount() {
         return account;

@@ -6,6 +6,7 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["/Users/macbookpro/NetBeansProjects/ticketsApp/src/ventanas/reportes/jasper/"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="institution" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -132,13 +133,13 @@
 				</textElement>
 				<text><![CDATA[Fecha:]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="0" y="15" width="198" height="15" uuid="4394494a-c4e8-40a3-9ccb-3c114959fdfa"/>
+			<textField>
+				<reportElement x="0" y="16" width="198" height="13" uuid="91974909-371f-48a1-be8c-79afb62cd7d7"/>
 				<textElement textAlignment="Center">
-					<font size="10" isBold="true"/>
+					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Zoológico Municipal]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$P{institution}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<columnHeader>

@@ -223,5 +223,4 @@ public class Family implements Serializable {
     public void setEdit(Boolean edit) {
         this.edit = edit;
     }
-    
 }

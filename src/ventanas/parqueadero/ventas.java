@@ -9,11 +9,12 @@ import ventanas.ventas.*;
 import com.sun.glass.events.KeyEvent;
 import controllers.BillingJpaController;
 import controllers.ClientProviderJpaController;
+import controllers.ConfigurationsJpaController;
 import controllers.PersonJpaController;
 import controllers.ProductJpaController;
 import controllers.exceptions.NonexistentEntityException;
 import entities.Billing;
-import entities.ClientProvider;
+import entities.Configurations;
 import entities.DetailBilling;
 import entities.Product;
 import java.io.BufferedInputStream;
@@ -31,12 +32,12 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Query;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
@@ -45,7 +46,6 @@ import org.joda.time.DateTime;
 import org.joda.time.Period;
 import ventanas.administracion.LoginApp;
 import ventanas.mainForm;
-import static ventanas.ventas.ventas.ventas;
 
 /**
  *
@@ -57,6 +57,7 @@ public class ventas extends javax.swing.JPanel {
     static PersonJpaController controllerPerson = null;
     static ProductJpaController controllerProducto = null;
     static ClientProviderJpaController controllerClient = null;
+    static ConfigurationsJpaController configController = null;
     public static List<Billing> ventas;
 
     /**
@@ -68,6 +69,7 @@ public class ventas extends javax.swing.JPanel {
         controllerPerson = new PersonJpaController();
         controllerProducto = new ProductJpaController();
         controllerClient = new ClientProviderJpaController();
+        configController = new ConfigurationsJpaController();
         verTabla();
     }
 
@@ -466,6 +468,14 @@ public class ventas extends javax.swing.JPanel {
         ResourceBundle resource = ResourceBundle.getBundle("values", local);
         String reportPath = resource.getString("pathJasper") + "comPark.jasper";
 
+        //parameters 
+        Map<String, Object> params = new HashMap<>();
+        params.put("code", "institutionName");
+        List<Configurations> list = configController.namedQuery("Configurations.findByCode", params);
+        
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("institution", list.get(0).getValor());
+
         try {
             FileInputStream fis = new FileInputStream(reportPath);
             BufferedInputStream bufferedInputStream = new BufferedInputStream(fis);
@@ -483,29 +493,30 @@ public class ventas extends javax.swing.JPanel {
     }//GEN-LAST:event_btnImprimirActionPerformed
 
     private void btnPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagoActionPerformed
+
+        
         int indice = dBTable1.getSelectedRow();
         Billing b = ventas.get(indice);
 
+        if(b.getState().equals("Pagada")){
+            JOptionPane.showMessageDialog(this, "El ticket ya ha sido pagado", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         //calcular el tiempo de pago 
-        DetailBilling detail = b.getDetailBillingList().get(0);
-        Date timeStart = detail.getTimestart();
+        Date timeStart = b.getDetailBillingList().get(0).getTimestart();
 
         DateTime start = new DateTime(timeStart);
         Date fin = new Date();
         DateTime end = new DateTime(fin);
 
-        System.out.println("===>" + start);
-        System.out.println("===>" + end);
         Period period = new Period(start, end);
 
         int hours = period.getHours();
         int minutes = period.getMinutes();
 
-        System.out.println("Dias: " + period.getDays());
-        System.out.println("horas: " + period.getHours());
-        System.out.println("minutes: " + period.getMinutes());
+        String tiempo = period.getHours() + ":" + period.getMinutes() + ":" + period.getMinutes();
 
-        Product product = detail.getProductId();
+        Product product = b.getDetailBillingList().get(0).getProductId();
         BigDecimal price = product.getSaleprice();
         BigDecimal quantity = BigDecimal.ZERO;
 
@@ -517,45 +528,26 @@ public class ventas extends javax.swing.JPanel {
             quantity = quantity.add(BigDecimal.ONE);
         }
 
-        detail.setPercentageIva(product.getPercentageIva());
-        detail.setUnitaryPrice(price);
-        detail.setValueIva(price);
+        b.getDetailBillingList().get(0).setPercentageIva(product.getPercentageIva());
+        b.getDetailBillingList().get(0).setUnitaryPrice(price);
+        b.getDetailBillingList().get(0).setValueIva(price);
 
         BigDecimal totalIva = price.multiply(quantity).multiply(product.getPercentageIva());
         BigDecimal total = product.getSaleprice().multiply(quantity).add(totalIva);
 
         total = total.setScale(2, RoundingMode.HALF_UP);
 
-        detail.setValueIva(totalIva);
-        detail.setTotalWithTax(total);
-        detail.setTotal(total);
-        detail.setQuantity(quantity);
-        detail.setTimeend(fin);
-        b.setTotal(detail.getTotalWithTax());
-       
-        CobroParkForm dialog = new CobroParkForm(new javax.swing.JFrame(), Boolean.TRUE, b);
+        b.getDetailBillingList().get(0).setValueIva(totalIva);
+        b.getDetailBillingList().get(0).setTotalWithTax(total);
+        b.getDetailBillingList().get(0).setTotal(total);
+        b.getDetailBillingList().get(0).setQuantity(quantity);
+        b.getDetailBillingList().get(0).setTimeend(fin);
+        b.setTotal(b.getDetailBillingList().get(0).getTotalWithTax());
+
+        CobroParkForm dialog = new CobroParkForm(new javax.swing.JFrame(), Boolean.TRUE, b, tiempo);
         dialog.setVisible(true);
         verTabla();
-        /*
-         if (ventas.isEmpty()) {
-         JOptionPane.showMessageDialog(this, "Seleccione una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
-         return;
-         }
-
-         int indice = dBTable1.getSelectedRow();
-         Billing b = ventas.get(indice);
-         if (!b.getState().equals("GENERADA")) {
-         //                abrirVentana(b);
-         JOptionPane.showMessageDialog(this, "Sólo se pueden pagar facturas en estado \"GENERADA\".", "ERROR", JOptionPane.ERROR_MESSAGE);
-         return;
-         }
-
-         CobroFacturaForm dialog = new CobroFacturaForm(new javax.swing.JFrame(), Boolean.TRUE, b);
-         dialog.setVisible(true);
-         System.out.println(">");
-           
-         System.out.println(">>");
-         */
+        
     }//GEN-LAST:event_btnPagoActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed

@@ -222,23 +222,6 @@ public class VentasForm extends javax.swing.JDialog implements ActionListener, K
             TableColumn col = dBTable1.getColumn(1);
             col.setCellEditor(new MyComboBoxEditor(values));
             col.setCellRenderer(new MyComboBoxRenderer(values));
-
-//                dBTable1.getColumn(1).setCellEditor(new DefaultCellEditor(comboQuantity));
-            /*
-             comboQuantity.addActionListener(new java.awt.event.ActionListener() {
-             public void actionPerformed(java.awt.event.ActionEvent evt) {
-             fijarCantidad(evt);
-             }
-             });
-             */
-             
-//            combo.addActionListener(new java.awt.event.ActionListener() {
-//                public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                    fijarCantidad(evt);
-//                }
-//            });
-//
-
             //calcular los totales de la factura1
             calcularTotales();
         } catch (Exception ex) {
@@ -669,17 +652,10 @@ public class VentasForm extends javax.swing.JDialog implements ActionListener, K
      *
      */
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
+
         try {
-
             if (!noValido()) {
-
-                if (billing.getId() == null) {
-
-              
-                    
-                            System.out.println("=====>"+billing.getSequential());
-                            System.out.println("=====>"+billing.getShop_id());
+                if (billing.getId() == null) { 
                     controller.createBilling(billing);
                       generarSecuencial();
                      controller.edit(billing);
@@ -994,31 +970,16 @@ public class VentasForm extends javax.swing.JDialog implements ActionListener, K
             setSelectedItem(value);
             return this;
         }
-        
-//        @Override
-//         public void actionPerformed(ActionEvent e) {
-//            System.out.println("=0-090000---");
-//              fijarCantidad(e);
-//        }
+ 
     }
 
+    /**
+     * Clase interna que permitecolocar un combobox en la tabla de detalle
+     */
     class MyComboBoxEditor extends DefaultCellEditor {
-
- 
-
-        public MyComboBoxEditor(String[] items) {
-
-//        JComboBox combo = new JComboBox(items);
+        public MyComboBoxEditor(String[] items) { 
             super(new JComboBox(items));
-//            JComboBox combo = (JComboBox) super.getComponent();
-//            combo.addActionListener(new java.awt.event.ActionListener() {
-//                public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                    fijarCantidad(evt);
-//                }
-//            });
-
         }
- 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

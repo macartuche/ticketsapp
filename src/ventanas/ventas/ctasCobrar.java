@@ -310,7 +310,7 @@ public class ctasCobrar extends javax.swing.JPanel {
     }
 
     /**
-     *
+     * Abre un dialogo para cobrar un abono a una cuenta para cobrar
      * @param account
      */
     private void abrirVentana(final Account account) {
@@ -363,6 +363,10 @@ public class ctasCobrar extends javax.swing.JPanel {
 
     }
 
+    /**
+     * Buscador de cuentas por cobrar, ya se por cliente o por un rango de fechas 
+     * @param evt 
+     */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         Date start = fromDate.getDate();
         Date end = untilDate.getDate();
@@ -384,6 +388,10 @@ public class ctasCobrar extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    /**
+     * Accion del boton limpiar
+     * @param evt 
+     */
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         rucTxt.setText("");
         nameTxt.setText("");
@@ -393,11 +401,20 @@ public class ctasCobrar extends javax.swing.JPanel {
         verTabla();
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    /**
+     * Fijar los datos del cliente seleccionado en el campo de busqueda de cliente
+     * @param clientProvider 
+     */
     public static void receiveClient(ClientProvider clientProvider) {
         client = clientProvider;
         rucTxt.setText(client.getPersonId().getPassport());
         nameTxt.setText(client.getPersonId().getNames() + " " + client.getPersonId().getLastname());
     }
+    
+    /**
+     * Muesta la venta de clientes para luego ser seleccinado uno
+     * @param evt 
+     */
     private void searchClientBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchClientBtnActionPerformed
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -425,6 +442,10 @@ public class ctasCobrar extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    /**
+     * Metodo que muesta un historial de pagos realizados
+     * @param account 
+     */
     private void abrirPagos(final Account account) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -441,6 +462,11 @@ public class ctasCobrar extends javax.swing.JPanel {
             }
         });
     }
+    
+    /**
+     * Obtieen la fila seleccionada de la cuenta por cobrar para luego abrir la ventan de pago
+     * @param evt 
+     */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         int indice = dBTable1.getSelectedRow();
         if (indice < 0) {
@@ -467,6 +493,9 @@ public class ctasCobrar extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    /**
+     * Visualiza la tabla de datos
+     */
     public static void verTabla() {
         dBTable1.createControlPanel();
         dBTable1.setEditable(false);
@@ -475,6 +504,10 @@ public class ctasCobrar extends javax.swing.JPanel {
 
     }
 
+    /**
+     * Fija las columnas y los datos de la tabla de datos
+     * @param accounts 
+     */
     private static void fijarDatos(List<Account> accounts) {
         try {
             resultados.setText("Resultados: " + accounts.size());

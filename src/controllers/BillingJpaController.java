@@ -33,14 +33,15 @@ public class BillingJpaController extends EntityManagerProj implements Serializa
         super();
     }
 
-//    public BillingJpaController(EntityManagerFactory emf) {
-//        this.emf = emf;
-//    }
-//    private EntityManagerFactory emf = null;
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
+    /**
+     * Permite crear una entidad de factura, verificando tambien las relaciones
+     * de cuentas, detalle de factura
+     * @param billing 
+     */
     public void create(Billing billing) {
         if (billing.getDetailBillingList() == null) {
             billing.setDetailBillingList(new ArrayList<DetailBilling>());
@@ -49,49 +50,13 @@ public class BillingJpaController extends EntityManagerProj implements Serializa
             billing.setInventaryList(new ArrayList<Inventary>());
         }
         EntityManager em = null;
-        try {
-//            em = getEntityManager();
+        try { 
             em = super.getEmf().createEntityManager();
             em.getTransaction().begin();
             ClientProvider clientProviderid = billing.getClientProviderid();
             if (clientProviderid != null) {
                 clientProviderid = em.getReference(clientProviderid.getClass(), clientProviderid.getId());
                 billing.setClientProviderid(clientProviderid);
-            }
-            List<DetailBilling> attachedDetailBillingList = new ArrayList<DetailBilling>();
-//            for (DetailBilling detailBillingListDetailBillingToAttach : billing.getDetailBillingList()) {
-//                detailBillingListDetailBillingToAttach = em.getReference(detailBillingListDetailBillingToAttach.getClass(), detailBillingListDetailBillingToAttach.getId());
-//                attachedDetailBillingList.add(detailBillingListDetailBillingToAttach);
-//            }
-//            billing.setDetailBillingList(attachedDetailBillingList);
-            List<Inventary> attachedInventaryList = new ArrayList<Inventary>();
-            for (Inventary inventaryListInventaryToAttach : billing.getInventaryList()) {
-                inventaryListInventaryToAttach = em.getReference(inventaryListInventaryToAttach.getClass(), inventaryListInventaryToAttach.getId());
-                attachedInventaryList.add(inventaryListInventaryToAttach);
-            }
-            billing.setInventaryList(attachedInventaryList);
-            em.persist(billing);
-            if (clientProviderid != null) {
-                clientProviderid.getBillingList().add(billing);
-                clientProviderid = em.merge(clientProviderid);
-            }
-//            for (DetailBilling detailBillingListDetailBilling : billing.getDetailBillingList()) {
-//                Billing oldBillingIdOfDetailBillingListDetailBilling = detailBillingListDetailBilling.getBillingId();
-//                detailBillingListDetailBilling.setBillingId(billing);
-//                detailBillingListDetailBilling = em.merge(detailBillingListDetailBilling);
-//                if (oldBillingIdOfDetailBillingListDetailBilling != null) {
-//                    oldBillingIdOfDetailBillingListDetailBilling.getDetailBillingList().remove(detailBillingListDetailBilling);
-//                    oldBillingIdOfDetailBillingListDetailBilling = em.merge(oldBillingIdOfDetailBillingListDetailBilling);
-//                }
-//            }
-            for (Inventary inventaryListInventary : billing.getInventaryList()) {
-                Billing oldBillingIdOfInventaryListInventary = inventaryListInventary.getBillingId();
-                inventaryListInventary.setBillingId(billing);
-                inventaryListInventary = em.merge(inventaryListInventary);
-                if (oldBillingIdOfInventaryListInventary != null) {
-                    oldBillingIdOfInventaryListInventary.getInventaryList().remove(inventaryListInventary);
-                    oldBillingIdOfInventaryListInventary = em.merge(oldBillingIdOfInventaryListInventary);
-                }
             }
             em.getTransaction().commit();
         } finally {
@@ -101,6 +66,14 @@ public class BillingJpaController extends EntityManagerProj implements Serializa
         }
     }
 
+    /**
+     * Permite editar una factura, verificando ademas
+     * las relaciones con detalle de factura y cuentas por cobrar
+     * @param billing
+     * @throws IllegalOrphanException
+     * @throws NonexistentEntityException
+     * @throws Exception 
+     */
     public void edit(Billing billing) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
@@ -172,17 +145,7 @@ public class BillingJpaController extends EntityManagerProj implements Serializa
                     }
                 }
             }
-            for (Inventary inventaryListNewInventary : inventaryListNew) {
-                if (!inventaryListOld.contains(inventaryListNewInventary)) {
-                    Billing oldBillingIdOfInventaryListNewInventary = inventaryListNewInventary.getBillingId();
-                    inventaryListNewInventary.setBillingId(billing);
-                    inventaryListNewInventary = em.merge(inventaryListNewInventary);
-                    if (oldBillingIdOfInventaryListNewInventary != null && !oldBillingIdOfInventaryListNewInventary.equals(billing)) {
-                        oldBillingIdOfInventaryListNewInventary.getInventaryList().remove(inventaryListNewInventary);
-                        oldBillingIdOfInventaryListNewInventary = em.merge(oldBillingIdOfInventaryListNewInventary);
-                    }
-                }
-            }
+     
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -200,6 +163,13 @@ public class BillingJpaController extends EntityManagerProj implements Serializa
         }
     }
 
+    /**
+     * Permite eliminar una factura,
+     * verificando las relacines de detalle de factura y cuentas x cobrar
+     * @param id
+     * @throws IllegalOrphanException
+     * @throws NonexistentEntityException 
+     */
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
@@ -245,14 +215,33 @@ public class BillingJpaController extends EntityManagerProj implements Serializa
         }
     }
 
+    /**
+     * Buscar todas las facturas
+     * @return 
+     */
     public List<Billing> findBillingEntities() {
         return findBillingEntities(true, -1, -1);
     }
 
+    /**
+     * BUscar las facturas con una maximo de resultados
+     * 
+     * @param maxResults
+     * @param firstResult
+     * @return 
+     */
     public List<Billing> findBillingEntities(int maxResults, int firstResult) {
         return findBillingEntities(false, maxResults, firstResult);
     }
 
+    /**
+     * Buscar facturas, pueden ser todas, un maximo rde resultados
+     * y el cursor en el primer resultado
+     * @param all
+     * @param maxResults
+     * @param firstResult
+     * @return 
+     */
     private List<Billing> findBillingEntities(boolean all, int maxResults, int firstResult) {
 //        EntityManager em = getEntityManager();
         em = super.getEmf().createEntityManager();
@@ -270,6 +259,11 @@ public class BillingJpaController extends EntityManagerProj implements Serializa
         }
     }
 
+    /**
+     * Encontrar una factura por su id
+     * @param id
+     * @return 
+     */
     public Billing findBilling(Integer id) {
 //        EntityManager em = getEntityManager();
         em = super.getEmf().createEntityManager();
@@ -280,8 +274,11 @@ public class BillingJpaController extends EntityManagerProj implements Serializa
         }
     }
 
-    public int getBillingCount() {
-//        EntityManager em = getEntityManager();
+    /**
+     * Contar las facturas encontradas resultados de una lista
+     * @return 
+     */
+    public int getBillingCount() { 
         em = super.getEmf().createEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
@@ -294,6 +291,13 @@ public class BillingJpaController extends EntityManagerProj implements Serializa
         }
     }
 
+    /**
+     * Permite realizar busquedas especificar, mediante los named queryes
+     * (consultas predifinidas)
+     * @param query
+     * @param filters
+     * @return 
+     */
     public List<Billing> namedQuery(String query, Map<String, Object> filters) {
         EntityManager em = super.getEmf().createEntityManager();
         try {
@@ -311,6 +315,13 @@ public class BillingJpaController extends EntityManagerProj implements Serializa
 
     }
 
+    /**
+     * BUscar las facturas de venta de acuerdo al dia y al emisor o recaudador
+     * es decir el usuario logueado
+     * @param date
+     * @param user
+     * @return 
+     */
     public List<Billing> findByDayAndCollector(Date date, Users user ) {
         EntityManager em = super.getEmf().createEntityManager();
         try {
@@ -337,6 +348,10 @@ public class BillingJpaController extends EntityManagerProj implements Serializa
         }
     }
     
+    /**
+     * Crea una factura
+     * @param entity 
+     */
     public void createBilling(Billing entity) {
         EntityManager entitymanager;
         try {
@@ -350,6 +365,10 @@ public class BillingJpaController extends EntityManagerProj implements Serializa
         }
     }
 
+    /**
+     * Actualiza las facturas
+     * @param entity 
+     */
     public void updateBilling(Billing entity) {
         EntityManager em = super.getEmf().createEntityManager();
         em.merge(entity);

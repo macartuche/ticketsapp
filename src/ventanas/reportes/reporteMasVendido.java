@@ -235,6 +235,10 @@ public class reporteMasVendido extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Obtiene el reporte de los productos mas vendidos
+     * @param evt 
+     */
     private void printBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printBTNActionPerformed
 
           String reportPath = Utilitario.getValue("pathJasper")+"masVendidoReport.jasper";
@@ -258,6 +262,10 @@ public class reporteMasVendido extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_printBTNActionPerformed
 
+    /**
+     * permite limpiar el cuadro de busqueda
+     * @param evt 
+     */
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
 //        criteria.setText("");
         fromDate.setDate(null);
@@ -266,6 +274,11 @@ public class reporteMasVendido extends javax.swing.JPanel {
         verTabla();
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    
+    /**
+     * Accion de boton Buscar de acuerdo aun rango de fechas
+     * @param evt 
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 //        String criterio = criteria.getText();
         Date start = fromDate.getDate();
@@ -309,6 +322,10 @@ public class reporteMasVendido extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnSalirActionPerformed
 
+    
+    /**
+     * Construir la tabla de datos
+     */
     public static void verTabla() {
 //        dBTable1.createControlPanel();
 //        details = controller.findDetailBillingEntities();
@@ -320,8 +337,7 @@ public class reporteMasVendido extends javax.swing.JPanel {
             
             for (Object[] object : objectList) {
                 DetailBilling detail = new DetailBilling();
-                detail.setName(object[1].toString());
-                System.out.println("===>"+object[1]);
+                detail.setName(object[1].toString()); 
                 detail.setQuantity(new BigDecimal(object[0].toString()));
                 detail.setTotal(new BigDecimal(object[2].toString()));
                 
@@ -330,17 +346,17 @@ public class reporteMasVendido extends javax.swing.JPanel {
         fijarDatos(details);
     }
 
+    /**
+     * Fijar los datos en la tabla de datos
+     * @param details 
+     */
     private static void fijarDatos(List<DetailBilling> details) {
         BigDecimal sum = BigDecimal.ZERO;
  
         if (details.size() > 0) {
             printBTN.setEnabled(true);
         }
-//        for (DetailBilling detail : details) {
-//            sum = sum.add(detail.getTotal());
-//        }
-//        totalReport = sum;
-
+ 
         try {
             String methodNames[] = {"getName", "getCantidad", "getPrecioUnitario","getTotal"};
             dBTable1.refreshDataObject(details, methodNames);
