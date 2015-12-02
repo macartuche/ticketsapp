@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comPago" pageWidth="210" pageHeight="297" columnWidth="198" leftMargin="7" rightMargin="5" topMargin="8" bottomMargin="8" uuid="228fd20d-3fef-43d9-81bb-466511a5b766">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="2.357947691000002"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["/Users/macbookpro/NetBeansProjects/ticketsApp/src/ventanas/reportes/jasper/"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["C:/Users/Usuario/Documents/GIM-Loxageek/ticketsApp/src/ventanas/reportes/jasper/"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="institution" class="java.lang.String"/>
 	<queryString>
@@ -106,13 +106,6 @@
 	<title>
 		<band height="59" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="29" width="198" height="15" uuid="81f93513-8477-4c7c-acb2-253ade04e85f"/>
-				<textElement textAlignment="Center">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Comprobante de pago]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="0" y="1" width="198" height="15" uuid="877108ab-43fe-4410-9269-6bc6e4f28fbe"/>
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
@@ -139,6 +132,13 @@
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{institution}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="0" y="30" width="198" height="16" uuid="e8b6e763-c9bb-4def-b6a7-7d4571944291"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Comprobante de pago N: "+ $F{sequential}.replaceFirst( "^0*", "" )]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

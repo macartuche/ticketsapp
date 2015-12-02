@@ -5,7 +5,7 @@
  */
 package ventanas.ventas;
 
-import com.sun.glass.events.KeyEvent;
+//import com.sun.glass.events.KeyEvent;
 import controllers.BillingJpaController;
 import controllers.ClientProviderJpaController;
 import controllers.ConfigurationsJpaController;
@@ -433,7 +433,7 @@ public class ventas extends javax.swing.JPanel {
                     product = detalle.getProductId();
                     cantidad = cantidad.add(product.getStock());
                     product.setStock(cantidad);
-                    controllerProducto.edit(product);
+                    controllerProducto.edit(product);                    
 
                 }
                 b.setState("ANULADA");
@@ -474,8 +474,8 @@ public class ventas extends javax.swing.JPanel {
             JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(facturas);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametersMap, beanCollectionDataSource);
             // view report to UI
-//            JasperViewer.viewReport(jasperPrint, false);
-            JasperPrintManager.printReport(jasperPrint, false);
+            JasperViewer.viewReport(jasperPrint, false);
+//            JasperPrintManager.printReport(jasperPrint, false);
         } catch (JRException ex) {
             Logger.getLogger(ventas.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
@@ -556,9 +556,9 @@ public class ventas extends javax.swing.JPanel {
 
     private void btnNuevoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnNuevoKeyPressed
         System.out.println("GIM=>" + evt.getKeyCode());
-        if (evt.getKeyCode() == KeyEvent.VK_N) {
-            abrirFormTickets();
-        }
+//        if (evt.getKeyCode() == KeyEvent.VK_N) {
+//            abrirFormTickets();
+//        }
     }//GEN-LAST:event_btnNuevoKeyPressed
 
     private void jPanel1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel1KeyPressed
