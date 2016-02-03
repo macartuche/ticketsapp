@@ -1,0 +1,1101 @@
+11<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Proyecto arquitectos</title>
+  <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link media="all" type="text/css" rel="stylesheet" href="http://192.168.1.2:8000/packages/bootstrap/css/bootstrap.css">
+
+  <link media="all" type="text/css" rel="stylesheet" href="http://192.168.1.2:8000/packages/bootstrap/css/bootstrap.min.css">
+
+  <link media="all" type="text/css" rel="stylesheet" href="http://192.168.1.2:8000/packages/bootstrap/css/datepicker3.css">
+
+  <link media="all" type="text/css" rel="stylesheet" href="http://192.168.1.2:8000/packages/bootstrap/css/slidebars.css">
+
+  <link media="all" type="text/css" rel="stylesheet" href="http://192.168.1.2:8000/css/main.css">
+
+  <link media="all" type="text/css" rel="stylesheet" href="http://192.168.1.2:8000/css/todo.css">
+
+  <script src="http://192.168.1.2:8000/packages/js/jquery-2.1.1.js"></script>
+
+  <script src="http://192.168.1.2:8000/packages/js/jquery.ui.min.js"></script>
+
+  <script src="http://192.168.1.2:8000/packages/js/jquery.ui.touch-punch.js"></script>
+
+  <script src="http://192.168.1.2:8000/packages/js/dialogs.js"></script>
+
+  <script src="http://192.168.1.2:8000/packages/js/todo.js"></script>
+
+  <script src="http://192.168.1.2:8000/packages/js/bootstrap-alert.js"></script>
+
+  <script src="http://192.168.1.2:8000/packages/bootstrap/js/bootstrap-datepicker.js"></script>
+
+  <script src="http://192.168.1.2:8000/packages/bootstrap/js/bootstrap-modal.js"></script>
+
+  <script src="http://192.168.1.2:8000/packages/bootstrap/js/slidebars.js"></script>
+
+</head>
+<body>
+  <div class="navbar navbar-fixed-top">
+    <div id="tabhead">
+      <div class="megamenu_container ">
+       <div id="logo">PROJARQ<label>MANAGEMENT</label></div>
+         <div class="sb-toggle-left navbar-left">
+            <div class="navicon-line"></div>
+            <div class="navicon-line"></div>
+            <div class="navicon-line"></div>
+          </div>
+        <nav id="menu" class="sb-slide sb-left">
+            <ul class="megamenu"> 
+              <li class="right">
+
+	<a href="#" class="drop megamenu-top-header" id="perfilID">Perfil</a>
+	<div id="perfil" class="drop8columns dropcontent pull-left-450" style="left: auto; display: none; max-height: 639px;">
+		<h3 class="col_6">Bienvenido: Daniel León</h3> 
+		<div style="clear:both"></div> 
+		<div class="col_6">
+			<ul class="project-menu-horizontal-list">
+				<li>
+					<!--<a href="edit/1"><i class="topmenu-icon icon-glyph icon-group"></i>Mi perfil</a> 
+					<a href="users/editProfile"><i class="topmenu-icon icon-glyph icon-group"></i>Mi perfil</a> -->
+					<a href="http://192.168.1.2:8000/users/editprofile" class="drop megamenu-top-header">Mi perfil</a>
+				</li>
+				<li>
+					<a href="http://192.168.1.2:8000/users/logout" class="drop megamenu-top-header">Cerrar sesi&oacute;n</a>
+				</li>
+			</ul>
+		</div> 
+	</div> 
+</li>
+<li id="navbar-project-menu" class="right" > 
+	
+</li>
+<li id="navbar-organization-menu" class="right"> 
+	<a href="#" class="drop megamenu-top-header" id="organization">Arquinova</a>
+	<div id="options" class="drop8columns dropcontent pull-left-450" style="left: auto; display: none; max-height: 639px;">
+		<h3 class="col_6">Arquinova</h3>  
+		<div class="col_6"> 
+			<ul class="project-menu-horizontal-list">
+				<li> 
+					<a href="/users/dashboard" title="Ver todas las iteraciones">
+						<i class="topmenu-icon icon-globe"> </i>
+						Escritorio
+					</a>
+				</li> 
+								<li>
+					<a href="/organization/name/Arquinova/projects" title="See the list of projects.">
+						<i class=" icon-briefcase"></i> 
+						Proyectos
+					</a>
+				</li>
+								
+				<li>
+					<a href="/messages" title="Lista de mensajes">
+					<i class="glyphicon glyphicon-envelope"></i> 
+						Mensajes 
+					<span class="badge">0</span>
+					</a>
+			
+				</li>
+				
+			
+								<li>
+					<a href="/organization/members/Arquinova/all_members" title="Get a listing of all members of the organization.">
+						<i class="topmenu-icon icon-glyph icon-group"></i> 
+						Miembros 
+					</a>
+				</li>
+								
+								<li>
+					<a href="/materials" title="Lista de materiales en la organización">
+						<i class="topmenu-icon icon-glyph icon-material"></i> 
+						Material 
+					</a>
+				</li>
+				
+								<li>
+					<a href="/personalType" title="Lista de tipo de personal en la organización">
+						<i class="topmenu-icon icon-glyph icon-group"></i> 
+						Tipo de personal 
+					</a>
+				</li>
+								 
+								<li>
+					<a href="/organization/edit">
+						<i class="topmenu-icon icon-glyph icon-edit"></i> 
+						Editar organización</a>
+				</li>
+							</ul>
+
+		</div>
+
+		<h3 class="col_8">Proyectos</h3> 
+		<div class="col_8">
+			<ul> 
+					    			    	<li class="project-menu-iteration-list-item ">
+					<a id="proyectID" class="organization-project-link" href="/projects/1" >
+						Construcción de vía
+					</a>
+				</li>
+						    	<li class="project-menu-iteration-list-item ">
+					<a id="proyectID" class="organization-project-link" href="/projects/5" >
+						Proyecto Josimar
+					</a>
+				</li>
+						    	<li class="project-menu-iteration-list-item ">
+					<a id="proyectID" class="organization-project-link" href="/projects/7" >
+						Proyecto tesis
+					</a>
+				</li>
+						    	<li class="project-menu-iteration-list-item ">
+					<a id="proyectID" class="organization-project-link" href="/projects/10" >
+						Proyecto MAC
+					</a>
+				</li>
+						    	<li class="project-menu-iteration-list-item ">
+					<a id="proyectID" class="organization-project-link" href="/projects/11" >
+						Contruccion de casa Sr Carlos
+					</a>
+				</li>
+						    	<li class="project-menu-iteration-list-item ">
+					<a id="proyectID" class="organization-project-link" href="/projects/30" >
+						Proyecto B 2015
+					</a>
+				</li>
+						    	<li class="project-menu-iteration-list-item ">
+					<a id="proyectID" class="organization-project-link" href="/projects/31" >
+						HHHHHHHHHHH
+					</a>
+				</li>
+						    	<li class="project-menu-iteration-list-item ">
+					<a id="proyectID" class="organization-project-link" href="/projects/32" >
+						Proyecto Anonimo
+					</a>
+				</li>
+						    	<li class="project-menu-iteration-list-item ">
+					<a id="proyectID" class="organization-project-link" href="/projects/33" >
+						Proyecto ZZZ
+					</a>
+				</li>
+						    	<li class="project-menu-iteration-list-item ">
+					<a id="proyectID" class="organization-project-link" href="/projects/34" >
+						Proyecto ZZZ
+					</a>
+				</li>
+						    	<li class="project-menu-iteration-list-item ">
+					<a id="proyectID" class="organization-project-link" href="/projects/35" >
+						eeeee
+					</a>
+				</li>
+						    	<li class="project-menu-iteration-list-item ">
+					<a id="proyectID" class="organization-project-link" href="/projects/37" >
+						GGGGGGGG
+					</a>
+				</li>
+						    	<li class="project-menu-iteration-list-item ">
+					<a id="proyectID" class="organization-project-link" href="/projects/38" >
+						Proyecto de construccion de casa de 3 pisos Sra Teresa
+					</a>
+				</li>
+						    	<li class="project-menu-iteration-list-item ">
+					<a id="proyectID" class="organization-project-link" href="/projects/39" >
+						Contruccioon de vivienda  Sra Ana Lucia
+					</a>
+				</li>
+				 
+						</ul>
+		</div>   
+	</div></li>
+ 
+          </ul>
+         </nav>
+      </div>
+    </div>
+  </div>
+ 
+  <div id="sb-site">
+    <div class="container">
+      <div class="container narrow_body" id="body">
+                                  <div class="project-body-header">
+	 	
+	<h1 id="tour-iteration-name">
+		Iteracón X 
+		<span class="iteration-title-date">
+			2015-01-07 - 2015-01-29
+		</span>
+	</h1>
+	<div id="iteration_stats" class="project-body-header-stats">
+		<div class="stats-bubble">
+			Historias
+			<h4>2</h4> 
+		</div>
+		<div class="stats-bubble">
+			Total Puntos
+			<h4>2</h4> 
+		</div>
+		<div class="stats-bubble">
+			Puntos en progreso
+			<h4>0</h4> 
+		</div>
+		<div class="stats-bubble">
+			Puntos completados
+			<h4>0</h4> 
+		</div>	
+		<div class="stats-bubble">
+			Dias restantes
+			<h4>3</h4> 
+		</div>
+	</div>
+	<div style="text-align:center; margin-top:20px;" id="burnup_chart">
+ 		<img src="http://192.168.1.2:8000/edit/20">
+		<!--  -->
+		<!--		-->
+
+	</div>	
+</div>
+
+
+<div class="container wide_body" id="body">
+		<div style="margin-left:auto; margin-right:auto; width:100%;">
+					<div id="story_form" class="story_form" style="margin-left:auto; margin-right:auto">
+				<ul id="createdStories">
+				</ul>
+				<div id="addStoryFormOnProgress" class="hidden">Guardando historia.  Por favor espere...</div> 
+				<form method="POST" action="http://192.168.1.2:8000/issue" accept-charset="UTF-8" class="uniForm" id="addStoryForm"><input name="_token" type="hidden" value="ZT7Egzyuxf8WgRtb7GVBWAwddjzbBJqDCNOMJi34">
+				<textarea id="summary" rows="1" cols="50" name="summary" maxlength="5000"></textarea>
+									<button id="add_button" type="submit" class="btn">Agregar historia</button>
+								<div class="iteration-app">
+					<div id="story_details" style="display: none;" >
+    <table id="add_story_table">
+      <tbody>
+        <tr>
+          <td>Detalle:</td>
+          <td>
+            <textarea id="detail" rows="10" cols="40" name="detail" maxlength="5000"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td>Etiquetas:</td>
+          <td>
+            <div class="tag_holder">
+              <input style="display: none;" name="labels" id="id_tags" type="text">
+              <ul class="tagit ui-widget ui-widget-content ui-corner-all">
+                <li class="tagit-new">
+                  <input aria-haspopup="true" aria-autocomplete="list" role="textbox" autocomplete="off" class="ui-widget-content ui-autocomplete-input" type="text">
+                </li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Puntos:&nbsp;</td>
+          <td id="points_section">
+            <ul>
+              <li>
+                <label for="id_points_3">
+                  <input id="id_points_3" value="1" name="points" type="radio"> 1
+                </label>
+              </li>
+              <li>
+                <label for="id_points_4">
+                  <input id="id_points_4" value="2" name="points" type="radio"> 2
+                </label>
+              </li>
+              <li>
+                <label for="id_points_5">
+                  <input id="id_points_5" value="3" name="points" type="radio"> 3
+                </label>
+              </li>
+              <li>
+                <label for="id_points_6">
+                  <input id="id_points_6" value="5" name="points" type="radio"> 5
+                </label>
+              </li>
+              <li>
+                <label for="id_points_7">
+                  <input id="id_points_7" value="8" name="points" type="radio"> 8
+                </label>
+              </li>
+              <li>
+                <label for="id_points_8">
+                  <input id="id_points_8" value="13" name="points" type="radio"> 13
+                </label>
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>Categoría:&nbsp;</td>
+          <td>
+            <select name="categoryid" id="categoryid">
+              <option value="0">----</option>
+                                                <option value="2" >asdfasdf </option>
+                                                                <option value="7" >Categoria1 </option>
+                                                                <option value="11" >Catego </option>
+                                                                <option value="12" >asdfasdf </option>
+                                                                <option value="13" >asdfasdfasdf </option>
+                                                                <option value="14" >asdfasdfasdf </option>
+                                                                <option value="15" >asdfasdfasdf </option>
+                                                                <option value="16" >asdfasdfasdf </option>
+                                          </select>   
+            <a class="add_category_link" href="#">Agregar categoría</a>
+            <input name="category_name" class="category_name" maxlength="25" style="display:none" type="text">
+          </td>
+        </tr>
+        <tr>
+          <td>Iteración:&nbsp;</td>
+          <td>
+            <select name="iterationid" id="iterationid">
+                              <option value="20">Construcción de vía / Iteracón X </option>
+                              <option value="21">Construcción de vía / Segunda iteración </option>
+                              <option value="22">Construcción de vía / Iteración tercera </option>
+                          </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="buttonHolder">
+      <a href="http://192.168.1.2:8000/iterations/22" class="btn btn-danger btn-sm">Cancelar</a> 
+    </div>
+  </div>
+
+<script type="text/javascript">
+$(document).ready(function() { 
+  $('#addStoryForm').submit(function(event){  
+     var summary = $('#summary').val();
+     var detail = $('#detail').val();
+     var radio = $('input[name=points]:checked'); 
+     if(summary == '' ||  detail == '' || !radio.val()){
+       return false;
+     }
+     return true;
+  });   
+});
+
+</script>				</div>
+				</form>
+			</div>
+				<h1>Historia</h1>
+		<ul id="tour-story-list" class="story-list ui-sortable" style="">
+						<li class="story-view superboard-story story_block gripper-status-1" story_id="863903" id="superboard_story_863903" rank="499999">
+				<div class="story-checkbox-holder" style="display: none;">
+					<input type="checkbox" class="story-checkbox">
+				</div>
+				<div class="block_story_body story-border">
+					<div class="story-content">
+						<span class="story-icons">
+							<a href="#" class="moveIterationIcon" story_id="863903">
+								<i class="icon-glyph icon-share" title="Move to another iteration."></i>
+							</a> 
+							<a href="#" class="story-status-button">
+								<i class="icon-glyph icon-tag" title="Change story status."></i>
+							</a>    
+							<a href="#" class="edit-story-button">
+								<i class="icon-glyph icon-edit" title="Edit story"></i>
+							</a>  
+						</span>
+						<h1 class="formatted_story_text story-summary">
+							<span style="color:#555555;" class="story_number">#7</span>
+							<p>prueba de puntos pechan</p>
+						</h1>
+						<div class="formatted_story_text story_detail">
+							<p>prueba</p>
+						</div>
+					</div>	
+					<div class="story_footer">    
+						<a class="status-text label-task status-background-1 status-foreground-1" 
+						href="#">
+						TO-DO
+					</a>
+
+										<span class="tasks-holder">
+						<span>
+							<a class="open-tasks-link show_tasks_link" href="#myModal" onclick="mostrarTaskboard(7, 1, 'Administrator')">
+								Tareas
+							</a>
+						</span>
+					</span>
+										|
+					<span class="comments-holder">
+						<a class="comments-link" href="#">
+							0&nbsp;Comments
+						</a>
+					</span> 
+				</div>
+			</div>
+		</li>
+					<li class="story-view superboard-story story_block gripper-status-1" story_id="863903" id="superboard_story_863903" rank="499999">
+				<div class="story-checkbox-holder" style="display: none;">
+					<input type="checkbox" class="story-checkbox">
+				</div>
+				<div class="block_story_body story-border">
+					<div class="story-content">
+						<span class="story-icons">
+							<a href="#" class="moveIterationIcon" story_id="863903">
+								<i class="icon-glyph icon-share" title="Move to another iteration."></i>
+							</a> 
+							<a href="#" class="story-status-button">
+								<i class="icon-glyph icon-tag" title="Change story status."></i>
+							</a>    
+							<a href="#" class="edit-story-button">
+								<i class="icon-glyph icon-edit" title="Edit story"></i>
+							</a>  
+						</span>
+						<h1 class="formatted_story_text story-summary">
+							<span style="color:#555555;" class="story_number">#8</span>
+							<p>Bailesadas</p>
+						</h1>
+						<div class="formatted_story_text story_detail">
+							<p>asdfasdf</p>
+						</div>
+					</div>	
+					<div class="story_footer">    
+						<a class="status-text label-task status-background-1 status-foreground-1" 
+						href="#">
+						TO-DO
+					</a>
+
+										<span class="tasks-holder">
+						<span>
+							<a class="open-tasks-link show_tasks_link" href="#myModal" onclick="mostrarTaskboard(8, 1, 'Administrator')">
+								Tareas
+							</a>
+						</span>
+					</span>
+										|
+					<span class="comments-holder">
+						<a class="comments-link" href="#">
+							0&nbsp;Comments
+						</a>
+					</span> 
+				</div>
+			</div>
+		</li>
+			</ul>
+</div>
+</div>
+<div sytle="clear:both"></div>
+
+<!-- DIALOGOS: MATERIAL, PERSONAL, GASTOS ADICIONALES, TAREAS -->
+<!-- DIALOGOS: GASTOS ADICIONALES -->
+<div class="modal chooseGasto" id="chooseGasto">
+	<form class="uniForm" id="acForm" action="/aditionalCost/save" > 
+	    <div style="width:95%; margin: 0 auto;">
+	<p></p>
+	<h1>Ingresar gastos adicionales</h1>
+	<p></p>
+	<br>
+		<fieldset class="inlineLabels">
+		<div class="ctrlHolder" id="div_id_name">
+			<label for="description" class="requiredField bold">Descripci&oacute;n</label>
+			<textarea class="textarea1 textinput datepicker input-block-level" name="description" cols="50" rows="10" id="description"></textarea>
+		</div>
+		<div class="ctrlHolder" id="div_id_name">
+			<label for="total" class="requiredField bold">Precio</label>
+			<input class="textInput  datepicker input-block-level" name="total" type="text" id="total">
+		</div>
+		<input id="taskid" name="taskid" type="hidden" value="">
+	</fieldset>
+</div>	    <div class="text-right" style="margin-right:20px; padding-top:10px">
+	    	<input class="btn btn-primary" id="aditionalBTN" type="submit" value="Guardar  ">
+	    	<button  class="btn btn-default" id="cerrarGasto">Cerrar</button>
+	    </div> 
+	</form>
+</div>
+<!-- DIALOGOS: MATERIAL -->
+<div class="modal materialForm" id="chooseMaterial">
+    <div style="width:95%; margin: 0 auto;">
+	<p></p>
+	<h1>Lista de materiales</h1>
+	<p></p>
+	<table class="table table-striped"  >
+	<tr>
+		<td><h2>Nombre</h2></td>
+		<td><h2>Valor</h2></td>
+		<td></td>
+	</tr>
+			<tr>
+	    	<td>Saco cemento</td>
+	    	<td align="right">$ 49.00</td>
+	    	<td><a href="#" onclick="udpateMaterial(1, 'Saco cemento', 49.00)">Seleccionar</a></td>
+	    </tr>
+			<tr>
+	    	<td>Piso cerámica</td>
+	    	<td align="right">$ 9.00</td>
+	    	<td><a href="#" onclick="udpateMaterial(2, 'Piso cerámica', 9.00)">Seleccionar</a></td>
+	    </tr>
+			<tr>
+	    	<td>Fierro </td>
+	    	<td align="right">$ 5.00</td>
+	    	<td><a href="#" onclick="udpateMaterial(3, 'Fierro ', 5.00)">Seleccionar</a></td>
+	    </tr>
+			<tr>
+	    	<td>PuntosAguaFria</td>
+	    	<td align="right">$ 999.99</td>
+	    	<td><a href="#" onclick="udpateMaterial(8, 'PuntosAguaFria', 999.99)">Seleccionar</a></td>
+	    </tr>
+			<tr>
+	    	<td>Puntos de red</td>
+	    	<td align="right">$ 4.00</td>
+	    	<td><a href="#" onclick="udpateMaterial(9, 'Puntos de red', 4.00)">Seleccionar</a></td>
+	    </tr>
+		</table>
+</div>    <div class="text-right" style="margin-right:20px;">
+    	<button  class="btn btn-default" id="cerrarChoose">Cerrar</button>
+    </div> 
+</div>
+<!-- DIALOGOS: PERSONAL -->
+<div class="modal chooseGasto" id="choosePersonal">
+    <div style="width:95%; margin: 0 auto;">
+	<p></p>
+	<h1>Lista de personal</h1>
+	<p></p>
+	<table class="table table-striped"  >
+	<tr>
+		<td><h2>Nombre</h2></td>
+		<td><h2>Valor</h2></td>
+		<td></td>
+	</tr>
+			<tr>
+	    	<td>Maestro</td>
+	    	<td align="right">$ 15.00</td>
+	    	<td>
+	    		<a href="#" onclick="udpatePersonal(2, 'Maestro', 15.00)">Seleccionar</a>
+	    	</td>
+	    </tr>
+			<tr>
+	    	<td>Personal Daniel Tipo 4</td>
+	    	<td align="right">$ 6.00</td>
+	    	<td>
+	    		<a href="#" onclick="udpatePersonal(9, 'Personal Daniel Tipo 4', 6.00)">Seleccionar</a>
+	    	</td>
+	    </tr>
+		</table>
+</div>    <div class="text-right" style="margin-right:20px;">
+    	<button  class="btn btn-default" id="cerrarPersonal">Cerrar</button>
+    </div> 
+</div>
+
+<!-- DIALOGOS: TAREA-NEW -->
+<div class="modal newTask" id="taskForm">
+	<div class="modal-header">    
+    <button aria-hidden="true" data-dismiss="modal" class="close1" id="cerrarTarea" type="button">×</button>
+    <h3 class="title-label">Nueva Tarea Administrator</h3>
+</div>
+<div class="modal-body edit-story-body">
+    <form method="POST" action="http://192.168.1.2:8000/task" accept-charset="UTF-8" id="formularioTarea" class="uniForm"><input name="_token" type="hidden" value="ZT7Egzyuxf8WgRtb7GVBWAwddjzbBJqDCNOMJi34">  
+    <fieldset class="inlineLabels">
+        <div id="div_id_name" class="ctrlHolder">
+            <label for="name" class="control-label">Nombre</label>
+            <div class="controls">
+              <input type="text" value="" class="inputTask" name="name" id="name"> 
+          </div>
+      </div>
+
+      <div id="div_id_name" class="ctrlHolder">
+        <label for="summary" class="control-label">Resumen</label>
+        <div class="controls">
+           <textarea  class="inputTask" name="summary" id="summary"></textarea>
+       </div>
+   </div>
+
+   <div id="div_id_name" class="ctrlHolder">
+    <label for="inputEmail" class="control-label">Puntos</label>
+    <div class="controls">
+      <input type="text" value="" class="inputTask" name="tags" id="txtTags">
+  </div>
+</div>
+
+<div id="div_id_name" class="ctrlHolder">
+    <label for="inputEmail" class="control-label">Estimado</label>
+    <div class="controls">
+      <input type="text" value="0"  class="inputTask" placeholder="00" name="timeEstimated" id="timeEstimated">
+  </div>
+</div>
+
+<div id="div_id_name" class="ctrlHolder">
+    <label for="inputEmail" class="control-label">Asignar a:</label>
+    <div class="controls">
+      <select class="inputTask" id="selAssignee" name="selAssignee">
+        <option></option>                
+                <option value="1">Daniel León</option>    
+                <option value="15">hola hola</option>    
+            </select>
+</div>
+</div>
+
+<input type="hidden" name="issueid" id="issueid" value="">
+<input type="hidden" name="rolId" id="rolId" value="Administrator">
+<div class="modal-footer">            
+    <input class="button expand round" id="guardarTarea" type="submit" value="Guardar">   
+</div>
+</fieldset>
+</form>
+</div>
+
+<script src="http://192.168.1.2:8000/packages/js/submitNewTask.js"></script>
+</div>
+<div sytle="clear:both"></div>
+
+<!-- DIALOGOS: TAREA-EDITAR -->
+<div class="modal editTask" id="editTaskForm">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<div class="modal-header">    
+  <!--<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>-->
+  <h3 class="title-label">Editar tarea</h3>
+</div>
+<div class="modal-body edit-story-body" style="height: 218px; max-height: 218px;">
+  <form action="/tareas/editTask" id="editFormTask" class="uniForm">
+    <fieldset class="inlineLabels">
+      <input id="state" name="state" type="hidden" value="0">
+      <div class="ctrlHolder">
+        <label for="name" class="control-label">Nombre</label>
+        <div class="controls">
+          <input type="text" value="" class="inputTask" name="name" id="name"> 
+        </div>
+      </div>
+
+      <div class="ctrlHolder">
+        <label for="summary" class="control-label">Resumen</label>
+        <div class="controls">
+         <textarea  class="inputTask" name="summary" id="summary"></textarea>
+       </div>
+     </div>
+
+     <div class="ctrlHolder">
+      <label for="inputEmail" class="control-label">Puntos</label>
+      <div class="controls">
+        <input type="text" value="" name="tags" id="txtTags">
+      </div>
+    </div>
+
+    <div class="ctrlHolder">
+      <label for="inputEmail" class="control-label">Tiempo estimado (horas)</label>
+      <div class="controls">
+          <input type="text" value="0" placeholder="00" name="timeEstimated" id="timeEstimated" readonly="true">
+      </div>
+    </div>
+
+    <div class="ctrlHolder">
+      <label for="inputEmail" class="control-label">Tiempo trabajado (horas)</label>
+      <div class="controls">
+        <input type="text" value="0" placeholder="00" name="timeReal" id="timeReal">
+      </div>
+    </div>
+
+    <div class="ctrlHolder">
+      <label for="inputEmail" class="control-label">Asignar a:</label>
+      <div class="controls">
+        <select class="inputTask" id="selAssignee" name="selAssignee">
+        </select>
+      </div>
+    </div>
+    <input type="hidden" name="issueid" id="issueid" value="">
+    <input type="hidden" name="id" id="id" value="">
+    <div class="control-group" style="display:none">
+      <div id="tabs">
+        <ul>
+          <li><a href="#tabs-1">Materiales</a></li>
+          <li><a href="#tabs-2">Personal</a></li>
+          <li><a href="#tabs-3">Gastos Adicionales</a></li>
+        </ul>
+        <div id="tabs-1">
+         <div class="text-right">
+          <button type="button" id="addMaterial" onclick="abrirMateriales()" class="btn btn-primary btn-lg">Agregar material</button>
+        </div>
+        <table id="listaMateriales" style="width:100%; display:none" class="table table-striped" >
+          <thead>
+            <tr>
+              <th width="50%" >Nombre</th>
+              <th width="15%" >P.U.
+              <th>Cant.</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <input type="hidden" value=" " name="listaIDS_M" id="listaIDS_M" />
+      </div>
+      <div id="tabs-2">
+        <div class="text-right">
+          <button type="button" id="addPersonal" onclick="abrirPersonal()" class="btn btn-primary btn-lg">Agregar personal</button>
+        </div>
+        <table id="listaPersonal" style="width:100%; display:none" class="table table-striped" >
+          <thead>
+            <tr>
+              <th width="50%" >Nombre</th>
+              <th width="15%" >P. H.
+              <th>Cant.</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <input type="hidden" value=" " name="listaIDS_P" id="listaIDS_P" />
+      </div>
+      <div id="tabs-3">
+        <div class="text-right">
+          <button type="button" id="addAditionalSpent" onclick="abrirGasto()" class="btn btn-primary btn-lg">Agregar gasto adicional</button>
+        </div>
+        <table id="listaGasto" style="width:100%; display:none" class="table table-striped" >
+          <thead>
+            <tr>
+              <th width="50%" >Descripcion</th>
+              <th width="15%" >Precio</th>
+              <th width="15%" ></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+       
+      </div>
+    </div> 
+ <input id="canRegisterSpent" name="canRegisterSpent" type="hidden" value="0">
+  </div>
+
+  <div class="modal-footer"> 
+    <input class="button expand round" id="guardarEditTF" type="submit" value="Guardar">   
+   <button class="button expand round" id="cancelarEdit" type="button">Cancelar</button> 
+ </div>
+</fieldset>
+</form>
+</div>
+<div style="clear:both"></div>
+<script src="http://192.168.1.2:8000/packages/js/submitEditTask.js"></script>
+
+<script src="http://192.168.1.2:8000/packages/js/submitAditionalSpent.js"></script>
+
+</div>
+
+<!-- DIALOGOS: TASKBOARD -->
+<div class="modal" id="myModal" style="margin-top: 0px; width: 1340px; margin-left: -670px; height: 496px; z-index:9000">
+	<style type="text/css">
+#todo, #haciendo, #hecho {
+    border: 1px solid #eee; 
+    min-height: 120px;
+    list-style-type: none;
+    margin: 0;
+    padding: 5px 0 0 0; 
+    margin-right: 10px;
+    overflow: scroll;
+    max-height: 300px;
+  }
+  #todo li, #haciendo li, #hecho li {
+    margin: 0 5px 5px 5px;
+    padding: 5px;
+    font-size: 1.2em; 
+  }
+
+</style>
+<div class="task-window"   > 
+	<div class="modal-header">
+        <button aria-hidden="true"
+         data-dismiss="modal" class="close" type="button">×</button>
+        <h3>Tareas</h3> 
+    </div> 
+    <div class="modal-body" style="height: 496px;">    
+		<div class="tasks-table-header-holder">
+			<table class="tasks-header-table">
+				<tbody>
+					<tr>			
+						<th class="status-bg-1">Por hacer</th>		
+						<th class="status-bg-4">Haciendo</th> 
+						<th class="status-bg-10">Hecho</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="tasks-table-holder">
+			<table class="tasks-table">
+				<tbody>
+					<tr>			
+						<td>
+							<ul data-task-status="1" id="todo" class="connectedSortable task-popup-list ui-sortable" >
+							</ul>
+						</td> 	
+						<td>
+							<ul data-task-status="4" id="haciendo"  class="connectedSortable task-popup-list">
+							</ul>
+						</td>	 	
+						<td>
+							<ul data-task-status="10"  id="hecho" class="connectedSortable task-popup-list" >
+							</ul>
+						</td>	 
+					</tr>
+				</tbody>
+			</table>
+	</div>
+
+			<div class="modal-footer">
+        	<a class="btn btn-success new-task-button" href="#taskForm" onclick="mostrarTaskForm()">Nueva Tarea</a>        
+        	<a class="btn" data-dismiss="modal" href="#">Cerrar</a>        
+		</div>
+		
+</div>
+<script type="text/javascript">
+	$(function() {
+		position_updated = false; //flag bit
+
+		$( "#todo, #haciendo, #hecho" ).sortable({
+	    	connectWith: ".connectedSortable",
+	    	items: "li:not(.ui-state-disabled)",
+		    start: function(event, ui) {
+	            var start_pos = ui.item.index();
+	            ui.item.data('start_pos', start_pos);
+	        }, 
+	        update: function(event, ui){
+	        	var id= ui.item.attr('id');
+	        	var state = $(this).attr('id'); 
+        	  
+        		//actiualizacion ajax
+        		$.ajax({
+		            type: 'GET',
+		            url:  '/tareas/updateTaks',
+		            data: 'id='+id+'&state='+state,
+		            success: function (data) { 
+		            	if(state=='todo'){
+		            		$('#'+id+' .delete-link').css('display', 'inline-block');
+		            	}else{
+		            		$('#'+id+' .delete-link').css('display', 'none');
+		            	}
+		            },
+		            error: function(errors){
+		                $('.before').hide();
+		                $('.errors_form').html('');
+		                $('.errors_form').html(errors);
+		            }
+		        });
+        	}
+	    }).disableSelection();
+  	});
+</script></div> <!-- Permite manejar el evento de teclado para aparicion de formulario de nueva historia -->
+<script type="text/javascript">
+
+$("#summary").keypress(function() { 
+	$("#story_details").show( "slow" );
+});	
+
+$(".add_category_link").click(function() {
+	$(this).css('display', 'none');
+	$("#categoryid").css( "display","none" );
+	$(".category_name").css( "display","block" ); 
+});
+
+var rol = "Administrator" ;
+createProjMenu("1", rol);
+</script>
+      </div>
+    </div>
+  </div>
+
+ </div>
+  <div class="sb-slidebar sb-left">
+      <ul class="menuResp"> 
+        <li class="">
+	<a href="#" id="perfilLink">Perfil: Daniel Le&oacute;n</a> 
+	<ul class="subPerfil">
+		<li><a href="edit/1"><i class="topmenu-icon icon-glyph icon-group"></i> Mi perfil </a></li>
+		<li><a href="http://192.168.1.2:8000/users/logout" class="">Cerrar sesi&oacute;n</a></li>
+	</ul>
+</li>
+<li id="organization-menu" class="">
+	<a href="#" class="" id="organizationResp">Arquinova</a>
+	<ul class="organizacionSub">
+		<li> 
+			<a href="/users/dashboard" title="Ver todas las iteraciones">
+				<i class="topmenu-icon icon-globe"> </i>
+				Escritorio
+			</a>
+		</li> 
+				<li>
+			<a href="/organization/name/Arquinova/projects" title="See the list of projects.">
+				<i class=" icon-briefcase"></i> 
+				Proyectos
+			</a>
+		</li>
+		
+				<li>
+			<a href="/projects/Arquinova/releases" title="Roll up work across projects into releases.">
+				<i class="topmenu-icon icon-glyph icon-calendar-empty"></i> Entregables
+			</a>
+		</li>
+		
+				<li>
+			<a href="/organization/members/Arquinova/all_members" title="Get a listing of all members of the organization.">
+				<i class="topmenu-icon icon-glyph icon-group"></i> 
+				Miembros 
+			</a>
+		</li>
+		
+				<li>
+			<a href="/materials" title="Lista de materiales en la organización">
+				<i class="topmenu-icon icon-glyph icon-material"></i> 
+				Material 
+			</a>
+		</li>
+		
+				<li>
+			<a href="/personalType" title="Lista de tipo de personal en la organización">
+				<i class="topmenu-icon icon-glyph icon-group"></i> 
+				Tipo de personal 
+			</a>
+		</li>
+		
+				<li>
+			<a href="/organization/edit">
+				<i class="topmenu-icon icon-glyph icon-edit"></i> 
+				Editar organización</a>
+			</li>
+				</ul>
+ 
+</li>
+
+<li id="project-menu" class="" > 
+	<a href="#" class="" id="proyectosResp">Proyectos</a>
+<ul class="proyectoSub">  
+		<li class="">
+		<a id="proyectID" class="organization-project-link" href="/projects/1" >
+			Construcción de vía
+		</a>
+	</li>
+		<li class="">
+		<a id="proyectID" class="organization-project-link" href="/projects/5" >
+			Proyecto Josimar
+		</a>
+	</li>
+		<li class="">
+		<a id="proyectID" class="organization-project-link" href="/projects/7" >
+			Proyecto tesis
+		</a>
+	</li>
+		<li class="">
+		<a id="proyectID" class="organization-project-link" href="/projects/10" >
+			Proyecto MAC
+		</a>
+	</li>
+		<li class="">
+		<a id="proyectID" class="organization-project-link" href="/projects/11" >
+			Contruccion de casa Sr Carlos
+		</a>
+	</li>
+		<li class="">
+		<a id="proyectID" class="organization-project-link" href="/projects/30" >
+			Proyecto B 2015
+		</a>
+	</li>
+		<li class="">
+		<a id="proyectID" class="organization-project-link" href="/projects/31" >
+			HHHHHHHHHHH
+		</a>
+	</li>
+		<li class="">
+		<a id="proyectID" class="organization-project-link" href="/projects/32" >
+			Proyecto Anonimo
+		</a>
+	</li>
+		<li class="">
+		<a id="proyectID" class="organization-project-link" href="/projects/33" >
+			Proyecto ZZZ
+		</a>
+	</li>
+		<li class="">
+		<a id="proyectID" class="organization-project-link" href="/projects/34" >
+			Proyecto ZZZ
+		</a>
+	</li>
+		<li class="">
+		<a id="proyectID" class="organization-project-link" href="/projects/35" >
+			eeeee
+		</a>
+	</li>
+		<li class="">
+		<a id="proyectID" class="organization-project-link" href="/projects/37" >
+			GGGGGGGG
+		</a>
+	</li>
+		<li class="">
+		<a id="proyectID" class="organization-project-link" href="/projects/38" >
+			Proyecto de construccion de casa de 3 pisos Sra Teresa
+		</a>
+	</li>
+		<li class="">
+		<a id="proyectID" class="organization-project-link" href="/projects/39" >
+			Contruccioon de vivienda  Sra Ana Lucia
+		</a>
+	</li>
+	 
+</ul> 
+</li>
+ 
+      </ul>
+  </div> 
+  <script type="text/javascript">
+  jQuery(document).ready(function($) {
+    //menu para moviles
+    $.slidebars();
+    var width = $( window ).width(); 
+    $('.sb-toggle-left').click(function() {
+        $('.options').css('display', 'block');
+      });
+   if(width < 490){
+ 
+      $( ".navbar-left" ).css('display', 'block');
+      $( "nav#menu" ).css('display', 'none');
+      $( ".subPerfil" ).css('display', 'none');      
+      $( ".organizacionSub" ).css('display', 'none');
+      $( ".proyectoSub" ).css('display', 'none');
+
+
+      $('#perfilLink').click(function() {
+        $('.subPerfil').toggle(); 
+      });
+      $('#organizationResp').click(function() {
+        $('.organizacionSub').toggle(); 
+      });
+      $('#proyectosResp').click(function() {
+        $('.proyectoSub').toggle(); 
+      });
+      
+      //eliminar menu 
+      $('#menu').empty();
+
+      
+    }else{ 
+      //$("#sb-site").css('padding-top', '60px');
+      $( "#options" ).css('display', 'none');
+      $( "#perfil" ).css('display', 'none');
+      $('#organization').click(function() {
+        $( "#subMenuProject" ).css('display','none');
+        $( "#options" ).toggle(); 
+      });
+      $('#perfilID').click(function() {
+        $( "#perfil" ).toggle();
+      });
+      
+      $(document).mouseup(function (e){
+        var container = $("#options");
+        if (!container.is(e.target) 
+            && container.has(e.target).length === 0) {
+            container.hide();
+        }
+
+        var container1 = $("#subMenuProject");
+        if (!container1.is(e.target) 
+            && container1.has(e.target).length === 0) {
+            container1.hide();
+        }
+
+        var container2 = $("#perfil");
+         if (!container2.is(e.target) 
+            && container2.has(e.target).length === 0) {
+            container2.hide();
+        }
+      });
+    }
+    
+  });
+  </script>
+</body>
+</html>
