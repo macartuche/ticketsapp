@@ -162,7 +162,7 @@ public class Utilitario {
     public static String getValue(String key) {
         Locale local = Locale.getDefault();
         ResourceBundle resource = ResourceBundle.getBundle("values", local);
-        return resource.getString("pathJasper");
+        return resource.getString(key);
     }
 
 }

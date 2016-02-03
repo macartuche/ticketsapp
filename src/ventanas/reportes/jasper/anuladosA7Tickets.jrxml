@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ventasA7Tickets" pageWidth="210" pageHeight="297" columnWidth="195" leftMargin="13" rightMargin="2" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="d553f270-521e-4d9e-9108-928edcf38a28">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="anuladosA7Tickets" pageWidth="210" pageHeight="297" columnWidth="195" leftMargin="13" rightMargin="2" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="d553f270-521e-4d9e-9108-928edcf38a28">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -58,7 +58,7 @@
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Ventas Unificado]]></text>
+				<text><![CDATA[Anulados Unificado]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="79" width="35" height="15" uuid="de74cfed-55d8-4dc5-af73-ecd07f051166"/>
@@ -68,7 +68,7 @@
 				<text><![CDATA[Cant.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="140" y="79" width="27" height="15" uuid="7ac905e9-0e2e-4070-aea8-9283c97459ea"/>
+				<reportElement x="139" y="79" width="24" height="15" uuid="7ac905e9-0e2e-4070-aea8-9283c97459ea"/>
 				<textElement textAlignment="Center">
 					<font size="7" isBold="true"/>
 				</textElement>
@@ -82,14 +82,14 @@
 				<text><![CDATA[Tasa de ingreso]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="35" y="79" width="105" height="15" uuid="cec866c1-8d13-469c-97b9-07652d94f14f"/>
+				<reportElement x="35" y="79" width="104" height="15" uuid="cec866c1-8d13-469c-97b9-07652d94f14f"/>
 				<textElement>
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Detalle]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="167" y="79" width="28" height="15" uuid="f420f97e-409e-49b4-aabd-dd53e87c4b29"/>
+				<reportElement x="163" y="79" width="32" height="15" uuid="f420f97e-409e-49b4-aabd-dd53e87c4b29"/>
 				<textElement textAlignment="Center">
 					<font size="7" isBold="true"/>
 				</textElement>
@@ -116,21 +116,21 @@
 					<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="140" y="0" width="27" height="15" uuid="b1f0e9cf-46ee-410e-b430-91ff124527e7"/>
+					<reportElement x="139" y="0" width="24" height="15" uuid="b1f0e9cf-46ee-410e-b430-91ff124527e7"/>
 					<textElement textAlignment="Right">
 						<font size="7"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{unitaryPrice}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="167" y="0" width="28" height="15" uuid="4ac55d18-4cd9-46c3-9faa-1f28bdd71959"/>
+					<reportElement x="163" y="0" width="32" height="15" uuid="4ac55d18-4cd9-46c3-9faa-1f28bdd71959"/>
 					<textElement textAlignment="Right">
 						<font size="7"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="35" y="0" width="105" height="15" uuid="4cc9cba2-6c0e-4116-bd8d-faa772c5b583"/>
+					<reportElement x="35" y="0" width="104" height="15" uuid="4cc9cba2-6c0e-4116-bd8d-faa772c5b583"/>
 					<textElement>
 						<font size="7"/>
 					</textElement>
@@ -142,14 +142,14 @@
 	<summary>
 		<band height="32">
 			<textField>
-				<reportElement x="165" y="0" width="30" height="15" uuid="18298146-5add-4dac-878e-0fb8220f3ff4"/>
+				<reportElement x="162" y="0" width="33" height="15" uuid="18298146-5add-4dac-878e-0fb8220f3ff4"/>
 				<textElement textAlignment="Right">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{total}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="102" y="0" width="63" height="15" uuid="d9446f19-ef27-4000-a076-0309cd1404fb"/>
+				<reportElement x="88" y="0" width="74" height="15" uuid="d9446f19-ef27-4000-a076-0309cd1404fb"/>
 				<textElement textAlignment="Right">
 					<font size="7" isBold="true"/>
 				</textElement>

@@ -282,7 +282,7 @@ public class CobroFacturaForm extends javax.swing.JDialog {
 //            ctasCobrar.registerPayment();
 
             //imprimir el comprobante
-            String reportPath = Utilitario.getValue("pathJasper") + "comPago.jasper";
+            String reportPath = Utilitario.getValue("pathTest") + "comPago.jasper";
 
             try {
                 Map parametersMap = new HashMap();
@@ -349,8 +349,7 @@ public class CobroFacturaForm extends javax.swing.JDialog {
         try {
             //ANULAR LA FACTURA
             billing.setState("ANULADA");
-            billingController.edit(billing);
-            System.out.println("=====>aquiiiiiiiiiiiii" + billing.getId());
+            billingController.edit(billing); 
             this.dispose();
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(CobroFacturaForm.class.getName()).log(Level.SEVERE, null, ex);

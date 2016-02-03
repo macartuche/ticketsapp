@@ -49,6 +49,7 @@ public class reporteVentas extends javax.swing.JPanel {
     static BigDecimal totalReport;
     private ConfigurationsJpaController configController;
     public Configurations config;
+
     /**
      * Constructor de reporte de ventas, se deshabilitan los botones cuando no
      * existen datos
@@ -56,16 +57,14 @@ public class reporteVentas extends javax.swing.JPanel {
     public reporteVentas() {
         initComponents();
         controller = new BillingJpaController();
-//        printBTN.setEnabled(false);
-//        printUnificadoBTN.setEnabled(false);
         printTicketsBTN.setEnabled(false);
-        
-          configController = new ConfigurationsJpaController(); 
+        printAnuladosBTN.setEnabled(false);
+        configController = new ConfigurationsJpaController();
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("code", "institutionName");
         config = configController.namedQuery("Configurations.findByCode", variables).get(0);
-        
+
         verTabla();
     }
 
@@ -99,6 +98,7 @@ public class reporteVentas extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         totalLbl = new javax.swing.JLabel();
         printTicketsBTN = new javax.swing.JButton();
+        printAnuladosBTN = new javax.swing.JButton();
 
         jButton2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jButton2.setText("Realizar gráfico");
@@ -175,6 +175,18 @@ public class reporteVentas extends javax.swing.JPanel {
             }
         });
 
+        printAnuladosBTN.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        printAnuladosBTN.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagenes/printer67.png"))); // NOI18N
+        printAnuladosBTN.setText("Imprimir anulados");
+        printAnuladosBTN.setEnabled(false);
+        printAnuladosBTN.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        printAnuladosBTN.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        printAnuladosBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printAnuladosBTNActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jXTitledPanel1Layout = new javax.swing.GroupLayout(jXTitledPanel1.getContentContainer());
         jXTitledPanel1.getContentContainer().setLayout(jXTitledPanel1Layout);
         jXTitledPanel1Layout.setHorizontalGroup(
@@ -184,16 +196,18 @@ public class reporteVentas extends javax.swing.JPanel {
                 .addGroup(jXTitledPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(dBTable1, javax.swing.GroupLayout.DEFAULT_SIZE, 709, Short.MAX_VALUE)
                     .addGroup(jXTitledPanel1Layout.createSequentialGroup()
-                        .addGap(0, 495, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jXTitledPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jXTitledPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(totalLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jXTitledPanel1Layout.createSequentialGroup()
-                                .addComponent(printTicketsBTN)
+                                .addComponent(printTicketsBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(11, 11, 11)
+                                .addComponent(printAnuladosBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(17, 17, 17))
         );
         jXTitledPanel1Layout.setVerticalGroup(
@@ -202,7 +216,8 @@ public class reporteVentas extends javax.swing.JPanel {
                 .addGap(12, 12, 12)
                 .addGroup(jXTitledPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(printTicketsBTN, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(printTicketsBTN, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(printAnuladosBTN, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(dBTable1, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -354,79 +369,114 @@ public class reporteVentas extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    /**
+     * Consultar los comprobantes por fecha y estado
+     *
+     * @param start Calendar fecha inicio
+     * @param end Calendar fecha fin
+     * @param state String el estado del comprobante
+     * @return
+     */
+    private List<Object[]> getBillingsByDatesAndState(Calendar start, Calendar end, String state) {
 
+        String query = "select sum(d.total),   d.unitaryPrice,  d.productId, sum(d.quantity) "
+                + "from DetailBilling d "
+                + "where d.billingId.emissiondate between :start "
+                + "and :end  and  d.billingId.state=:state  and d.billingId.user=:user  group by d.productId  ";
+        Query q = controller.getEm().createQuery(query);
+        q.setParameter("start", start.getTime());
+        q.setParameter("end", end.getTime());
+        q.setParameter("user", LoginApp.userLogged);
+        q.setParameter("state", "Pagada");
+        return q.getResultList();
+    }
+
+    private List<Object[]> getBillingsOfDayByState(String state) {
+        Calendar start = Calendar.getInstance();
+        start.setTime(fromDate.getDate());
+        start.set(Calendar.HOUR_OF_DAY, 0);
+        start.set(Calendar.MINUTE, 0);
+        start.set(Calendar.SECOND, 0);
+
+        Calendar end = Calendar.getInstance();
+        end.setTime(untilDate.getDate());
+        end.set(Calendar.HOUR_OF_DAY, 23);
+        end.set(Calendar.MINUTE, 59);
+        end.set(Calendar.SECOND, 0);
+
+        return getBillingsByDatesAndState(start, end, state);
+    }
+
+    private void PrintReportByState(String state, String reportPath) {
+        List<Object[]> temp = getBillingsOfDayByState(state);
+
+        BigDecimal totalRep = BigDecimal.ZERO;
+        BigDecimal totalBilling = BigDecimal.ZERO;
+        List<DetailBilling> tickets = new ArrayList<>();
+        for (Object[] bill : temp) {
+            totalBilling = new BigDecimal(bill[0].toString());
+            DetailBilling newDetail = new DetailBilling();
+            newDetail.setTotal(totalBilling);
+            newDetail.setProductId((Product) bill[2]);
+            newDetail.setUnitaryPrice(new BigDecimal(bill[1].toString()));
+            newDetail.setQuantity(new BigDecimal(bill[3].toString()));
+            tickets.add(newDetail);
+
+            totalRep = totalRep.add(totalBilling);
+        }
+
+        try {
+            Map parametersMap = new HashMap();
+            parametersMap.put("total", totalRep);
+            parametersMap.put("desde", fromDate.getDate());
+            parametersMap.put("hasta", untilDate.getDate());;
+            parametersMap.put("recaudador", LoginApp.userLogged.getNombres());
+            parametersMap.put("institution", config.getValue());
+
+            FileInputStream fis = new FileInputStream(reportPath);
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(fis);
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(bufferedInputStream);
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(tickets);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametersMap, beanCollectionDataSource);
+//            JasperPrintManager.printReport(jasperPrint, false);
+            JasperViewer viewer = new JasperViewer(jasperPrint, false);
+            viewer.setVisible(true);
+
+        } catch (JRException | FileNotFoundException ex) {
+            Logger.getLogger(reporteVentas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Obtener el reporte de tickets en estado Pagada
+     *
+     * @param evt
+     */
     private void printTicketsBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printTicketsBTNActionPerformed
-        if (!billings.isEmpty()) {
-
-            //consultar nuevamente agrupando los usuarios
-            Calendar start = Calendar.getInstance();
-            start.setTime(fromDate.getDate());
-            start.set(Calendar.HOUR_OF_DAY, 0);
-            start.set(Calendar.MINUTE, 0);
-            start.set(Calendar.SECOND, 0);
-
-            Calendar end = Calendar.getInstance();
-            end.setTime(untilDate.getDate());
-            end.set(Calendar.HOUR_OF_DAY, 23);
-            end.set(Calendar.MINUTE, 59);
-            end.set(Calendar.SECOND, 0);
-
-            String query = "select sum(d.total),   d.unitaryPrice,  d.productId, sum(d.quantity) "
-                    + "from DetailBilling d "
-                    + "where d.billingId.emissiondate between :start "
-                    + "and :end  and  d.billingId.state=:state  and d.billingId.user=:user  group by d.productId  ";
-            Query q = controller.getEm().createQuery(query);
-            q.setParameter("start", start.getTime());
-            q.setParameter("end", end.getTime());
-            q.setParameter("user", LoginApp.userLogged);
-            q.setParameter("state", "Pagada");
-
-            BigDecimal totalReport = BigDecimal.ZERO;
-
-            List<Object[]> temp = q.getResultList();
-            BigDecimal totalBilling = BigDecimal.ZERO;
-            List<DetailBilling> tickets = new ArrayList<>();
-
-            for (Object[] bill : temp) {
-                totalBilling = new BigDecimal(bill[0].toString());
-                DetailBilling newDetail = new DetailBilling();
-                newDetail.setTotal(totalBilling);
-                newDetail.setProductId((Product) bill[2]);
-                newDetail.setUnitaryPrice(new BigDecimal(bill[1].toString()));
-                newDetail.setQuantity(new BigDecimal(bill[3].toString()));
-                tickets.add(newDetail);
-
-                totalReport = totalReport.add(totalBilling);
-            }
-
-            String reportPath = Utilitario.getValue("pathJasper") + "ventasA7Tickets.jasper";
-
-            try {
-                Map parametersMap = new HashMap();
-                parametersMap.put("total", totalReport);
-                parametersMap.put("desde", fromDate.getDate());
-                parametersMap.put("hasta", untilDate.getDate());;
-                parametersMap.put("recaudador", LoginApp.userLogged.getNombres());
-                parametersMap.put("institution", config.getValue());
-
-                FileInputStream fis = new FileInputStream(reportPath);
-                BufferedInputStream bufferedInputStream = new BufferedInputStream(fis);
-                JasperReport jasperReport = (JasperReport) JRLoader.loadObject(bufferedInputStream);
-                JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(tickets);
-                JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametersMap, beanCollectionDataSource);
-                // view report to UI
-//                JasperViewer.viewReport(jasperPrint, false);
-
-                JasperPrintManager.printReport(jasperPrint, false);
-            } catch (JRException ex) {
-                Logger.getLogger(reporteVentas.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(reporteVentas.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        if (!billings.isEmpty()) { 
+            System.out.println(Utilitario.getValue("pathTest") );
+            String reportPath = Utilitario.getValue("pathTest") + "ventasA7Tickets.jasper";
+            PrintReportByState("Pagada", reportPath);
         } else {
-//            printUnificadoBTN.setEnabled(false);
+            printTicketsBTN.setEnabled(false);
+            printAnuladosBTN.setEnabled(false);
         }
     }//GEN-LAST:event_printTicketsBTNActionPerformed
+
+    /**
+     * Generar el comprobante de botones anulados
+     *
+     * @param evt ActionEvent
+     */
+    private void printAnuladosBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printAnuladosBTNActionPerformed
+        if (billings != null && !billings.isEmpty()) {
+            String reportPath = Utilitario.getValue("pathTest") + "anuladosA7Tickets.jasper";
+            PrintReportByState("ANULADA", reportPath);
+        } else {
+            printAnuladosBTN.setEnabled(false);
+            printAnuladosBTN.setEnabled(false);
+        }
+    }//GEN-LAST:event_printAnuladosBTNActionPerformed
 
     /**
      * Construir la tabla de datos de ventas
@@ -451,14 +501,12 @@ public class reporteVentas extends javax.swing.JPanel {
             sum = sum.add(billing.getTotal());
         }
 
-        if (billings.size() > 0) {
-//            printBTN.setEnabled(true);
-//            printUnificadoBTN.setEnabled(true);
+        if (billings.size() > 0) { 
             printTicketsBTN.setEnabled(true);
+            printAnuladosBTN.setEnabled(true);
         } else {
-//            printBTN.setEnabled(false);
-//            printUnificadoBTN.setEnabled(false);
             printTicketsBTN.setEnabled(false);
+            printAnuladosBTN.setEnabled(false);
         }
 
         totalLbl.setText(sum.toString());
@@ -498,6 +546,7 @@ public class reporteVentas extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel1;
+    private static javax.swing.JButton printAnuladosBTN;
     private static javax.swing.JButton printTicketsBTN;
     private static javax.swing.JLabel totalLbl;
     private com.toedter.calendar.JDateChooser untilDate;

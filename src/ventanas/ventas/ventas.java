@@ -454,14 +454,13 @@ public class ventas extends javax.swing.JPanel {
     }
 
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
-        int indice = dBTable1.getSelectedRow();
-        System.out.println("======>" + indice);
+        int indice = dBTable1.getSelectedRow(); 
         Billing b = ventas.get(indice);
         List<Billing> facturas = new ArrayList<>();
         facturas.add(b);
         Locale local = Locale.getDefault();
         ResourceBundle resource = ResourceBundle.getBundle("values", local);
-        String reportPath = resource.getString("pathJasper") + "comPago.jasper";
+        String reportPath = resource.getString("pathTest") + "comPago.jasper";
 
         try {
 
