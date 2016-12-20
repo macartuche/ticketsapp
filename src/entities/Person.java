@@ -29,18 +29,28 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "persona")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Person.findAll", query = "SELECT p FROM Person p"),
-    @NamedQuery(name = "Person.findById", query = "SELECT p FROM Person p WHERE p.id = :id"),
-    @NamedQuery(name = "Person.findByPassport", query = "SELECT p FROM Person p WHERE p.passport = :passport"),
-    @NamedQuery(name = "Person.findByNames", query = "SELECT p FROM Person p WHERE p.names = :names"),
-    @NamedQuery(name = "Person.findByLastname", query = "SELECT p FROM Person p WHERE p.lastname = :lastname"),
-    @NamedQuery(name = "Person.findByEmail", query = "SELECT p FROM Person p WHERE p.email = :email"),
-    @NamedQuery(name = "Person.findByAddress", query = "SELECT p FROM Person p WHERE p.address = :address"),
-    @NamedQuery(name = "Person.findBySex", query = "SELECT p FROM Person p WHERE p.sex = :sex"),
-    @NamedQuery(name = "Person.findByPhone", query = "SELECT p FROM Person p WHERE p.phone = :phone"),
-    @NamedQuery(name = "Person.findByPhoto", query = "SELECT p FROM Person p WHERE p.photo = :photo")})
+    @NamedQuery(name = Person.FIND_ALL, query = "SELECT p FROM Person p"),
+    @NamedQuery(name = Person.FIND_BY_ID, query = "SELECT p FROM Person p WHERE p.id = :id"),
+    @NamedQuery(name = Person.FIND_BY_PASSPORT, query = "SELECT p FROM Person p WHERE p.passport = :passport"),
+    @NamedQuery(name = Person.FIND_BY_NAME, query = "SELECT p FROM Person p WHERE p.names = :names"),
+    @NamedQuery(name = Person.FIND_BY_LASTNAME, query = "SELECT p FROM Person p WHERE p.lastname = :lastname"),
+    @NamedQuery(name = Person.FIND_BY_EMAIL, query = "SELECT p FROM Person p WHERE p.email = :email"),
+    @NamedQuery(name = Person.FIND_BY_FULLNAME, query = "SELECT p FROM Person p "
+            + "WHERE concat(p.lastname, ' ',  p.names ) = :names")
+})
 public class Person implements Serializable {
+    
     private static final long serialVersionUID = 1L;
+    
+    
+    public static final String FIND_ALL = "Person.findAll";
+    public static final String FIND_BY_FULLNAME = "Person.findByFullName";
+    public static final String FIND_BY_ID = "Person.findById";
+    public static final String FIND_BY_PASSPORT = "Person.findByPassport";
+    public static final String FIND_BY_NAME = "Person.findByName";
+    public static final String FIND_BY_LASTNAME = "Person.findByNames";
+    public static final String FIND_BY_EMAIL = "Person.findByEmail"; 
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -67,6 +77,7 @@ public class Person implements Serializable {
     private List<Users> usersList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "personId")
     private List<ClientProvider> clientProviderList;
+
 
     public Person() {
     }
@@ -169,7 +180,7 @@ public class Person implements Serializable {
     public void setClientProviderList(List<ClientProvider> clientProviderList) {
         this.clientProviderList = clientProviderList;
     }
-
+ 
     @Override
     public int hashCode() {
         int hash = 0;

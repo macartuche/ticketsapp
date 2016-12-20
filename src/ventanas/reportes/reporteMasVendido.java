@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import utilitarios.TabsIndex;
 import utilitarios.Utilitario;
 import ventanas.mainForm;
 
@@ -318,7 +319,7 @@ public class reporteMasVendido extends javax.swing.JPanel {
         int index = mainForm.pestanias.getSelectedIndex();
         if (index != -1) {
             mainForm.pestanias.remove(index);
-            mainForm.CerrarPestana(11);
+            mainForm.CerrarPestana(TabsIndex.REPORTES_PRODUCTOSMASVENDIDO.getIndex());
         }
     }//GEN-LAST:event_btnSalirActionPerformed
 
@@ -336,12 +337,13 @@ public class reporteMasVendido extends javax.swing.JPanel {
             details = new ArrayList<DetailBilling>();
             
             for (Object[] object : objectList) {
+                
                 DetailBilling detail = new DetailBilling();
                 detail.setName(object[1].toString()); 
                 detail.setQuantity(new BigDecimal(object[0].toString()));
-                detail.setTotal(new BigDecimal(object[2].toString()));
-                
+                detail.setTotal(new BigDecimal(object[2].toString()));                
                 details.add(detail);
+            
             }
         fijarDatos(details);
     }

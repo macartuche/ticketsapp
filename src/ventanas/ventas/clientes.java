@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import utilitarios.TabsIndex;
 import ventanas.administracion.usuarios;
 import ventanas.mainForm;
 
@@ -334,7 +335,7 @@ public class clientes extends javax.swing.JPanel {
         int index = mainForm.pestanias.getSelectedIndex();
         if (index != -1) {
             mainForm.pestanias.remove(index);
-            mainForm.CerrarPestana(1);
+            mainForm.CerrarPestana(TabsIndex.CLIENTES.getIndex());
         }
          
     }//GEN-LAST:event_btnActivarDesativar1ActionPerformed

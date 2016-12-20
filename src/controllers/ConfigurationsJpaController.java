@@ -57,6 +57,7 @@ public class ConfigurationsJpaController extends EntityManagerProj implements Se
             em = super.getEmf().createEntityManager();
             em.getTransaction().begin();
             configurations = em.merge(configurations);
+            em.flush();
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -151,11 +152,22 @@ public class ConfigurationsJpaController extends EntityManagerProj implements Se
                 Object value = entrySet.getValue();
                 q.setParameter(key, value);
             }
-            return q.getResultList();
+            List<Configurations> lista = q.getResultList();
+//            refreshCollection(lista);
+            return lista;
         } finally {
             em.close();
         }
 
     }
+    
+    
+    
+    public void refreshCollection(List<Configurations> entityCollection) {
+        for (Configurations entity : entityCollection) {
+            getEntityManager().refresh(getEntityManager().merge(entity));
+        }
+    }
+
 
 }

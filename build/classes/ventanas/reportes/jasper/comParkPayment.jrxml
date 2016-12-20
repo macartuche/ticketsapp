@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comPark" pageWidth="210" pageHeight="297" columnWidth="198" leftMargin="7" rightMargin="5" topMargin="8" bottomMargin="8" uuid="228fd20d-3fef-43d9-81bb-466511a5b766">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:/Users/Usuario/Documents/GIM-Loxageek/src/ventanas/reportes/jasper/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="institutionName" class="java.lang.String"/>
+	<parameter name="minutes" class="java.lang.Integer"/>
+	<parameter name="hours" class="java.lang.Integer"/>
+	<parameter name="days" class="java.lang.Integer"/>
+	<parameter name="total" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="detailBillingList" class="java.util.List">
+		<fieldDescription><![CDATA[detailBillingList]]></fieldDescription>
+	</field>
+	<field name="emissiondate" class="java.util.Date">
+		<fieldDescription><![CDATA[emissiondate]]></fieldDescription>
+	</field>
+	<field name="inicio" class="java.lang.String">
+		<fieldDescription><![CDATA[inicio]]></fieldDescription>
+	</field>
+	<field name="user" class="entities.Users">
+		<fieldDescription><![CDATA[user]]></fieldDescription>
+	</field>
+	<field name="placa" class="java.lang.String">
+		<fieldDescription><![CDATA[placa]]></fieldDescription>
+	</field>
+	<field name="number" class="java.lang.String">
+		<fieldDescription><![CDATA[number]]></fieldDescription>
+	</field>
+	<field name="fin" class="java.lang.String">
+		<fieldDescription><![CDATA[fin]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="138" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="1" width="198" height="15" uuid="877108ab-43fe-4410-9269-6bc6e4f28fbe"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tasa de Ingreso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="50" width="75" height="12" uuid="2aa6dfff-6508-474a-a3d6-44d033c9568f"/>
+				<textElement textAlignment="Left">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de entrada:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="62" width="75" height="12" uuid="41593167-b203-46d6-bb1b-253174dde6cb"/>
+				<textElement textAlignment="Left">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de salida:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="74" width="75" height="12" uuid="f9c9e636-aa48-441c-9b14-69bca6c9b733"/>
+				<textElement textAlignment="Left">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número de placa:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="75" y="74" width="123" height="12" uuid="14300ac1-28ff-4094-b63b-21359985fe07"/>
+				<textElement>
+					<font size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{placa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="30" width="198" height="10" uuid="4b72cb31-896f-4dff-81dd-fe79076be96b"/>
+				<textElement textAlignment="Center">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nro. "+$F{number}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="16" width="198" height="14" uuid="32db9906-aeee-439a-94f4-16c7eb0912d7"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{institutionName}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="75" y="50" width="123" height="12" uuid="d8b28d46-3139-494d-99a2-3f76e8dbbd81"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inicio}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="75" y="62" width="123" height="12" uuid="b35f67cd-3977-4721-9930-17709328937e"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fin}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="90" width="198" height="1" uuid="15611b10-7c8c-4011-990d-e48447d8ac3c"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="0" y="45" width="198" height="1" uuid="1cec6ae7-06e2-4736-9d44-a226b6b33de3"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="0" y="93" width="61" height="10" uuid="9d0135e6-d135-429e-adec-0ada3717d456"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="61" y="93" width="62" height="10" uuid="0fb785f5-3c1a-418f-b71a-5f4f20cfe9a1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HORAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="123" y="93" width="75" height="10" uuid="f3ac2f82-c27e-4dce-bf94-08ca71f97b1e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MINUTOS]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="123" y="102" width="75" height="15" uuid="3b030826-0421-4442-8382-310e58eb7177"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{minutes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="61" y="103" width="62" height="14" uuid="b923b7db-f385-4229-bddb-3396b5de8d9b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{hours}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="102" width="61" height="15" uuid="3629ba1c-5198-4b11-8c89-5b07c413471b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{days}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="117" width="86" height="20" uuid="53f01228-d4d4-43a7-a573-7ca1e6b1089b"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor a cancelar:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="86" y="117" width="112" height="20" uuid="aad1a3db-be2d-48ff-9fb9-2dc101390b6f"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<summary>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="12" width="198" height="12" uuid="a967e00c-b4a6-472c-8f7f-f6a299bfc761"/>
+				<textElement textAlignment="Justified">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Motivación: Ordenanza 036-2015 SRO 537 del 07 de 2015]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="51" height="12" uuid="a7d0235f-d494-484e-8a6d-be56df6dacca"/>
+				<textElement textAlignment="Justified">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Recaudador:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="51" y="0" width="147" height="12" uuid="c0add269-6708-45df-aeba-fcad4076e88b"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{user}.getPersonId().getNames()+" "+$F{user}.getPersonId().getLastname()]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

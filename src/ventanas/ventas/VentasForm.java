@@ -49,6 +49,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.text.JTextComponent;
+import ventanas.administracion.LoginApp;
 
 /**
  *
@@ -336,7 +337,7 @@ public class VentasForm extends javax.swing.JDialog implements ActionListener, K
         jLabel19.setText("0,00");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Factura de venta");
+        setTitle("Formulario de tickets");
         setLocationByPlatform(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -657,10 +658,10 @@ public class VentasForm extends javax.swing.JDialog implements ActionListener, K
             if (!noValido()) {
                 if (billing.getId() == null) { 
                     controller.createBilling(billing);
-                      generarSecuencial();
-                     controller.edit(billing);
+                    generarSecuencial();
+                    
+                    controller.edit(billing);
                     actualizarSecuencial();
-                    actualizarStock();
 
                     //crear una nueva cta por cobrar
                     Account account = new Account();
@@ -708,8 +709,6 @@ public class VentasForm extends javax.swing.JDialog implements ActionListener, K
         numSecuencial++;
         secuencial = formatoSecuencial(numSecuencial);
         billing.setShop_id("001");
-        
-        System.out.println("=====>"+secuencial);
         billing.setEmissionpoint_id("001");
         billing.setSequential(secuencial);
         billing.setNumber(billing.getShop_id() + "-" + billing.getEmissionpoint_id() + "-" + billing.getSequential());

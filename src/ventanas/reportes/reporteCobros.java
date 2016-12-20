@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import utilitarios.TabsIndex;
 import utilitarios.Utilitario;
 import ventanas.mainForm;
 
@@ -316,7 +317,7 @@ public class reporteCobros extends javax.swing.JPanel {
         int index = mainForm.pestanias.getSelectedIndex();
         if (index != -1) {
             mainForm.pestanias.remove(index);
-            mainForm.CerrarPestana(10);
+            mainForm.CerrarPestana(TabsIndex.REPORTES_CTASCOBRAR.getIndex());
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 

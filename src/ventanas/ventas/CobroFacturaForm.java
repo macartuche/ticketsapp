@@ -34,6 +34,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import utilitarios.Utilitario;
+import ventanas.administracion.LoginApp;
 import ventanas.reportes.reporteMasVendido;
 
 /**
@@ -278,11 +279,13 @@ public class CobroFacturaForm extends javax.swing.JDialog {
             account.setBalance(newBalance);
             accountController.edit(this.account);
             billing.setState("Pagada");
+            //colocar la persona que cobra
+            billing.setCollectorPerson(LoginApp.userLogged.getId());
             billingController.edit(billing);
 //            ctasCobrar.registerPayment();
 
             //imprimir el comprobante
-            String reportPath = Utilitario.getValue("pathTest") + "comPago.jasper";
+            String reportPath = Utilitario.getValue("pathJasper") + "comPago.jasper";
 
             try {
                 Map parametersMap = new HashMap();

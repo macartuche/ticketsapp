@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "ClientProvider.findAll", query = "SELECT c FROM ClientProvider c"),
     @NamedQuery(name = "ClientProvider.findById", query = "SELECT c FROM ClientProvider c WHERE c.id = :id"),
+    @NamedQuery(name = "ClientProvider.findByPerson", query = "SELECT c FROM ClientProvider c WHERE c.personId= :personId"),
     @NamedQuery(name = "ClientProvider.findByActiveclient", query = "SELECT c FROM ClientProvider c WHERE c.activeclient = :activeclient"),
     @NamedQuery(name = "ClientProvider.findByClient",
             query = "SELECT c FROM ClientProvider c WHERE c.client = :client"),
@@ -75,6 +76,11 @@ public class ClientProvider implements Serializable {
    @Transient
    private String fullname;
    
+   
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "client")
+    private List<UserContract> usercontractList;
+    
+    
     public ClientProvider() {
     }
 
@@ -181,10 +187,21 @@ public class ClientProvider implements Serializable {
     } 
 
     public String getFullname() {
-        return personId.getNames()+" "+personId.getLastname();
+        //armar de acuerdo al caso
+        String names  = (personId.getNames()==null)? "" : personId.getNames();
+        String lastname = (personId.getLastname()==null)? "": " "+personId.getLastname();
+        return names+lastname;
     }
 
     public void setFullname(String fullname) {
         this.fullname = fullname;
+    }
+
+    public List<UserContract> getUsercontractList() {
+        return usercontractList;
+    }
+
+    public void setUsercontractList(List<UserContract> usercontractList) {
+        this.usercontractList = usercontractList;
     }
 }

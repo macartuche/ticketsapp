@@ -16,6 +16,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -49,6 +50,11 @@ import javax.xml.bind.annotation.XmlTransient;
             + " and :endDate"
             + " and (b.clientProviderid.personId.passport like :rucci or"
             + " lower(b.number) like :numReceipt)  order by b.emissiondate desc"),
+    @NamedQuery(name = "Billing.findByFilter2",
+            query = "SELECT b FROM Billing b"
+            + " WHERE b.emissiondate between :startDate"
+            + " and :endDate"
+            + " order by b.emissiondate desc"),    
     @NamedQuery(name = "Billing.findByState", query = "SELECT b FROM Billing b WHERE b.state = :state"),
     @NamedQuery(name = "Billing.findByCriteria",
             query = "SELECT b FROM Billing b"
@@ -56,7 +62,13 @@ import javax.xml.bind.annotation.XmlTransient;
             + " and :endDate"
             + " and (b.clientProviderid.personId.passport like :criteria or"
             + " lower(b.clientProviderid.personId.lastname ) like :criteria) order by b.emissiondate desc"),
-    @NamedQuery(name = "Billing.findByTotal", query = "SELECT b FROM Billing b WHERE b.total = :total")})
+    @NamedQuery(name = "Billing.findByTotal", query = "SELECT b FROM Billing b WHERE b.total = :total"),
+    @NamedQuery(name = "Billing.findByTicketOrPlaca",
+            query = "SELECT b FROM Billing b"
+            + " WHERE b.emissiondate between :from and :until "
+            + " and ( b.number like :criteria or lower(b.additionalInformation) like  :criteria)  "
+            + " order by b.emissiondate desc")
+})
 @SuppressWarnings("ValidAttributes")
 public class Billing implements Serializable {
 
@@ -104,10 +116,8 @@ public class Billing implements Serializable {
     @ManyToOne(optional = false)
     private ClientProvider clientProviderid;
 //    @OneToMany(cascade = CascadeType.ALL, mappedBy = "billingId")
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "billingId")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "billingId", fetch = FetchType.EAGER)
     private List<DetailBilling> detailBillingList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "billingId")
-    private List<Inventary> inventaryList;
 
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
@@ -122,10 +132,24 @@ public class Billing implements Serializable {
     @Column(name = "adicional")
     @Basic(optional = true)
     private String additionalInformation;
+     
+    
+    @Column(name = "emisor")
+    private Integer emitterPerson;
+    
+    @Column(name = "cobrador")
+    private Integer collectorPerson;
 
+    
+    @Transient
+    private String emisor;
+    
+    @Transient 
+    private String cobrador;
+    
     public Billing() {
-        detailBillingList = new ArrayList<DetailBilling>();
-        accountCollection = new ArrayList<Account>();
+        detailBillingList = new ArrayList<>();
+        accountCollection = new ArrayList<>();
     }
 
     public Billing(Integer id) {
@@ -277,14 +301,6 @@ public class Billing implements Serializable {
         this.detailBillingList = detailBillingList;
     }
 
-    @XmlTransient
-    public List<Inventary> getInventaryList() {
-        return inventaryList;
-    }
-
-    public void setInventaryList(List<Inventary> inventaryList) {
-        this.inventaryList = inventaryList;
-    }
 
     @Override
     public int hashCode() {
@@ -317,7 +333,7 @@ public class Billing implements Serializable {
     }
 
     public String getCliente() {
-        return clientProviderid.getNombres() + " " + clientProviderid.getApellidos();
+        return clientProviderid.getFullname();
     }
 
     public String getNumero() {
@@ -377,7 +393,14 @@ public class Billing implements Serializable {
     
     public String getFin() {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-        return (!detailBillingList.isEmpty()) ? format.format(detailBillingList.get(0).getTimeend()) : "";
+        String fin="";
+        if(!detailBillingList.isEmpty()){
+            if(detailBillingList.get(0).getTimeend()!=null){
+                fin = format.format(detailBillingList.get(0).getTimeend());
+            }
+        }
+        return fin;
+         
     }
 
     public String getAdditionalInformation() {
@@ -391,5 +414,37 @@ public class Billing implements Serializable {
     
     public String getPlaca(){
         return this.additionalInformation;
+    }
+
+    public Integer getEmitterPerson() {
+        return emitterPerson;
+    }
+
+    public void setEmitterPerson(Integer emitterPerson) {
+        this.emitterPerson = emitterPerson;
+    }
+
+    public Integer getCollectorPerson() {
+        return collectorPerson;
+    }
+
+    public void setCollectorPerson(Integer collectorPerson) {
+        this.collectorPerson = collectorPerson;
+    }
+
+    public String getEmisor() {
+        return emisor;
+    }
+
+    public void setEmisor(String emisor) {
+        this.emisor = emisor;
+    }
+
+    public String getCobrador() {
+        return cobrador;
+    }
+
+    public void setCobrador(String cobrador) {
+        this.cobrador = cobrador;
     }
 }

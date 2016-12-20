@@ -75,8 +75,6 @@ public class Product implements Serializable {
     private BigDecimal percentageIva;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private List<DetailBilling> detailBillingList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
-    private List<Inventary> inventaryList;
     @OneToOne
     @JoinColumn(name = "familia_id")
     private Family family;
@@ -188,15 +186,6 @@ public class Product implements Serializable {
 
     public void setDetailBillingList(List<DetailBilling> detailBillingList) {
         this.detailBillingList = detailBillingList;
-    }
-
-    @XmlTransient
-    public List<Inventary> getInventaryList() {
-        return inventaryList;
-    }
-
-    public void setInventaryList(List<Inventary> inventaryList) {
-        this.inventaryList = inventaryList;
     }
 
     @Override

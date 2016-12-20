@@ -18,7 +18,6 @@ import java.util.List;
 import entities.ClientProvider;
 import entities.Person;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -29,7 +28,6 @@ public class PersonJpaController  extends EntityManagerProj  implements Serializ
     public PersonJpaController() {
         super();
     }
-    private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();

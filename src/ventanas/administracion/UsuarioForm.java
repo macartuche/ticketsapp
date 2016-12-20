@@ -37,6 +37,8 @@ public class UsuarioForm extends javax.swing.JDialog {
     public int config = 0;
     public int clientes = 0;
     public int parking = 0;
+    public int contract=0;
+    
     public static Map<String, Integer> llaves;
     private UsersJpaController controller;
 
@@ -60,6 +62,8 @@ public class UsuarioForm extends javax.swing.JDialog {
         direccion.setText(this.user.getPersonId().getAddress());
         correo.setText(this.user.getPersonId().getEmail());
         rol.setSelectedItem(this.user.getRol());
+        phraseTxt.setText(this.user.getPhrase());
+        
         if (this.user.getId() == null) {
             clave.setEnabled(true);
             cambiarClave.setVisible(false);
@@ -172,6 +176,9 @@ public class UsuarioForm extends javax.swing.JDialog {
         UsuariosCH = new javax.swing.JCheckBox();
         parkingCH = new javax.swing.JCheckBox();
         ConfigCH = new javax.swing.JCheckBox();
+        contractCH = new javax.swing.JCheckBox();
+        jLabel14 = new javax.swing.JLabel();
+        phraseTxt = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Datos de usuario");
@@ -355,6 +362,16 @@ public class UsuarioForm extends javax.swing.JDialog {
             }
         });
 
+        contractCH.setText("Contratos");
+        contractCH.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                contractCHActionPerformed(evt);
+            }
+        });
+
+        jLabel14.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel14.setText("Frase: ");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -373,16 +390,6 @@ public class UsuarioForm extends javax.swing.JDialog {
                                 .addComponent(jButton2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton1))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(57, 57, 57)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(rol, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(estado, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(16, 16, 16)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -403,11 +410,32 @@ public class UsuarioForm extends javax.swing.JDialog {
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(ReporteMsVendidoCH)
                                             .addComponent(ReporteCtasCH))))
-                                .addGap(19, 19, 19)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(UsuariosCH)
-                                    .addComponent(ConfigCH))))
-                        .addGap(0, 50, Short.MAX_VALUE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(19, 19, 19)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(UsuariosCH)
+                                            .addComponent(ConfigCH)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(contractCH, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(116, 116, 116)
+                                        .addComponent(estado, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(57, 57, 57)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(phraseTxt)
+                                            .addComponent(rol, 0, 219, Short.MAX_VALUE))))))
+                        .addGap(0, 25, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -451,7 +479,7 @@ public class UsuarioForm extends javax.swing.JDialog {
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(clave, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
@@ -497,10 +525,14 @@ public class UsuarioForm extends javax.swing.JDialog {
                     .addComponent(jLabel9)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(clave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel14)
+                        .addComponent(phraseTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cambiarClave)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel12)
                         .addComponent(estado)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cambiarClave)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel13)
@@ -521,7 +553,8 @@ public class UsuarioForm extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(clientesCH)
                     .addComponent(ReporteMsVendidoCH)
-                    .addComponent(parkingCH))
+                    .addComponent(parkingCH)
+                    .addComponent(contractCH))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
@@ -556,6 +589,7 @@ public class UsuarioForm extends javax.swing.JDialog {
         llaves.put("usuarios", usuarioopt);
         llaves.put("configuracion", config);
         llaves.put("parqueadero", parking);
+        llaves.put("contratos", contract);
     }
 
 
@@ -571,8 +605,6 @@ public class UsuarioForm extends javax.swing.JDialog {
         permisos = permisos.replaceAll(" ", "");
 
         this.user.getPersonId().setNames(nombres.getText());
-        System.out.println("TF=>" + nombres.getText());
-        System.out.println("OB=>" + this.user.getPersonId().getNames());
         this.user.getPersonId().setLastname(apellidos.getText());
         this.user.getPersonId().setPassport(identificacion.getText());
         this.user.getPersonId().setAddress(direccion.getText());
@@ -582,6 +614,7 @@ public class UsuarioForm extends javax.swing.JDialog {
         this.user.setRol(rol.getSelectedItem().toString());
         this.user.setActive(estado.isSelected());
         this.user.setPermissions(permisos.trim());
+        this.user.setPhrase(phraseTxt.getText());
 
         if (this.user.getId() == null) {
             try {
@@ -631,6 +664,12 @@ public class UsuarioForm extends javax.swing.JDialog {
             mensaje.append("- Campo Nombres obligatorio \n");
         }
 
+        if (Utilitario.campoVacio(phraseTxt.getText())) {
+            error = true;
+            mensaje.append("- Campo Nombres obligatorio \n");
+        }
+
+        
         Query q = null;
         //revisar que la cedula no este repetida
         if (this.user.getId() == null) {
@@ -701,6 +740,7 @@ public class UsuarioForm extends javax.swing.JDialog {
         config = (ConfigCH.isSelected()) ? 1 : 0;
         producto = (prodCH.isSelected()) ? 1 : 0;
         parking = (parkingCH.isSelected()) ? 1 : 0;
+        contract = (contractCH.isSelected())? 1: 0;
     }
 
 
@@ -747,6 +787,10 @@ public class UsuarioForm extends javax.swing.JDialog {
     private void parkingCHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_parkingCHActionPerformed
         parking = (parkingCH.isSelected()) ? 1 : 0;
     }//GEN-LAST:event_parkingCHActionPerformed
+
+    private void contractCHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contractCHActionPerformed
+        contract = (contractCH.isSelected()) ? 1:0;
+    }//GEN-LAST:event_contractCHActionPerformed
 
     /**
      * @param args the command line arguments
@@ -813,6 +857,7 @@ public class UsuarioForm extends javax.swing.JDialog {
     private javax.swing.JButton cambiarClave;
     private javax.swing.JPasswordField clave;
     private javax.swing.JCheckBox clientesCH;
+    private javax.swing.JCheckBox contractCH;
     private javax.swing.JTextField correo;
     private javax.swing.JTextField direccion;
     private javax.swing.JCheckBox estado;
@@ -827,6 +872,7 @@ public class UsuarioForm extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -842,6 +888,7 @@ public class UsuarioForm extends javax.swing.JDialog {
     private javax.swing.JRadioButton masculino;
     private javax.swing.JTextField nombres;
     private javax.swing.JCheckBox parkingCH;
+    private javax.swing.JTextField phraseTxt;
     private javax.swing.JCheckBox prodCH;
     private javax.swing.JComboBox rol;
     private javax.swing.JTextField usuario;

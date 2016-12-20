@@ -15,7 +15,6 @@ import javax.persistence.criteria.Root;
 import entities.DetailBilling;
 import java.util.ArrayList;
 import java.util.List;
-import entities.Inventary;
 import entities.Product;
 import java.util.Map;
 import javax.persistence.EntityManager;
@@ -44,9 +43,7 @@ public class ProductJpaController extends EntityManagerProj implements Serializa
         if (product.getDetailBillingList() == null) {
             product.setDetailBillingList(new ArrayList<DetailBilling>());
         }
-        if (product.getInventaryList() == null) {
-            product.setInventaryList(new ArrayList<Inventary>());
-        }
+       
         EntityManager em = null;
         try {
 //            em = getEntityManager();
@@ -58,12 +55,6 @@ public class ProductJpaController extends EntityManagerProj implements Serializa
                 attachedDetailBillingList.add(detailBillingListDetailBillingToAttach);
             }
             product.setDetailBillingList(attachedDetailBillingList);
-            List<Inventary> attachedInventaryList = new ArrayList<Inventary>();
-            for (Inventary inventaryListInventaryToAttach : product.getInventaryList()) {
-                inventaryListInventaryToAttach = em.getReference(inventaryListInventaryToAttach.getClass(), inventaryListInventaryToAttach.getId());
-                attachedInventaryList.add(inventaryListInventaryToAttach);
-            }
-            product.setInventaryList(attachedInventaryList);
             em.persist(product);
             for (DetailBilling detailBillingListDetailBilling : product.getDetailBillingList()) {
                 Product oldProductIdOfDetailBillingListDetailBilling = detailBillingListDetailBilling.getProductId();
@@ -72,15 +63,6 @@ public class ProductJpaController extends EntityManagerProj implements Serializa
                 if (oldProductIdOfDetailBillingListDetailBilling != null) {
                     oldProductIdOfDetailBillingListDetailBilling.getDetailBillingList().remove(detailBillingListDetailBilling);
                     oldProductIdOfDetailBillingListDetailBilling = em.merge(oldProductIdOfDetailBillingListDetailBilling);
-                }
-            }
-            for (Inventary inventaryListInventary : product.getInventaryList()) {
-                Product oldProductIdOfInventaryListInventary = inventaryListInventary.getProductId();
-                inventaryListInventary.setProductId(product);
-                inventaryListInventary = em.merge(inventaryListInventary);
-                if (oldProductIdOfInventaryListInventary != null) {
-                    oldProductIdOfInventaryListInventary.getInventaryList().remove(inventaryListInventary);
-                    oldProductIdOfInventaryListInventary = em.merge(oldProductIdOfInventaryListInventary);
                 }
             }
             em.getTransaction().commit();
@@ -100,8 +82,6 @@ public class ProductJpaController extends EntityManagerProj implements Serializa
             Product persistentProduct = em.find(Product.class, product.getId());
             List<DetailBilling> detailBillingListOld = persistentProduct.getDetailBillingList();
             List<DetailBilling> detailBillingListNew = product.getDetailBillingList();
-            List<Inventary> inventaryListOld = persistentProduct.getInventaryList();
-            List<Inventary> inventaryListNew = product.getInventaryList();
             List<String> illegalOrphanMessages = null;
             for (DetailBilling detailBillingListOldDetailBilling : detailBillingListOld) {
                 if (!detailBillingListNew.contains(detailBillingListOldDetailBilling)) {
@@ -109,14 +89,6 @@ public class ProductJpaController extends EntityManagerProj implements Serializa
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain DetailBilling " + detailBillingListOldDetailBilling + " since its productId field is not nullable.");
-                }
-            }
-            for (Inventary inventaryListOldInventary : inventaryListOld) {
-                if (!inventaryListNew.contains(inventaryListOldInventary)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Inventary " + inventaryListOldInventary + " since its productId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -129,13 +101,6 @@ public class ProductJpaController extends EntityManagerProj implements Serializa
             }
             detailBillingListNew = attachedDetailBillingListNew;
             product.setDetailBillingList(detailBillingListNew);
-            List<Inventary> attachedInventaryListNew = new ArrayList<Inventary>();
-            for (Inventary inventaryListNewInventaryToAttach : inventaryListNew) {
-                inventaryListNewInventaryToAttach = em.getReference(inventaryListNewInventaryToAttach.getClass(), inventaryListNewInventaryToAttach.getId());
-                attachedInventaryListNew.add(inventaryListNewInventaryToAttach);
-            }
-            inventaryListNew = attachedInventaryListNew;
-            product.setInventaryList(inventaryListNew);
             product = em.merge(product);
             for (DetailBilling detailBillingListNewDetailBilling : detailBillingListNew) {
                 if (!detailBillingListOld.contains(detailBillingListNewDetailBilling)) {
@@ -148,17 +113,7 @@ public class ProductJpaController extends EntityManagerProj implements Serializa
                     }
                 }
             }
-            for (Inventary inventaryListNewInventary : inventaryListNew) {
-                if (!inventaryListOld.contains(inventaryListNewInventary)) {
-                    Product oldProductIdOfInventaryListNewInventary = inventaryListNewInventary.getProductId();
-                    inventaryListNewInventary.setProductId(product);
-                    inventaryListNewInventary = em.merge(inventaryListNewInventary);
-                    if (oldProductIdOfInventaryListNewInventary != null && !oldProductIdOfInventaryListNewInventary.equals(product)) {
-                        oldProductIdOfInventaryListNewInventary.getInventaryList().remove(inventaryListNewInventary);
-                        oldProductIdOfInventaryListNewInventary = em.merge(oldProductIdOfInventaryListNewInventary);
-                    }
-                }
-            }
+            
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -196,13 +151,6 @@ public class ProductJpaController extends EntityManagerProj implements Serializa
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Product (" + product + ") cannot be destroyed since the DetailBilling " + detailBillingListOrphanCheckDetailBilling + " in its detailBillingList field has a non-nullable productId field.");
-            }
-            List<Inventary> inventaryListOrphanCheck = product.getInventaryList();
-            for (Inventary inventaryListOrphanCheckInventary : inventaryListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Product (" + product + ") cannot be destroyed since the Inventary " + inventaryListOrphanCheckInventary + " in its inventaryList field has a non-nullable productId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

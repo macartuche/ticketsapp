@@ -31,15 +31,16 @@ public class FamilyJpaController  extends EntityManagerProj implements Serializa
     }
 
     public void create(Family family) {
-        EntityManager em = null;
+//        EntityManager em = null;
         try {
-             em = super.getEmf().createEntityManager();
+//             em = super.getEmf().createEntityManager();
+            em = super.getEm();
             em.getTransaction().begin();
             em.persist(family);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
-                em.close();
+//                em.close();
             }
         }
     }
@@ -47,7 +48,8 @@ public class FamilyJpaController  extends EntityManagerProj implements Serializa
     public void edit(Family family) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
-         em = super.getEmf().createEntityManager();
+//         em = super.getEmf().createEntityManager();
+            em = super.getEm();
             em.getTransaction().begin();
             family = em.merge(family);
             em.getTransaction().commit();
@@ -62,7 +64,7 @@ public class FamilyJpaController  extends EntityManagerProj implements Serializa
             throw ex;
         } finally {
             if (em != null) {
-                em.close();
+//                em.close();
             }
         }
     }
@@ -70,7 +72,8 @@ public class FamilyJpaController  extends EntityManagerProj implements Serializa
     public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
-           em = super.getEmf().createEntityManager();
+//           em = super.getEmf().createEntityManager();
+            em = super.getEm();
             em.getTransaction().begin();
             Family family;
             try {
@@ -83,7 +86,7 @@ public class FamilyJpaController  extends EntityManagerProj implements Serializa
             em.getTransaction().commit();
         } finally {
             if (em != null) {
-                em.close();
+//                em.close();
             }
         }
     }
@@ -97,7 +100,8 @@ public class FamilyJpaController  extends EntityManagerProj implements Serializa
     }
 
     private List<Family> findFamilyEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager    em = super.getEmf().createEntityManager(); 
+//        EntityManager    em = super.getEmf().createEntityManager(); 
+        em = super.getEm();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             cq.select(cq.from(Family.class));
@@ -108,21 +112,23 @@ public class FamilyJpaController  extends EntityManagerProj implements Serializa
             }
             return q.getResultList();
         } finally {
-            em.close();
+//            em.close();
         }
     }
 
     public Family findFamily(Integer id) {
-        EntityManager em = getEntityManager();
+//        EntityManager em = getEntityManager();
+        em = super.getEm();
         try {
             return em.find(Family.class, id);
         } finally {
-            em.close();
+//            em.close();
         }
     }
 
     public int getFamilyCount() {
-        EntityManager    em = super.getEmf().createEntityManager();
+//        EntityManager    em = super.getEmf().createEntityManager();
+        em = super.getEm();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             Root<Family> rt = cq.from(Family.class);
@@ -130,7 +136,7 @@ public class FamilyJpaController  extends EntityManagerProj implements Serializa
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
         } finally {
-            em.close();
+//            em.close();
         }
     }
     

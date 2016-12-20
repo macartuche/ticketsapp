@@ -70,6 +70,10 @@ public class Users implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Billing> billingList;
 
+    
+    @Column(name = "frase",unique=true)
+    private String phrase;
+    
     public Users() {
     }
 
@@ -193,5 +197,13 @@ public class Users implements Serializable {
 
     public void setBillingList(List<Billing> billingList) {
         this.billingList = billingList;
+    }
+
+    public String getPhrase() {
+        return phrase;
+    }
+
+    public void setPhrase(String phrase) {
+        this.phrase = phrase;
     }
 }

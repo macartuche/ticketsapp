@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comPago" pageWidth="210" pageHeight="297" columnWidth="191" leftMargin="14" rightMargin="5" topMargin="8" bottomMargin="8" uuid="228fd20d-3fef-43d9-81bb-466511a5b766">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comPago" pageWidth="210" pageHeight="297" columnWidth="190" leftMargin="15" rightMargin="5" topMargin="8" bottomMargin="8" uuid="228fd20d-3fef-43d9-81bb-466511a5b766">
 	<property name="ireport.zoom" value="2.357947691000002"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["/Users/macbookpro/NetBeansProjects/ticketsApp/src/ventanas/reportes/jasper/"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["C://reportes/"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="institution" class="java.lang.String"/>
 	<queryString>
@@ -143,7 +143,7 @@
 		</band>
 	</title>
 	<columnHeader>
-		<band height="14" splitType="Stretch">
+		<band height="12" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="0" width="31" height="12" uuid="41397018-2f94-4065-84ce-5ee90143e00b"/>
 				<textElement>

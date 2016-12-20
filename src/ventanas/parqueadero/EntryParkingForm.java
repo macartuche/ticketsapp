@@ -5,20 +5,21 @@
  */
 package ventanas.parqueadero;
 
-import ant.DatosMatricula;
-import antclient.AntClient;
 import controllers.AccountJpaController;
 import controllers.BillingJpaController;
 import controllers.ClientProviderJpaController;
+import controllers.ConfigurationsJpaController;
 import controllers.DetailBillingJpaController;
 import controllers.PersonJpaController;
 import controllers.ProductJpaController;
+import controllers.UserContractJpaController;
 import entities.Account;
 import entities.Billing;
-import entities.ClientProvider;
+import entities.Configurations;
 import entities.DetailBilling;
-import entities.Person;
 import entities.Product;
+import entities.UserContract;
+import java.awt.Dimension;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -31,19 +32,24 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
+import javax.swing.JOptionPane;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.DocumentFilter;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import org.apache.tools.ant.taskdefs.Sequential;
 import utilitarios.UpperCaseDocumentFilter;
 
 /**
@@ -59,21 +65,28 @@ public class EntryParkingForm extends javax.swing.JDialog {
     public PersonJpaController personController;
     public AccountJpaController accountController;
     public ProductJpaController productController;
+    public UserContractJpaController userContractController;
+    static ConfigurationsJpaController configController = null;
+    public Product product = null;
 
     /**
      * Creates new form EnterParkinForm
+     *
+     * @param parent
+     * @param modal
+     * @param b
      */
     public EntryParkingForm(java.awt.Frame parent, boolean modal, Billing b) {
         super(parent, modal);
         initComponents();
 
-        DateFormat day = new SimpleDateFormat("MM-dd-yyyy ");
+        DateFormat day = new SimpleDateFormat("EEE, d MMM yyyy ");
         DateFormat time = new SimpleDateFormat("HH:mm:ss");
         Date today = Calendar.getInstance().getTime();
         String reportDay = day.format(today);
         String reportDate = time.format(today);
         dayLbl.setText(reportDay);
-        timeLbl.setText(reportDate);
+//        ticketNro.setText(b.getNumber());
 
         clientController = new ClientProviderJpaController();
         controller = new BillingJpaController();
@@ -81,10 +94,22 @@ public class EntryParkingForm extends javax.swing.JDialog {
         personController = new PersonJpaController();
         accountController = new AccountJpaController();
         productController = new ProductJpaController();
+        configController = new ConfigurationsJpaController();
+
+        Query q = productController.getEm().createQuery("Select p from Product p where p.code =:code and p.active=true");
+        q.setParameter("code", "park001");
+        List<Product> productList = q.getResultList();
+
+        if (!productList.isEmpty()) {
+            product = productList.get(0);
+        }
 
         this.billing = b;
-        DocumentFilter filter = new  UpperCaseDocumentFilter();
-        ((AbstractDocument)placaTxt.getDocument()).setDocumentFilter(filter);
+        DocumentFilter filter = new UpperCaseDocumentFilter();
+        ((AbstractDocument) placaTxt.getDocument()).setDocumentFilter(filter);
+
+        //fijar la hora
+        timeLbl.setText(reportDate);
     }
 
     /**
@@ -97,45 +122,24 @@ public class EntryParkingForm extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        ownerLbl = new javax.swing.JLabel();
-        placaTxt = new javax.swing.JTextField();
-        timeLbl = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         dayLbl = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        timeLbl = new javax.swing.JLabel();
+        placaTxt = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Ingreso de nuevo vehículo");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel1.setText("Propietario:");
-
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
-        jLabel2.setText("Placa:");
-
         jLabel3.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel3.setText("Hora:");
-
-        ownerLbl.setBackground(new java.awt.Color(255, 255, 255));
-        ownerLbl.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-
-        placaTxt.setFont(new java.awt.Font("Lucida Grande", 1, 35)); // NOI18N
-        placaTxt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                placaTxtActionPerformed(evt);
-            }
-        });
-
-        timeLbl.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
-        timeLbl.setText("08:50:30");
 
         jButton1.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         jButton1.setMnemonic('R');
@@ -155,15 +159,6 @@ public class EntryParkingForm extends javax.swing.JDialog {
             }
         });
 
-        jButton3.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
-        jButton3.setMnemonic('B');
-        jButton3.setText("Buscar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
         dayLbl.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         dayLbl.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         dayLbl.setText("08:50:30");
@@ -171,82 +166,86 @@ public class EntryParkingForm extends javax.swing.JDialog {
         jLabel5.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         jLabel5.setText("Nuevo ingreso");
 
+        timeLbl.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
+        timeLbl.setText("08:50:30");
+
+        placaTxt.setFont(new java.awt.Font("Lucida Grande", 0, 36)); // NOI18N
+        placaTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                placaTxtActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel7.setText("Placa:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dayLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(27, 27, 27)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(timeLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(placaTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton3))
-                                    .addComponent(ownerLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton1)
+                                .addGap(23, 23, 23)
+                                .addComponent(timeLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(127, 127, 127))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(dayLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(19, Short.MAX_VALUE))))
+                                .addComponent(placaTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(207, 207, 207)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton2)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addComponent(jLabel5))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dayLbl)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(timeLbl))
+                        .addGap(17, 17, 17)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(placaTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ownerLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                        .addComponent(dayLbl)))
+                .addGap(27, 27, 27)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(timeLbl))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
+                    .addComponent(placaTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -256,70 +255,78 @@ public class EntryParkingForm extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void placaTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_placaTxtActionPerformed
-        buscarANT();
-    }//GEN-LAST:event_placaTxtActionPerformed
 
-    private void buscarANT() {
-        String placa = placaTxt.getText();
-        if (!placa.trim().isEmpty()) {
-            //LAA1007
-            DatosMatricula dm = AntClient.solicitaMatricula(placa, "WEB", "TESTUSER");
-            if (dm != null) {
-                if (dm.getPropietario() != null && !dm.getPropietario().isEmpty()) {
-                    String identification = dm.getDocPropietario().replace("CED-", "");
-                    Query q = clientController.getEm().createNamedQuery("ClientProvider.findByNamesOrPassport");
-                    q.setParameter("criteria", identification);
-                    List<ClientProvider> list = q.getResultList();
-                    ClientProvider client = null;
-
-                    if (list.isEmpty()) {
-
-                        Person person = new Person();
-                        person.setNames(dm.getPropietario());
-                        person.setPassport(identification);
-                        personController.create(person);
-
-                        client = new ClientProvider();
-                        client.setPersonId(person);
-                        client.setActiveclient(true);
-                        clientController.create(client);
-
-                        this.billing.setClientProviderid(client);
-                    } else {
-                        this.billing.setClientProviderid(list.get(0));
-                    }
-                    this.billing.setAdditionalInformation(placa);
-                }
-            }
-            System.out.println("1=>" + dm.getDocPropietario());
-            System.out.println("2=>" + dm.getPropietario());
-            System.out.println("3=>" + dm.getApellido1());
-            System.out.println("4=>" + dm.getApellido2());
-//            System.out.println("5=>"+dm.ge);
-            System.out.println("6=>" + dm.getTipo());
-            ownerLbl.setText(dm.getPropietario());
-        }
-    }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Query q = productController.getEm().createQuery("Select p from Product p where p.code =:code and p.active=true");
-        q.setParameter("code", "park001");
-        List<Product> productList = q.getResultList();
-        Product product = null;
-        if (!productList.isEmpty()) {
-            product = productList.get(0);
+        generateTicket();
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private int numSecuencial;
+
+    private void generarSecuencial() {
+        List<Configurations> sequences = new ArrayList<>();
+
+        Object data = configController.getEntityManager().createNativeQuery("Select valor from configuraciones where codigo = 'SECUENCIAL_ACT' ").getSingleResult();
+        System.out.println(data);
+//        sequences = checkConfigurations("SECUENCIAL_ACT");
+
+//        if (!sequences.isEmpty()) {
+//            secuencial = sequences.get(0).getValue();
+//        }
+        numSecuencial = Integer.parseInt(data.toString());
+//        numSecuencial++;
+//        secuencial = formatoSecuencial(numSecuencial);
+    }
+
+    private void generateTicket() {
+
+        if (product == null) {
+            JOptionPane.showMessageDialog(this,
+                    "No se encuentra definido el item parqueadero", "ERROR",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
+        //revisar si ingreso una placa caso contrario se cobrara de manera 
+        //normal
+        String placa = placaTxt.getText();
+        String state = "GENERADA";
+
+        if (!placa.trim().isEmpty()) {
+            Date currentDate = new Date();
+            Query q = productController.getEm().
+                    createNamedQuery("UserContract.findBylicensePlateAndDate");
+            q.setParameter("currentDate", currentDate);
+            q.setParameter("licensePlate", placa);
+            List<UserContract> usersContract = q.getResultList();
+
+            if (usersContract.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "La placa del vehículo no "
+                        + " se encuentra en el contrato.\n No se puede registrar "
+                        + "el ingreso.  ", "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            } else {
+                //fija el cliente
+                this.billing.setClientProviderid(usersContract.get(0).getClient());
+                state = "CONTRATO";
+            }
+        }
+
+        generarSecuencial();
+
+        this.billing.setSequential(numSecuencial+"");
+        
         DetailBilling detail = new DetailBilling();
         detail.setBillingId(this.billing);
         detail.setQuantity(BigDecimal.ONE);
         detail.setTotal(BigDecimal.ZERO);
         detail.setProductId(product);
-        detail.setTimestart(new Date());
+        detail.setTimestart(this.billing.getEmissiondate());
         detail.setTotal(BigDecimal.ZERO);
         detail.setPercentageIva(BigDecimal.ZERO);
         detail.setUnitaryPrice(BigDecimal.ZERO);
@@ -327,28 +334,35 @@ public class EntryParkingForm extends javax.swing.JDialog {
         detail.setPercentageDiscount(BigDecimal.ZERO);
         detail.setValueDiscount(BigDecimal.ZERO);
 
-        this.billing.setState("GENERADA");
+        this.billing.setNumber(""+numSecuencial);
+        this.billing.setState(state);
+        this.billing.setAdditionalInformation(placaTxt.getText());
         this.billing.getDetailBillingList().add(detail);
 
-        //cuenta
-        Account account = new Account();
-        account.setBalance(BigDecimal.ZERO);
-        account.setTotal(BigDecimal.ZERO);
-        account.setDateCreation(new Date());
-        account.setBillingId(this.billing);
-        account.setState("Abierta");
         try {
-
             controller.create(this.billing);
 //            detailController.create(detail);
+
+            Account account = new Account();
+            account.setBalance(BigDecimal.ZERO);
+            account.setTotal(BigDecimal.ZERO);
+            account.setDateCreation(new Date());
+            account.setBillingId(this.billing);
+            account.setState("Abierta");
             accountController.create(account);
+
+            actualizarSecuencial();
             printTicket();
 
         } catch (Exception ex) {
             Logger.getLogger(EntryParkingForm.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }
+
+    private void placaTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_placaTxtActionPerformed
+        generateTicket();
+    }//GEN-LAST:event_placaTxtActionPerformed
 
     /**
      *
@@ -366,27 +380,49 @@ public class EntryParkingForm extends javax.swing.JDialog {
             JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(facturas);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap(), beanCollectionDataSource);
             // view report to UI
-            JasperViewer.viewReport(jasperPrint, false);
-//            JasperPrintManager.printReport(jasperPrint, false);
-        } catch (JRException ex) {
-            Logger.getLogger(ventas.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FileNotFoundException ex) {
+//            JasperViewer viewer = new JasperViewer(jasperPrint, false);
+//            viewer.setVisible(true);
+            
+            JasperPrintManager.printReport(jasperPrint, false);
+        } catch (JRException | FileNotFoundException ex) {
             Logger.getLogger(ventas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        buscarANT();
-    }//GEN-LAST:event_jButton3ActionPerformed
+
+    /**
+     * Actualiza el secuencial de factura de venta
+     */
+    private void actualizarSecuencial() {
+
+        try {
+            Map<String, Object> variables = new HashMap<>();
+            Integer sequential = Integer.valueOf(this.billing.getNumber()) + 1;
+            /*
+             variables.put("code", "SECUENCIAL_ACT");
+             Configurations config = configController.namedQuery("Configurations.findByCode", variables).get(0);
+           
+             config.setValue(sequential.toString());
+             configController.edit(config);
+             */
+            EntityTransaction tx = configController.getEm().getTransaction();
+            tx.begin();
+            Query q = configController.getEm().createNativeQuery("update configuraciones set valor='" + sequential.toString() + "' "
+                    + "where codigo='SECUENCIAL_ACT' ");
+            q.executeUpdate();
+
+            tx.commit();
+        } catch (Exception ex) {
+            System.out.println(ex);
+            Logger.getLogger(EntryParkingForm.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -394,17 +430,9 @@ public class EntryParkingForm extends javax.swing.JDialog {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EntryParkingForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EntryParkingForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EntryParkingForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(EntryParkingForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -426,14 +454,11 @@ public class EntryParkingForm extends javax.swing.JDialog {
     private javax.swing.JLabel dayLbl;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JLabel ownerLbl;
     private javax.swing.JTextField placaTxt;
     private javax.swing.JLabel timeLbl;
     // End of variables declaration//GEN-END:variables

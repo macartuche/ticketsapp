@@ -11,12 +11,14 @@ import controllers.ClientProviderJpaController;
 import controllers.ConfigurationsJpaController;
 import controllers.PersonJpaController;
 import controllers.ProductJpaController;
+import controllers.UsersJpaController;
 import controllers.exceptions.NonexistentEntityException;
 import entities.Billing;
 import entities.ClientProvider;
 import entities.Configurations;
 import entities.DetailBilling;
 import entities.Product;
+import entities.Users;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -41,6 +43,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import utilitarios.TabsIndex;
 import ventanas.administracion.LoginApp;
 import ventanas.mainForm;
 
@@ -57,6 +60,7 @@ public class ventas extends javax.swing.JPanel {
     public static List<Billing> ventas;
     private ConfigurationsJpaController configController;
     public Configurations config;
+    static UsersJpaController userscontroller;
 
     /**
      * Creates new form ventas
@@ -67,35 +71,41 @@ public class ventas extends javax.swing.JPanel {
         controllerPerson = new PersonJpaController();
         controllerProducto = new ProductJpaController();
         controllerClient = new ClientProviderJpaController();
-        configController = new ConfigurationsJpaController(); 
+        configController = new ConfigurationsJpaController();
+        userscontroller = new UsersJpaController();
 
         Map<String, Object> variables = new HashMap<>();
-        variables.put("code", "institutionName");
+            variables.put("code", "institutionName");
         config = configController.namedQuery("Configurations.findByCode", variables).get(0);
-        verTabla();
+        verTabla(false);
     }
 
-    public static void verTabla() {
+    public static void verTabla(Boolean refresh) {
         dBTable1.createControlPanel();
         Calendar date = Calendar.getInstance();
         date.set(Calendar.HOUR_OF_DAY, 0);
         date.set(Calendar.MINUTE, 0);
-        ventas = controller.findByDayAndCollector2(date.getTime(), LoginApp.userLogged);
+        ventas = controller.findByDayAndCollector2(date.getTime(), LoginApp.userLogged, refresh);
         dBTable1.setEditable(false);
+        
+        setEmiterAndCollecter(ventas);
         fijarDatos(ventas);
-
+        
     }
 
     private static void fijarDatos(List<Billing> ventas) {
         try {
             labelResultado.setText("Resultado: " + ventas.size());
-            String methodNames[] = {"getFecha", "getCliente", "getNumero", "getTotal", "getEstado"};
+            String methodNames[] = {"getFecha", "getCliente", "getNumero", "getTotal", "getEstado","getEmisor", "getCobrador"};
             dBTable1.refreshDataObject(ventas, methodNames);
             dBTable1.getColumn(0).setPreferredWidth(150);
             dBTable1.getColumn(1).setPreferredWidth(200);
             dBTable1.getColumn(2).setPreferredWidth(150);
             dBTable1.getColumn(3).setPreferredWidth(100);
             dBTable1.getColumn(4).setPreferredWidth(150);
+            
+            dBTable1.getColumn(5).setPreferredWidth(80);
+            dBTable1.getColumn(6).setPreferredWidth(80);
 
             DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
             rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
@@ -107,6 +117,29 @@ public class ventas extends javax.swing.JPanel {
         }
     }
 
+    
+       /**
+     * Agregado para informacion de emisor y cobrador
+     * @param ventas 
+     */
+    private static void setEmiterAndCollecter(List<Billing> ventas){
+        Users emitter = null;
+        Users collecter = null;
+        for (Billing venta : ventas) {
+            Integer emisorId = venta.getEmitterPerson();
+            Integer collectorId = venta.getCollectorPerson();
+            
+            if(emisorId!=null && emisorId!= 0){
+                emitter = userscontroller.findUsers(emisorId);
+                venta.setEmisor(emitter.getUsuario());
+            }
+            
+            if(collectorId!=null && collectorId!= 0){
+                collecter = userscontroller.findUsers(collectorId);
+                venta.setCobrador(collecter.getUsuario());
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -394,26 +427,42 @@ public class ventas extends javax.swing.JPanel {
         b.setDetailBillingList(new ArrayList<DetailBilling>());
         b.setEmissiondate(new Date());
         b.setUser(LoginApp.userLogged);
+        
+        //emisor
+        b.setEmitterPerson(LoginApp.userLogged.getId());
 
         //fijar por defecto el contribuyente: CONSUMIDOR FINAL
-        ClientProvider consumidorFinal = controllerClient.findClientProvider(5);
+        ClientProvider consumidorFinal = controllerClient.findClientProvider(2);
         b.setClientProviderid(consumidorFinal);
         abrirVentana(b);
     }
     private void btnAnularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnularActionPerformed
 
-        try {
+         try {
             if (ventas.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Seleccione una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
+            //solo el usuario administrador puede anular
+            if (!LoginApp.userLogged.getRol().equals("Administrador")) {
+                JOptionPane.showMessageDialog(this, "Solo el administrador de la aplicación puede anular tickets\n. Contáctese a informática a la ext: 149", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             int indice = dBTable1.getSelectedRow();
             Billing b = ventas.get(indice);
-//            if (!b.getState().equals("GENERADA")) {
-//                JOptionPane.showMessageDialog(this, "Sólo se pueden modificar facturas en estado \"GENERADA\".", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                return;
-//            }
+
+            //verificar que no sea de otro dia
+            Calendar currentDate = Calendar.getInstance();
+            currentDate.setTime(new Date());
+            currentDate.set(Calendar.HOUR_OF_DAY, 0);
+            currentDate.set(Calendar.MINUTE, 0);
+            currentDate.set(Calendar.SECOND, 0);
+            if (b.getEmissiondate().before(currentDate.getTime())) {
+                JOptionPane.showMessageDialog(this, "No puede anular tickets de fechas anteriores", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             int confirmado = JOptionPane.showOptionDialog(btnAnular,
                     "  Desea anular la factura con número,      \n"
@@ -421,24 +470,25 @@ public class ventas extends javax.swing.JPanel {
                     + " \n", "Alerta",
                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Si", "No", "Cancelar"}, "Si");
 
-            System.out.println("CONFIMADO >>> " + confirmado);
             if (JOptionPane.OK_OPTION == confirmado) {
                 System.out.println("si");
                 List<DetailBilling> listaDetalle = b.getDetailBillingList();
                 BigDecimal cantidad;
                 Product product;
-                for (DetailBilling detalle : listaDetalle) {
+                /*
+                 for (DetailBilling detalle : listaDetalle) {
 
-                    cantidad = detalle.getQuantity();
-                    product = detalle.getProductId();
-                    cantidad = cantidad.add(product.getStock());
-                    product.setStock(cantidad);
-                    controllerProducto.edit(product);                    
+                 cantidad = detalle.getQuantity();
+                 product = detalle.getProductId();
+                 cantidad = cantidad.add(product.getStock());
+                 product.setStock(cantidad);
+                 controllerProducto.edit(product);
 
-                }
+                 }*/
+
                 b.setState("ANULADA");
                 controller.edit(b);
-                verTabla();
+                verTabla(true);
             } else {
                 System.out.println("no");
 
@@ -460,7 +510,7 @@ public class ventas extends javax.swing.JPanel {
         facturas.add(b);
         Locale local = Locale.getDefault();
         ResourceBundle resource = ResourceBundle.getBundle("values", local);
-        String reportPath = resource.getString("pathTest") + "comPago.jasper";
+        String reportPath = resource.getString("pathJasper") + "comPago.jasper";
 
         try {
 
@@ -473,11 +523,9 @@ public class ventas extends javax.swing.JPanel {
             JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(facturas);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametersMap, beanCollectionDataSource);
             // view report to UI
-            JasperViewer.viewReport(jasperPrint, false);
-//            JasperPrintManager.printReport(jasperPrint, false);
-        } catch (JRException ex) {
-            Logger.getLogger(ventas.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FileNotFoundException ex) {
+//            JasperViewer.viewReport(jasperPrint, false);
+            JasperPrintManager.printReport(jasperPrint, false);
+        } catch (JRException | FileNotFoundException ex) {
             Logger.getLogger(ventas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnImprimirActionPerformed
@@ -491,16 +539,13 @@ public class ventas extends javax.swing.JPanel {
         int indice = dBTable1.getSelectedRow();
         Billing b = ventas.get(indice);
         if (!b.getState().equals("GENERADA")) {
-//                abrirVentana(b);
             JOptionPane.showMessageDialog(this, "Sólo se pueden pagar facturas en estado \"GENERADA\".", "ERROR", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         CobroFacturaForm dialog = new CobroFacturaForm(new javax.swing.JFrame(), Boolean.TRUE, b);
         dialog.setVisible(true);
-        System.out.println(">");
-        verTabla();
-        System.out.println(">>");
+        verTabla(true);
 
     }//GEN-LAST:event_btnPagoActionPerformed
 
@@ -522,15 +567,12 @@ public class ventas extends javax.swing.JPanel {
         end.set(Calendar.SECOND, 0);
 
         variables.put("startDate", start.getTime());
-        variables.put("endDate", end.getTime());
-//        if (!rucci.trim().isEmpty()) {
+        variables.put("endDate", end.getTime()); 
         variables.put("rucci", rucci.toLowerCase() + "%");
-//        }
-//        if (!numReceipt.trim().isEmpty()) {
         variables.put("numReceipt", numReceipt.toLowerCase() + "%");
-//        }
         ventas = controller.namedQuery("Billing.findByFilter", variables);
-        System.out.println("=>" + ventas.size());
+        
+        setEmiterAndCollecter(ventas);
         fijarDatos(ventas);
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -538,14 +580,14 @@ public class ventas extends javax.swing.JPanel {
         // TODO add your handling code here:
         txtNumFactura.setText("");
         txtRucCi.setText("");
-        verTabla();
+        verTabla(true);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnPago1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPago1ActionPerformed
         int index = mainForm.pestanias.getSelectedIndex();
         if (index != -1) {
             mainForm.pestanias.remove(index);
-            mainForm.CerrarPestana(2);
+            mainForm.CerrarPestana(TabsIndex.FACTURASVENTA.getIndex());
         }
     }//GEN-LAST:event_btnPago1ActionPerformed
 
@@ -555,9 +597,6 @@ public class ventas extends javax.swing.JPanel {
 
     private void btnNuevoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnNuevoKeyPressed
         System.out.println("GIM=>" + evt.getKeyCode());
-//        if (evt.getKeyCode() == KeyEvent.VK_N) {
-//            abrirFormTickets();
-//        }
     }//GEN-LAST:event_btnNuevoKeyPressed
 
     private void jPanel1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel1KeyPressed
@@ -567,20 +606,7 @@ public class ventas extends javax.swing.JPanel {
     private void abrirVentana(final Billing b) {
         VentasForm dialog = new VentasForm(new javax.swing.JFrame(), true, b);
         dialog.setVisible(true);
-        verTabla();
-
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                final VentasForm dialog = new VentasForm(new javax.swing.JFrame(), true, b);
-//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-//                    @Override
-//                    public void windowClosing(java.awt.event.WindowEvent e) {
-//                        dialog.dispose();
-//                    }
-//                });
-//                dialog.setVisible(true);
-//            }
-//        });
+        verTabla(true);
     }
 
 

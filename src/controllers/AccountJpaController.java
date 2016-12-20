@@ -34,7 +34,8 @@ public class AccountJpaController extends EntityManagerProj implements Serializa
     public void create(Account account) {
         EntityManager em = null;
         try {
-           em = super.getEmf().createEntityManager();
+            em = super.getEm();
+//           em = super.getEmf().createEntityManager();
             em.getTransaction().begin();
             Billing billingId = account.getBillingId();
             if (billingId != null) {
@@ -49,7 +50,7 @@ public class AccountJpaController extends EntityManagerProj implements Serializa
             em.getTransaction().commit();
         } finally {
             if (em != null) {
-                em.close();
+//                em.close();
             }
         }
     }
@@ -57,7 +58,8 @@ public class AccountJpaController extends EntityManagerProj implements Serializa
     public void edit(Account account) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
-            em = super.getEmf().createEntityManager();
+//            em = super.getEmf().createEntityManager();
+            em = super.getEm();
             em.getTransaction().begin();
             Account persistentAccount = em.find(Account.class, account.getId());
             Billing billingIdOld = persistentAccount.getBillingId();
@@ -87,7 +89,7 @@ public class AccountJpaController extends EntityManagerProj implements Serializa
             throw ex;
         } finally {
             if (em != null) {
-                em.close();
+//                em.close();
             }
         }
     }
@@ -95,7 +97,8 @@ public class AccountJpaController extends EntityManagerProj implements Serializa
     public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
-            em = super.getEmf().createEntityManager();
+//            em = super.getEmf().createEntityManager();
+            em = super.getEm();
             em.getTransaction().begin();
             Account account;
             try {
@@ -113,7 +116,7 @@ public class AccountJpaController extends EntityManagerProj implements Serializa
             em.getTransaction().commit();
         } finally {
             if (em != null) {
-                em.close();
+//                em.close();
             }
         }
     }
@@ -127,7 +130,9 @@ public class AccountJpaController extends EntityManagerProj implements Serializa
     }
 
     private List<Account> findAccountEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = super.getEmf().createEntityManager();
+//        EntityManager em = super.getEmf().createEntityManager();
+        em = super.getEm();
+        
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             cq.select(cq.from(Account.class));
@@ -138,21 +143,23 @@ public class AccountJpaController extends EntityManagerProj implements Serializa
             }
             return q.getResultList();
         } finally {
-            em.close();
+//            em.close();
         }
     }
 
     public Account findAccount(Integer id) {
-        EntityManager em = super.getEmf().createEntityManager();
+//        EntityManager em = super.getEmf().createEntityManager();
+        em = super.getEm();
         try {
             return em.find(Account.class, id);
         } finally {
-            em.close();
+//            em.close();
         }
     }
 
     public int getAccountCount() {
-        EntityManager em = super.getEmf().createEntityManager();
+//        EntityManager em = super.getEmf().createEntityManager();
+        em = super.getEm();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             Root<Account> rt = cq.from(Account.class);
@@ -160,7 +167,7 @@ public class AccountJpaController extends EntityManagerProj implements Serializa
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
         } finally {
-            em.close();
+//            em.close();
         }
     }
 

@@ -42,7 +42,8 @@ public class ClientProviderJpaController extends EntityManagerProj implements Se
         }
         EntityManager em = null;
         try {
-            em = super.getEmf().createEntityManager();
+//            em = super.getEmf().createEntityManager
+            em = super.getEm();
             em.getTransaction().begin();
             Person personId = clientProvider.getPersonId();
             if (personId != null) {
@@ -72,7 +73,7 @@ public class ClientProviderJpaController extends EntityManagerProj implements Se
             em.getTransaction().commit();
         } finally {
             if (em != null) {
-                em.close();
+//                em.close();
             }
         }
     }
@@ -80,7 +81,8 @@ public class ClientProviderJpaController extends EntityManagerProj implements Se
     public void edit(ClientProvider clientProvider) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
-            em = super.getEmf().createEntityManager();
+//            em = super.getEmf().createEntityManager();
+            em = super.getEm();
             em.getTransaction().begin();
             ClientProvider persistentClientProvider = em.find(ClientProvider.class, clientProvider.getId());
             Person personIdOld = persistentClientProvider.getPersonId();
@@ -142,7 +144,7 @@ public class ClientProviderJpaController extends EntityManagerProj implements Se
             throw ex;
         } finally {
             if (em != null) {
-                em.close();
+//                em.close();
             }
         }
     }
@@ -150,7 +152,8 @@ public class ClientProviderJpaController extends EntityManagerProj implements Se
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
-            em = super.getEmf().createEntityManager();
+//            em = super.getEmf().createEntityManager();
+            em = super.getEm();
             em.getTransaction().begin();
             ClientProvider clientProvider;
             try {
@@ -179,7 +182,7 @@ public class ClientProviderJpaController extends EntityManagerProj implements Se
             em.getTransaction().commit();
         } finally {
             if (em != null) {
-                em.close();
+//                em.close();
             }
         }
     }
@@ -193,7 +196,8 @@ public class ClientProviderJpaController extends EntityManagerProj implements Se
     }
 
     private List<ClientProvider> findClientProviderEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = super.getEmf().createEntityManager();
+//        EntityManager em = super.getEmf().createEntityManager();
+        em = super.getEm();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             cq.select(cq.from(ClientProvider.class));
@@ -204,21 +208,23 @@ public class ClientProviderJpaController extends EntityManagerProj implements Se
             }
             return q.getResultList();
         } finally {
-            em.close();
+//            em.close();
         }
     }
 
     public ClientProvider findClientProvider(Integer id) {
-        EntityManager em = super.getEmf().createEntityManager();
+//        EntityManager em = super.getEmf().createEntityManager();
+        em = super.getEm();
         try {
             return em.find(ClientProvider.class, id);
         } finally {
-            em.close();
+//            em.close();
         }
     }
 
     public int getClientProviderCount() {
-        EntityManager em = super.getEmf().createEntityManager();
+//        EntityManager em = super.getEmf().createEntityManager();
+        em = super.getEm();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             Root<ClientProvider> rt = cq.from(ClientProvider.class);
@@ -226,12 +232,13 @@ public class ClientProviderJpaController extends EntityManagerProj implements Se
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
         } finally {
-            em.close();
+//            em.close();
         }
     }
 
     public List<ClientProvider> getClients(String query, Map<String, Object> filters) {
-        EntityManager em = super.getEmf().createEntityManager();
+//        EntityManager em = super.getEmf().createEntityManager();
+        em = super.getEm();
         try {
 
             Query q = em.createNamedQuery(query);
@@ -242,13 +249,14 @@ public class ClientProviderJpaController extends EntityManagerProj implements Se
             }
             return q.getResultList();
         } finally {
-            em.close();
+//            em.close();
         }
 
     }
 
     public List<ClientProvider> namedQuery(String query, Map<String, Object> filters) {
-        EntityManager em = super.getEmf().createEntityManager();
+//        EntityManager em = super.getEmf().createEntityManager();
+         em = super.getEm();
         try {
 
             Query q = em.createNamedQuery(query);
@@ -259,7 +267,7 @@ public class ClientProviderJpaController extends EntityManagerProj implements Se
             }
             return q.getResultList();
         } finally {
-            em.close();
+//            em.close();
         }
 
     }
