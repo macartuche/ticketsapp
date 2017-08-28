@@ -149,6 +149,7 @@ public class ventas extends javax.swing.JPanel implements KeyListener {
         date.set(Calendar.MINUTE, 0);
         ventas = controller.findByDayAndCollector2(date.getTime(), LoginApp.userLogged, refresh);
         dBTable1.setEditable(false);
+        dBTable1.setSortEnabled(false);
         
         setEmiterAndCollecter(ventas);
         fijarDatos(ventas);
