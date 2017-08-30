@@ -305,16 +305,17 @@ public class EntryParkingForm extends javax.swing.JDialog {
             List<UserContract> usersContract = q.getResultList();
 
             if (usersContract.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "La placa del vehículo no "
-                        + " se encuentra en el contrato.\n No se puede registrar "
-                        + "el ingreso.  ", "ERROR",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
+                //JOptionPane.showMessageDialog(this, "La placa del vehículo no "
+                //        + " se encuentra en el contrato.\n No se puede registrar "
+                //        + "el ingreso.  ", "ERROR",
+                //        JOptionPane.ERROR_MESSAGE);
+                //return;
             } else {
                 //fija el cliente
                 this.billing.setClientProviderid(usersContract.get(0).getClient());
                 state = "CONTRATO";
             }
+            
         }
 
         generarSecuencial();

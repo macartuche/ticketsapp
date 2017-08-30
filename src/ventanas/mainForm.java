@@ -87,7 +87,7 @@ public class mainForm extends javax.swing.JFrame {
         pestanasAbiertas = new ArrayList<>();
         this.setExtendedState(Frame.MAXIMIZED_BOTH);
         
-        username.setText("Bienvenido: "+user.getPersonId().getNames());
+        username.setText("Bienvenido: "+user.getPersonId().getNames()+" "+user.getPersonId().getLastname());
     }
 
     /**

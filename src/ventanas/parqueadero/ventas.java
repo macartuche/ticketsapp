@@ -757,24 +757,12 @@ public class ventas extends javax.swing.JPanel implements KeyListener {
                 quantity = quantity.add(new BigDecimal(hoursPerDay));
             }
             
-            b.getDetailBillingList().get(0).setPercentageIva(product.getPercentageIva());
-            b.getDetailBillingList().get(0).setUnitaryPrice(price);
-            b.getDetailBillingList().get(0).setValueIva(price);
-            
             BigDecimal totalIva = price.multiply(quantity).multiply(product.getPercentageIva());
             BigDecimal total = product.getSaleprice().multiply(quantity).add(totalIva);
-            
-            total = total.setScale(2, RoundingMode.HALF_UP);
-            
-            b.getDetailBillingList().get(0).setValueIva(totalIva);
-            b.getDetailBillingList().get(0).setTotalWithTax(total);
-            b.getDetailBillingList().get(0).setTotal(total);
-            b.getDetailBillingList().get(0).setQuantity(quantity);
-            b.getDetailBillingList().get(0).setTimeend(endJava);
-            b.setTotal(b.getDetailBillingList().get(0).getTotalWithTax());
+             total = total.setScale(2, RoundingMode.HALF_UP);
             
             CobroParkForm dialog = new CobroParkForm(new javax.swing.JFrame(), Boolean.TRUE, b,
-                    tiempo, days, hours, minutes);
+                    tiempo, days, hours, minutes, quantity, endJava, total);
             dialog.setVisible(true);
             verTabla(true);
         } catch (ParseException ex) {
@@ -814,7 +802,7 @@ public class ventas extends javax.swing.JPanel implements KeyListener {
     private static void setEmiterAndCollecter(List<Billing> ventas){
         Users emitter = null;
         Users collecter = null;
-        for (Billing venta : ventas) {
+        for (Billing venta : ventas) { 
             Integer emisorId = venta.getEmitterPerson();
             Integer collectorId = venta.getCollectorPerson();
             
@@ -826,6 +814,7 @@ public class ventas extends javax.swing.JPanel implements KeyListener {
             if(collectorId!=null && collectorId!= 0){
                 collecter = userscontroller.findUsers(collectorId);
                 venta.setCobrador(collecter.getUsuario());
+                       
             }
         }
     }

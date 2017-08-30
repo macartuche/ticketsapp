@@ -16,10 +16,13 @@ import entities.Billing;
 import entities.Configurations;
 import entities.DetailBilling;
 import entities.Payment;
+import entities.Product;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,6 +39,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import org.joda.time.DateTime;
 import utilitarios.Utilitario;
 import ventanas.administracion.LoginApp;
 import ventanas.reportes.reporteMasVendido;
@@ -59,19 +63,24 @@ public class CobroParkForm extends javax.swing.JDialog {
     public int days;
     public int hours;
     public int minutes;
+    public BigDecimal quantity = BigDecimal.ZERO;
+    public Date endJava; 
 
     public CobroParkForm(java.awt.Frame parent, boolean modal, Billing billing,
-            String time, int days, int hours, int minutes) {
+            String time, int days, int hours, int minutes, BigDecimal quantity,
+            Date endJava, BigDecimal total ) {
 
         super(parent, modal);
         this.bil = billing;
         this.detail = billing.getDetailBillingList().get(0);
         this.account = this.bil.getAccountCollection().get(0);
-        this.quote = this.bil.getTotal();
+        this.quote = total;
         this.time = time;
         this.days = days;
         this.hours = hours;
         this.minutes = minutes;
+        this.quantity = quantity;
+        this.endJava = endJava;
 
         System.out.println("bal cons: " + this.account.getBalance());
         paymentController = new PaymentJpaController();
@@ -94,8 +103,11 @@ public class CobroParkForm extends javax.swing.JDialog {
         this.lblSaldo.setText(this.quote.toString());
         this.txtPago.setText("00.00");
         this.txtCambio.setText("00.00");
-        this.lblSalida.setText(this.bil.getFin());
-        this.lblPlaca.setText(this.bil.getAdditionalInformation());
+        
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        String out = format.format(this.endJava);
+        this.lblSalida.setText(out);
+        this.lblPlaca.setText(this.bil.getAdditionalInformation()+" Nro: "+this.bil.getNumero());
         this.lblIngreso.setText(this.bil.getInicio());
         this.lblTime.setText(this.time);
 
@@ -207,7 +219,7 @@ public class CobroParkForm extends javax.swing.JDialog {
         jLabel6.setText("Total a pagar:");
 
         jLabel7.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel7.setText("Placa:");
+        jLabel7.setText("Placa /ticket:");
 
         lblSaldo.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         lblSaldo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -382,6 +394,26 @@ public class CobroParkForm extends javax.swing.JDialog {
             //colocar la persona que cobra
             this.bil.setCollectorPerson(LoginApp.userLogged.getId());
             
+            Product product = this.bil.getDetailBillingList().get(0).getProductId();
+            BigDecimal price = product.getSaleprice(); 
+            
+            this.bil.getDetailBillingList().get(0).setPercentageIva(product.getPercentageIva());
+            this.bil.getDetailBillingList().get(0).setUnitaryPrice(price);
+            this.bil.getDetailBillingList().get(0).setValueIva(price);
+            
+            BigDecimal totalIva = price.multiply(quantity).multiply(product.getPercentageIva());
+            BigDecimal total = product.getSaleprice().multiply(this.quantity).add(totalIva);
+            
+            total = total.setScale(2, RoundingMode.HALF_UP);
+            
+            this.bil.getDetailBillingList().get(0).setValueIva(totalIva);
+            this.bil.getDetailBillingList().get(0).setTotalWithTax(total);
+            this.bil.getDetailBillingList().get(0).setTotal(total);
+            this.bil.getDetailBillingList().get(0).setQuantity(this.quantity);
+            this.bil.getDetailBillingList().get(0).setTimeend(this.endJava);
+            this.bil.setTotal(this.bil.getDetailBillingList().get(0).getTotalWithTax());
+            
+            
             billingController.edit(bil);
 
             detailController.edit(this.detail);
@@ -411,7 +443,7 @@ public class CobroParkForm extends javax.swing.JDialog {
                 JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(billings);
                 JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametersReport, beanCollectionDataSource);
                 // view report to UI
-                JasperViewer.viewReport(jasperPrint, false);
+                //JasperViewer.viewReport(jasperPrint, false);
                 JasperPrintManager.printReport(jasperPrint, false);
             } catch (JRException | FileNotFoundException ex) {
                 Logger.getLogger(reporteMasVendido.class.getName()).log(Level.SEVERE, null, ex);
@@ -460,9 +492,14 @@ public class CobroParkForm extends javax.swing.JDialog {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
 
+     this.dispose();
+     /*
         try {
             //ANULAR LA FACTURA
             //this.bil.setState("ANULADA");
+            
+           // this.dispose();
+            
             this.bil.setTotal(BigDecimal.ZERO);
             this.bil.getDetailBillingList().get(0).setPercentageIva(BigDecimal.ZERO);
             this.bil.getDetailBillingList().get(0).setQuantity(BigDecimal.ZERO);
@@ -470,6 +507,7 @@ public class CobroParkForm extends javax.swing.JDialog {
 
             billingController.edit(this.bil);
             System.out.println("=====>aquiiiiiiiiiiiii" + this.bil.getId());
+            System.out.println("id d3talle"+this.bil.getDetailBillingList().get(0).getId());
 
             this.bil.setState("GENERADA");
             this.dispose();
@@ -478,7 +516,7 @@ public class CobroParkForm extends javax.swing.JDialog {
         } catch (Exception ex) {
             Logger.getLogger(CobroParkForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+     */
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPagoActionPerformed
