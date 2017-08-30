@@ -17,13 +17,13 @@
     <class>entities.UserContract</class>
     <class>entities.Contracts</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://192.168.1.28:3306/billingDB?zeroDateTimeBehavior=convertToNull"/>
-      <!--<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/billingDB?zeroDateTimeBehavior=convertToNull"/>-->
-      <property name="javax.persistence.jdbc.user" value="parqueadero"/>
-      <!--<property name="javax.persistence.jdbc.user" value="root"/>-->
+      <!--<property name="javax.persistence.jdbc.url" value="jdbc:mysql://192.168.1.28:3306/billingDB?zeroDateTimeBehavior=convertToNull"/>-->
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/billingDB?zeroDateTimeBehavior=convertToNull"/>
+      <!--<property name="javax.persistence.jdbc.user" value="parqueadero"/>-->
+      <property name="javax.persistence.jdbc.user" value="root"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.password" value="informatica2016"/>
-      <!--<property name="javax.persistence.jdbc.password" value=""/>-->
+      <!--<property name="javax.persistence.jdbc.password" value="informatica2016"/>-->
+      <property name="javax.persistence.jdbc.password" value=""/>
     </properties>
   </persistence-unit>
 </persistence>

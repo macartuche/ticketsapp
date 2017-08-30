@@ -677,6 +677,10 @@ public class ventas extends javax.swing.JPanel implements KeyListener {
             // view report to UI
 //            JasperViewer.viewReport(jasperPrint, false);
             JasperPrintManager.printReport(jasperPrint, false);
+            JasperViewer viewer = new JasperViewer(jasperPrint, false);
+            viewer.viewReport(jasperPrint, false);
+            viewer.setVisible(true);
+            
         } catch (JRException ex) {
             Logger.getLogger(ventas.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {

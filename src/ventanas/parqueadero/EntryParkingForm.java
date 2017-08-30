@@ -381,10 +381,11 @@ public class EntryParkingForm extends javax.swing.JDialog {
             JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(facturas);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap(), beanCollectionDataSource);
             // view report to UI
-//            JasperViewer viewer = new JasperViewer(jasperPrint, false);
-//            viewer.setVisible(true);
+            JasperViewer viewer = new JasperViewer(jasperPrint, false);
+            viewer.viewReport(jasperPrint, false);
+            viewer.setVisible(true);
             
-            JasperPrintManager.printReport(jasperPrint, false);
+//            JasperPrintManager.printReport(jasperPrint, false);
         } catch (JRException | FileNotFoundException ex) {
             Logger.getLogger(ventas.class.getName()).log(Level.SEVERE, null, ex);
         }
